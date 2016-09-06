@@ -1,0 +1,1268 @@
+Starting game_redis_1
+Recreating game_postgres_1
+Recreating game_django_1
+Recreating game_nginx_1
+Attaching to game_postgres_1, game_redis_1, game_django_1, game_nginx_1
+[36mpostgres_1  |[0m LOG:  database system was interrupted; last known up at 2016-08-26 02:23:43 UTC
+[36mpostgres_1  |[0m LOG:  database system was not properly shut down; automatic recovery in progress
+[36mpostgres_1  |[0m LOG:  invalid record length at 0/17F0128
+[36mpostgres_1  |[0m LOG:  redo is not required
+[36mpostgres_1  |[0m LOG:  MultiXact member wraparound protections are now enabled
+[33mredis_1     |[0m                 _._                                                  
+[33mredis_1     |[0m            _.-``__ ''-._                                             
+[33mredis_1     |[0m       _.-``    `.  `_.  ''-._           Redis 3.2.3 (00000000/0) 64 bit
+[33mredis_1     |[0m   .-`` .-```.  ```\/    _.,_ ''-._                                   
+[33mredis_1     |[0m  (    '      ,       .-`  | `,    )     Running in standalone mode
+[33mredis_1     |[0m  |`-._`-...-` __...-.``-._|'` _.-'|     Port: 6379
+[33mredis_1     |[0m  |    `-._   `._    /     _.-'    |     PID: 1
+[33mredis_1     |[0m   `-._    `-._  `-./  _.-'    _.-'                                   
+[33mredis_1     |[0m  |`-._`-._    `-.__.-'    _.-'_.-'|                                  
+[33mredis_1     |[0m  |    `-._`-._        _.-'_.-'    |           http://redis.io        
+[33mredis_1     |[0m   `-._    `-._`-.__.-'_.-'    _.-'                                   
+[33mredis_1     |[0m  |`-._`-._    `-.__.-'    _.-'_.-'|                                  
+[33mredis_1     |[0m  |    `-._`-._        _.-'_.-'    |                                  
+[33mredis_1     |[0m   `-._    `-._`-.__.-'_.-'    _.-'                                   
+[33mredis_1     |[0m       `-._    `-.__.-'    _.-'                                       
+[33mredis_1     |[0m           `-._        _.-'                                           
+[33mredis_1     |[0m               `-.__.-'                                               
+[33mredis_1     |[0m 
+[36mpostgres_1  |[0m LOG:  database system is ready to accept connections
+[36mpostgres_1  |[0m LOG:  autovacuum launcher started
+[32mdjango_1    |[0m Postgres is up - continuing...
+[33mredis_1     |[0m 1:M 26 Aug 02:47:14.279 # WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set to the lower value of 128.
+[33mredis_1     |[0m 1:M 26 Aug 02:47:14.280 # Server started, Redis version 3.2.3
+[33mredis_1     |[0m 1:M 26 Aug 02:47:14.280 # WARNING overcommit_memory is set to 0! Background save may fail under low memory condition. To fix this issue add 'vm.overcommit_memory = 1' to /etc/sysctl.conf and then reboot or run the command 'sysctl vm.overcommit_memory=1' for this to take effect.
+[33mredis_1     |[0m 1:M 26 Aug 02:47:14.281 * The server is now ready to accept connections on port 6379
+[32mdjango_1    |[0m Copying '/app/game/static/plots/2.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/61.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/37.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/20.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/57.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/16.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/69.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/74.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/50.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/66.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/72.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/46.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/49.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/53.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/65.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/49.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/85.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/54.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/95.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/3.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/92.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/19.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/73.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/90.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/11.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/75.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/52.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/76.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/22.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/61.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/42.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/43.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/89.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/51.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/26.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/7.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/34.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/71.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/18.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/60.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/38.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/80.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/84.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/14.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/74.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/44.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/47.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/63.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/62.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/68.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/9.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/47.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/31.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/25.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/2.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/23.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/95.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/98.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/24.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/50.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/84.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/5.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/79.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/41.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/43.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/19.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/45.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/17.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/46.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/85.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/67.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/38.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/7.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/28.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/13.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/96.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/8.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/81.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/16.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/70.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/33.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/36.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/30.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/88.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/27.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/10.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/31.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/48.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/21.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/22.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/75.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/66.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/88.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/86.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/5.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/0.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/44.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/86.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/28.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/62.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/42.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/36.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/45.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/12.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/29.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/27.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/29.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/26.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/56.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/30.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/94.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/21.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/69.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/13.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/98.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/73.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/63.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/58.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/89.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/82.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/92.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/10.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/78.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/0.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/32.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/77.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/1.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/39.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/65.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/97.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/93.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/57.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/40.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/25.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/23.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/72.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/64.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/94.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/52.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/71.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/55.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/53.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/59.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/24.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/34.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/51.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/59.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/15.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/18.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/9.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/77.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/40.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/15.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/12.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/3.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/80.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/93.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/1.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/76.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/48.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/20.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/97.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/64.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/14.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/56.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/99.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/35.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/60.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/54.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/70.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/68.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/90.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/6.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/33.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/4.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/32.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/39.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/8.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/83.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/35.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/41.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/17.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/6.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/81.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/91.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/99.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/91.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/96.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/79.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/87.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/55.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/4.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/37.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/58.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/78.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/11.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/83.png'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/67.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/82.pdf'
+[32mdjango_1    |[0m Copying '/app/game/static/plots/87.png'
+[32mdjango_1    |[0m Copying '/app/game/static/sass/project.scss'
+[32mdjango_1    |[0m Copying '/app/game/static/js/project.js'
+[32mdjango_1    |[0m Copying '/app/game/static/css/project.css'
+[32mdjango_1    |[0m Copying '/app/game/static/images/favicon.ico'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/img/icon-changelink.svg'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/img/calendar-icons.svg'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/img/sorting-icons.svg'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/img/tooltag-add.svg'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/img/inline-delete.svg'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/img/icon-alert.svg'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/img/icon-deletelink.svg'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/img/icon-calendar.svg'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/img/search.svg'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/img/tooltag-arrowright.svg'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/img/LICENSE'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/img/icon-addlink.svg'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/img/selector-icons.svg'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/img/icon-clock.svg'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/img/README.txt'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/img/icon-unknown-alt.svg'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/img/icon-unknown.svg'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/img/icon-no.svg'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/img/icon-yes.svg'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/img/gis/move_vertex_off.svg'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/img/gis/move_vertex_on.svg'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/fonts/Roboto-Bold-webfont.woff'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/fonts/LICENSE.txt'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/fonts/Roboto-Light-webfont.woff'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/fonts/Roboto-Regular-webfont.woff'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/fonts/README.txt'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/js/urlify.js'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/js/collapse.min.js'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/js/SelectBox.js'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/js/prepopulate.js'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/js/prepopulate.min.js'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/js/collapse.js'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/js/SelectFilter2.js'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/js/calendar.js'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/js/inlines.min.js'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/js/inlines.js'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/js/core.js'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/js/actions.min.js'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/js/jquery.init.js'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/js/actions.js'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/js/timeparse.js'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/js/admin/DateTimeShortcuts.js'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/js/admin/RelatedObjectLookups.js'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/js/vendor/jquery/jquery.js'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/js/vendor/jquery/jquery.min.js'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/js/vendor/jquery/LICENSE-JQUERY.txt'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/js/vendor/xregexp/xregexp.min.js'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/js/vendor/xregexp/xregexp.js'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/js/vendor/xregexp/LICENSE-XREGEXP.txt'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/css/base.css'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/css/dashboard.css'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/css/forms.css'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/css/fonts.css'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/css/widgets.css'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/css/changelists.css'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/css/login.css'
+[32mdjango_1    |[0m Copying '/usr/local/lib/python3.5/site-packages/django/contrib/admin/static/admin/css/rtl.css'
+[32mdjango_1    |[0m Post-processed 'admin/js/vendor/jquery/jquery.js' as 'admin/js/vendor/jquery/jquery.107fbe9555bf.js'
+[32mdjango_1    |[0m Post-processed 'admin/js/vendor/jquery/jquery.min.js' as 'admin/js/vendor/jquery/jquery.min.f9c7afd05729.js'
+[32mdjango_1    |[0m Post-processed 'admin/js/vendor/jquery/LICENSE-JQUERY.txt' as 'admin/js/vendor/jquery/LICENSE-JQUERY.a158210a2737.txt'
+[32mdjango_1    |[0m Post-processed 'admin/js/vendor/xregexp/xregexp.min.js' as 'admin/js/vendor/xregexp/xregexp.min.c95393b8ca4d.js'
+[32mdjango_1    |[0m Post-processed 'admin/js/vendor/xregexp/xregexp.js' as 'admin/js/vendor/xregexp/xregexp.1865b1cf5085.js'
+[32mdjango_1    |[0m Post-processed 'admin/js/vendor/xregexp/LICENSE-XREGEXP.txt' as 'admin/js/vendor/xregexp/LICENSE-XREGEXP.d64cecf4f157.txt'
+[32mdjango_1    |[0m Post-processed 'admin/img/gis/move_vertex_off.svg' as 'admin/img/gis/move_vertex_off.7a23bf31ef8a.svg'
+[32mdjango_1    |[0m Post-processed 'admin/img/gis/move_vertex_on.svg' as 'admin/img/gis/move_vertex_on.0047eba25b67.svg'
+[32mdjango_1    |[0m Post-processed 'admin/js/admin/DateTimeShortcuts.js' as 'admin/js/admin/DateTimeShortcuts.1a1d41ec13f8.js'
+[32mdjango_1    |[0m Post-processed 'admin/js/admin/RelatedObjectLookups.js' as 'admin/js/admin/RelatedObjectLookups.6a0c7c211234.js'
+[32mdjango_1    |[0m Post-processed 'admin/img/icon-changelink.svg' as 'admin/img/icon-changelink.18d2fd706348.svg'
+[32mdjango_1    |[0m Post-processed 'admin/img/calendar-icons.svg' as 'admin/img/calendar-icons.39b290681a8b.svg'
+[32mdjango_1    |[0m Post-processed 'admin/img/sorting-icons.svg' as 'admin/img/sorting-icons.3a097b59f104.svg'
+[32mdjango_1    |[0m Post-processed 'admin/img/tooltag-add.svg' as 'admin/img/tooltag-add.e59d620a9742.svg'
+[32mdjango_1    |[0m Post-processed 'admin/img/inline-delete.svg' as 'admin/img/inline-delete.fec1b761f254.svg'
+[32mdjango_1    |[0m Post-processed 'admin/img/icon-alert.svg' as 'admin/img/icon-alert.034cc7d8a67f.svg'
+[32mdjango_1    |[0m Post-processed 'admin/img/icon-deletelink.svg' as 'admin/img/icon-deletelink.564ef9dc3854.svg'
+[32mdjango_1    |[0m Post-processed 'admin/img/icon-calendar.svg' as 'admin/img/icon-calendar.ac7aea671bea.svg'
+[32mdjango_1    |[0m Post-processed 'admin/img/search.svg' as 'admin/img/search.7cf54ff789c6.svg'
+[32mdjango_1    |[0m Post-processed 'admin/img/tooltag-arrowright.svg' as 'admin/img/tooltag-arrowright.bbfb788a849e.svg'
+[32mdjango_1    |[0m Post-processed 'admin/img/LICENSE' as 'admin/img/LICENSE.2c54f4e1ca1c'
+[32mdjango_1    |[0m Post-processed 'admin/img/icon-addlink.svg' as 'admin/img/icon-addlink.d519b3bab011.svg'
+[32mdjango_1    |[0m Post-processed 'admin/img/selector-icons.svg' as 'admin/img/selector-icons.b4555096cea2.svg'
+[32mdjango_1    |[0m Post-processed 'admin/img/icon-clock.svg' as 'admin/img/icon-clock.e1d4dfac3f2b.svg'
+[32mdjango_1    |[0m Post-processed 'admin/img/README.txt' as 'admin/img/README.837277fa1908.txt'
+[32mdjango_1    |[0m Post-processed 'admin/img/icon-unknown-alt.svg' as 'admin/img/icon-unknown-alt.81536e128bb6.svg'
+[32mdjango_1    |[0m Post-processed 'admin/img/icon-unknown.svg' as 'admin/img/icon-unknown.a18cb4398978.svg'
+[32mdjango_1    |[0m Post-processed 'admin/img/icon-no.svg' as 'admin/img/icon-no.439e821418cd.svg'
+[32mdjango_1    |[0m Post-processed 'admin/img/icon-yes.svg' as 'admin/img/icon-yes.d2f9f035226a.svg'
+[32mdjango_1    |[0m Post-processed 'admin/fonts/Roboto-Bold-webfont.woff' as 'admin/fonts/Roboto-Bold-webfont.2ad99072841e.woff'
+[32mdjango_1    |[0m Post-processed 'admin/fonts/LICENSE.txt' as 'admin/fonts/LICENSE.d273d63619c9.txt'
+[32mdjango_1    |[0m Post-processed 'admin/fonts/Roboto-Light-webfont.woff' as 'admin/fonts/Roboto-Light-webfont.b446c2399bb6.woff'
+[32mdjango_1    |[0m Post-processed 'admin/fonts/Roboto-Regular-webfont.woff' as 'admin/fonts/Roboto-Regular-webfont.ec39515ae8c6.woff'
+[32mdjango_1    |[0m Post-processed 'admin/fonts/README.txt' as 'admin/fonts/README.2c3d0bcdede2.txt'
+[32mdjango_1    |[0m Post-processed 'admin/js/urlify.js' as 'admin/js/urlify.72f9b26e3ecd.js'
+[32mdjango_1    |[0m Post-processed 'admin/js/collapse.min.js' as 'admin/js/collapse.min.dc930adb2821.js'
+[32mdjango_1    |[0m Post-processed 'admin/js/SelectBox.js' as 'admin/js/SelectBox.9b544c47149c.js'
+[32mdjango_1    |[0m Post-processed 'admin/js/prepopulate.js' as 'admin/js/prepopulate.ff9208865444.js'
+[32mdjango_1    |[0m Post-processed 'admin/js/prepopulate.min.js' as 'admin/js/prepopulate.min.f4057ebb9b62.js'
+[32mdjango_1    |[0m Post-processed 'admin/js/collapse.js' as 'admin/js/collapse.17d715df2104.js'
+[32mdjango_1    |[0m Post-processed 'admin/js/SelectFilter2.js' as 'admin/js/SelectFilter2.92ca1fea6656.js'
+[32mdjango_1    |[0m Post-processed 'admin/js/calendar.js' as 'admin/js/calendar.847972dc11ca.js'
+[32mdjango_1    |[0m Post-processed 'admin/js/inlines.min.js' as 'admin/js/inlines.min.91c080dc1cbf.js'
+[32mdjango_1    |[0m Post-processed 'admin/js/inlines.js' as 'admin/js/inlines.8199258210ef.js'
+[32mdjango_1    |[0m Post-processed 'admin/js/core.js' as 'admin/js/core.84da04fcbfaf.js'
+[32mdjango_1    |[0m Post-processed 'admin/js/actions.min.js' as 'admin/js/actions.min.c8d91e1d05fe.js'
+[32mdjango_1    |[0m Post-processed 'admin/js/jquery.init.js' as 'admin/js/jquery.init.95b62fa19378.js'
+[32mdjango_1    |[0m Post-processed 'admin/js/actions.js' as 'admin/js/actions.df9119bcc981.js'
+[32mdjango_1    |[0m Post-processed 'admin/js/timeparse.js' as 'admin/js/timeparse.51258861a46a.js'
+[32mdjango_1    |[0m Post-processed 'admin/css/base.css' as 'admin/css/base.9f6547179ace.css'
+[32mdjango_1    |[0m Post-processed 'admin/css/dashboard.css' as 'admin/css/dashboard.4898e2e9983d.css'
+[32mdjango_1    |[0m Post-processed 'admin/css/forms.css' as 'admin/css/forms.70b858e61281.css'
+[32mdjango_1    |[0m Post-processed 'admin/css/fonts.css' as 'admin/css/fonts.cc6140298ba7.css'
+[32mdjango_1    |[0m Post-processed 'admin/css/widgets.css' as 'admin/css/widgets.a7251c097987.css'
+[32mdjango_1    |[0m Post-processed 'admin/css/changelists.css' as 'admin/css/changelists.32a12db9a480.css'
+[32mdjango_1    |[0m Post-processed 'admin/css/login.css' as 'admin/css/login.a846c0e2ef65.css'
+[32mdjango_1    |[0m Post-processed 'admin/css/rtl.css' as 'admin/css/rtl.e024aaf6df25.css'
+[32mdjango_1    |[0m Post-processed 'plots/2.pdf' as 'plots/2.eea843d2ec14.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/61.pdf' as 'plots/61.209a88184e17.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/37.pdf' as 'plots/37.b746616e7d7d.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/20.png' as 'plots/20.31b17dc6fa72.png'
+[32mdjango_1    |[0m Post-processed 'plots/57.png' as 'plots/57.b76dec9c61e4.png'
+[32mdjango_1    |[0m Post-processed 'plots/16.pdf' as 'plots/16.4d04d91c797f.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/69.png' as 'plots/69.0324150c2bb4.png'
+[32mdjango_1    |[0m Post-processed 'plots/74.pdf' as 'plots/74.5171bba65261.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/50.pdf' as 'plots/50.c33be5550a4f.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/66.pdf' as 'plots/66.5bbc4428f7b5.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/72.png' as 'plots/72.af2f4485a4de.png'
+[32mdjango_1    |[0m Post-processed 'plots/46.png' as 'plots/46.b854a4f54c95.png'
+[32mdjango_1    |[0m Post-processed 'plots/49.png' as 'plots/49.9607262a79af.png'
+[32mdjango_1    |[0m Post-processed 'plots/53.png' as 'plots/53.fd6aea3f574a.png'
+[32mdjango_1    |[0m Post-processed 'plots/65.png' as 'plots/65.ba52025238ec.png'
+[32mdjango_1    |[0m Post-processed 'plots/49.pdf' as 'plots/49.0b294dd4da94.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/85.pdf' as 'plots/85.129948ccd3b5.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/54.pdf' as 'plots/54.5c3582770adb.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/95.png' as 'plots/95.8657a46e8723.png'
+[32mdjango_1    |[0m Post-processed 'plots/3.pdf' as 'plots/3.66099e1ad2d3.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/92.png' as 'plots/92.bb4ab8a18cb4.png'
+[32mdjango_1    |[0m Post-processed 'plots/19.pdf' as 'plots/19.5068c572bfd3.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/73.pdf' as 'plots/73.b2844ef735f7.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/90.pdf' as 'plots/90.5951a28047da.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/11.png' as 'plots/11.210e9119bc90.png'
+[32mdjango_1    |[0m Post-processed 'plots/75.pdf' as 'plots/75.511a0ae05c3e.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/52.pdf' as 'plots/52.16c28e5a406a.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/76.png' as 'plots/76.02638258a53a.png'
+[32mdjango_1    |[0m Post-processed 'plots/22.pdf' as 'plots/22.0bbc5059d91c.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/61.png' as 'plots/61.80cb7ccdb375.png'
+[32mdjango_1    |[0m Post-processed 'plots/42.pdf' as 'plots/42.b2b7ecde9d3c.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/43.pdf' as 'plots/43.27f9dfcb520a.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/89.png' as 'plots/89.fd615b3cd95e.png'
+[32mdjango_1    |[0m Post-processed 'plots/51.png' as 'plots/51.d43290897221.png'
+[32mdjango_1    |[0m Post-processed 'plots/26.png' as 'plots/26.422c6ec58a4e.png'
+[32mdjango_1    |[0m Post-processed 'plots/7.png' as 'plots/7.79675ec2032f.png'
+[32mdjango_1    |[0m Post-processed 'plots/34.png' as 'plots/34.6fb05bc50f21.png'
+[32mdjango_1    |[0m Post-processed 'plots/71.pdf' as 'plots/71.be40cf27a493.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/18.png' as 'plots/18.6907a2d2eecc.png'
+[32mdjango_1    |[0m Post-processed 'plots/60.pdf' as 'plots/60.1347e11b11f0.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/38.pdf' as 'plots/38.97e13654d15d.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/80.png' as 'plots/80.88371554930e.png'
+[32mdjango_1    |[0m Post-processed 'plots/84.pdf' as 'plots/84.909f4694dda7.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/14.png' as 'plots/14.734c5a797f1a.png'
+[32mdjango_1    |[0m Post-processed 'plots/74.png' as 'plots/74.2b5989e9ca4c.png'
+[32mdjango_1    |[0m Post-processed 'plots/44.pdf' as 'plots/44.8df235112459.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/47.pdf' as 'plots/47.91079204c9bb.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/63.pdf' as 'plots/63.e9fe7b3a8241.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/62.pdf' as 'plots/62.0ce112951123.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/68.pdf' as 'plots/68.3e176f9ad926.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/9.png' as 'plots/9.6676db679a38.png'
+[32mdjango_1    |[0m Post-processed 'plots/47.png' as 'plots/47.e1091481b53b.png'
+[32mdjango_1    |[0m Post-processed 'plots/31.png' as 'plots/31.a8a507043e6f.png'
+[32mdjango_1    |[0m Post-processed 'plots/25.pdf' as 'plots/25.4d80469308e0.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/2.png' as 'plots/2.afc1b09f18a3.png'
+[32mdjango_1    |[0m Post-processed 'plots/23.pdf' as 'plots/23.186cfc69fbcc.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/95.pdf' as 'plots/95.d995f9395e4c.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/98.png' as 'plots/98.8d2abeb5fe32.png'
+[32mdjango_1    |[0m Post-processed 'plots/24.pdf' as 'plots/24.21673d7cbf3f.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/50.png' as 'plots/50.f438794276e1.png'
+[32mdjango_1    |[0m Post-processed 'plots/84.png' as 'plots/84.4016f1042774.png'
+[32mdjango_1    |[0m Post-processed 'plots/5.png' as 'plots/5.840f8bfccdd6.png'
+[32mdjango_1    |[0m Post-processed 'plots/79.pdf' as 'plots/79.d643618d629c.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/41.pdf' as 'plots/41.b9de7a8c2756.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/43.png' as 'plots/43.34ebf17ef206.png'
+[32mdjango_1    |[0m Post-processed 'plots/19.png' as 'plots/19.8c31a06db816.png'
+[32mdjango_1    |[0m Post-processed 'plots/45.pdf' as 'plots/45.4808be7e30b1.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/17.png' as 'plots/17.f22423482e12.png'
+[32mdjango_1    |[0m Post-processed 'plots/46.pdf' as 'plots/46.0d0936d8a87a.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/85.png' as 'plots/85.98107e08ea04.png'
+[32mdjango_1    |[0m Post-processed 'plots/67.png' as 'plots/67.cde484157d81.png'
+[32mdjango_1    |[0m Post-processed 'plots/38.png' as 'plots/38.546cbfd62460.png'
+[32mdjango_1    |[0m Post-processed 'plots/7.pdf' as 'plots/7.e7781d6edcfc.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/28.pdf' as 'plots/28.bc0bf9a25af4.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/13.pdf' as 'plots/13.5474f241a808.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/96.png' as 'plots/96.f0e49306d0e0.png'
+[32mdjango_1    |[0m Post-processed 'plots/8.pdf' as 'plots/8.f791a0d67da6.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/81.png' as 'plots/81.5e5991722c4c.png'
+[32mdjango_1    |[0m Post-processed 'plots/16.png' as 'plots/16.19afc08962bc.png'
+[32mdjango_1    |[0m Post-processed 'plots/70.pdf' as 'plots/70.dcceb9b34b50.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/33.png' as 'plots/33.8278fd1a7841.png'
+[32mdjango_1    |[0m Post-processed 'plots/36.png' as 'plots/36.5966687f75a7.png'
+[32mdjango_1    |[0m Post-processed 'plots/30.png' as 'plots/30.d7ccf7c61d73.png'
+[32mdjango_1    |[0m Post-processed 'plots/88.png' as 'plots/88.bc415c211249.png'
+[32mdjango_1    |[0m Post-processed 'plots/27.png' as 'plots/27.6f03d6416387.png'
+[32mdjango_1    |[0m Post-processed 'plots/10.pdf' as 'plots/10.d42e55aa0c39.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/31.pdf' as 'plots/31.9f3cfb980a6a.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/48.png' as 'plots/48.96250606a6a3.png'
+[32mdjango_1    |[0m Post-processed 'plots/21.png' as 'plots/21.8f91dcf292af.png'
+[32mdjango_1    |[0m Post-processed 'plots/22.png' as 'plots/22.826c3d1abcbc.png'
+[32mdjango_1    |[0m Post-processed 'plots/75.png' as 'plots/75.311729aadc36.png'
+[32mdjango_1    |[0m Post-processed 'plots/66.png' as 'plots/66.2dbb3964ee42.png'
+[32mdjango_1    |[0m Post-processed 'plots/88.pdf' as 'plots/88.a085b038a292.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/86.pdf' as 'plots/86.24476b4fdb30.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/5.pdf' as 'plots/5.94d0985c3b7b.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/0.pdf' as 'plots/0.9199df19df4c.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/44.png' as 'plots/44.07258047fbe7.png'
+[32mdjango_1    |[0m Post-processed 'plots/86.png' as 'plots/86.844b18c63f31.png'
+[32mdjango_1    |[0m Post-processed 'plots/28.png' as 'plots/28.00a4781421dc.png'
+[32mdjango_1    |[0m Post-processed 'plots/62.png' as 'plots/62.339167cd979a.png'
+[32mdjango_1    |[0m Post-processed 'plots/42.png' as 'plots/42.ceb7c59e2566.png'
+[32mdjango_1    |[0m Post-processed 'plots/36.pdf' as 'plots/36.2751548af196.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/45.png' as 'plots/45.3696c94f4aec.png'
+[32mdjango_1    |[0m Post-processed 'plots/12.pdf' as 'plots/12.878192c6c1b8.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/29.pdf' as 'plots/29.9171b75979a7.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/27.pdf' as 'plots/27.fe53b25ad41f.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/29.png' as 'plots/29.149d21e37f15.png'
+[32mdjango_1    |[0m Post-processed 'plots/26.pdf' as 'plots/26.8265cb10e469.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/56.png' as 'plots/56.f34550eb2228.png'
+[32mdjango_1    |[0m Post-processed 'plots/30.pdf' as 'plots/30.c89b27d29b8b.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/94.png' as 'plots/94.3f93e3a1e1ee.png'
+[32mdjango_1    |[0m Post-processed 'plots/21.pdf' as 'plots/21.ec33ae2bd54b.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/69.pdf' as 'plots/69.dc072daa3df6.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/13.png' as 'plots/13.000eb1621786.png'
+[32mdjango_1    |[0m Post-processed 'plots/98.pdf' as 'plots/98.8fe0f6263d4e.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/73.png' as 'plots/73.d0996bb0fdc1.png'
+[32mdjango_1    |[0m Post-processed 'plots/63.png' as 'plots/63.8db3f7613ec0.png'
+[32mdjango_1    |[0m Post-processed 'plots/58.png' as 'plots/58.cb7c293f58f2.png'
+[32mdjango_1    |[0m Post-processed 'plots/89.pdf' as 'plots/89.345deeb32df9.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/82.png' as 'plots/82.3958a47db0c6.png'
+[32mdjango_1    |[0m Post-processed 'plots/92.pdf' as 'plots/92.7d6f077fb282.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/10.png' as 'plots/10.83d6aea942ac.png'
+[32mdjango_1    |[0m Post-processed 'plots/78.png' as 'plots/78.589b5e2abc8c.png'
+[32mdjango_1    |[0m Post-processed 'plots/0.png' as 'plots/0.4281d85400af.png'
+[32mdjango_1    |[0m Post-processed 'plots/32.png' as 'plots/32.4f30a17b3c0b.png'
+[32mdjango_1    |[0m Post-processed 'plots/77.pdf' as 'plots/77.a2bc4348e049.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/1.png' as 'plots/1.f1aa93199f9e.png'
+[32mdjango_1    |[0m Post-processed 'plots/39.pdf' as 'plots/39.7868049f3e5e.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/65.pdf' as 'plots/65.c245236a0122.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/97.png' as 'plots/97.d6212610ecb0.png'
+[32mdjango_1    |[0m Post-processed 'plots/93.pdf' as 'plots/93.e2c8e85ed070.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/57.pdf' as 'plots/57.13ea75dc3075.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/40.png' as 'plots/40.ffefb573a046.png'
+[32mdjango_1    |[0m Post-processed 'plots/25.png' as 'plots/25.14d494a53bde.png'
+[32mdjango_1    |[0m Post-processed 'plots/23.png' as 'plots/23.0e4a46dbb85c.png'
+[32mdjango_1    |[0m Post-processed 'plots/72.pdf' as 'plots/72.12faaa867385.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/64.pdf' as 'plots/64.03ada4d82b58.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/94.pdf' as 'plots/94.e4596ce94c90.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/52.png' as 'plots/52.e1a58b9c51e1.png'
+[32mdjango_1    |[0m Post-processed 'plots/71.png' as 'plots/71.05d8d05f95e7.png'
+[32mdjango_1    |[0m Post-processed 'plots/55.pdf' as 'plots/55.72f9b1959607.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/53.pdf' as 'plots/53.717837cf2888.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/59.pdf' as 'plots/59.541dfb6ecad8.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/24.png' as 'plots/24.b7f35be3eef7.png'
+[32mdjango_1    |[0m Post-processed 'plots/34.pdf' as 'plots/34.d145cc970625.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/51.pdf' as 'plots/51.c072ed65092b.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/59.png' as 'plots/59.6ef2884ea892.png'
+[32mdjango_1    |[0m Post-processed 'plots/15.pdf' as 'plots/15.d596cc64ddcb.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/18.pdf' as 'plots/18.766e2cc9db53.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/9.pdf' as 'plots/9.6f109641f750.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/77.png' as 'plots/77.0b1a49483d35.png'
+[32mdjango_1    |[0m Post-processed 'plots/40.pdf' as 'plots/40.73a6cf6877bd.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/15.png' as 'plots/15.4a345c304ef9.png'
+[32mdjango_1    |[0m Post-processed 'plots/12.png' as 'plots/12.d12838272dc1.png'
+[32mdjango_1    |[0m Post-processed 'plots/3.png' as 'plots/3.7ca5145fd96b.png'
+[32mdjango_1    |[0m Post-processed 'plots/80.pdf' as 'plots/80.b2dae804924d.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/93.png' as 'plots/93.2b319cfce13b.png'
+[32mdjango_1    |[0m Post-processed 'plots/1.pdf' as 'plots/1.34162eaf20f6.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/76.pdf' as 'plots/76.892e6ffa6930.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/48.pdf' as 'plots/48.f78d9c9c9a23.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/20.pdf' as 'plots/20.8fcf9d6da96a.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/97.pdf' as 'plots/97.c9992d4e3858.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/64.png' as 'plots/64.c6c44f2e7b0d.png'
+[32mdjango_1    |[0m Post-processed 'plots/14.pdf' as 'plots/14.5ee8ed15b809.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/56.pdf' as 'plots/56.b2125ba9bbfe.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/99.pdf' as 'plots/99.c000bdf48f46.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/35.pdf' as 'plots/35.79ff33b5716b.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/60.png' as 'plots/60.e15b1f11d00a.png'
+[32mdjango_1    |[0m Post-processed 'plots/54.png' as 'plots/54.bdbbb5165854.png'
+[32mdjango_1    |[0m Post-processed 'plots/70.png' as 'plots/70.70701bcb0871.png'
+[32mdjango_1    |[0m Post-processed 'plots/68.png' as 'plots/68.90c172e6d367.png'
+[32mdjango_1    |[0m Post-processed 'plots/90.png' as 'plots/90.7822a8bfa3c5.png'
+[32mdjango_1    |[0m Post-processed 'plots/6.png' as 'plots/6.deb1c4cbb16c.png'
+[32mdjango_1    |[0m Post-processed 'plots/33.pdf' as 'plots/33.ba6b6580a86f.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/4.pdf' as 'plots/4.0fc7ccfbd359.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/32.pdf' as 'plots/32.47cf3f3b78e3.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/39.png' as 'plots/39.4e9c136ec016.png'
+[32mdjango_1    |[0m Post-processed 'plots/8.png' as 'plots/8.2ad1aef4c106.png'
+[32mdjango_1    |[0m Post-processed 'plots/83.pdf' as 'plots/83.eccd88b2ba1b.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/35.png' as 'plots/35.8a7e6bc4a1ea.png'
+[32mdjango_1    |[0m Post-processed 'plots/41.png' as 'plots/41.ca8abffda69f.png'
+[32mdjango_1    |[0m Post-processed 'plots/17.pdf' as 'plots/17.f71ce0ebaaeb.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/6.pdf' as 'plots/6.9acdda16bc0f.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/81.pdf' as 'plots/81.50f90ddcf2e2.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/91.png' as 'plots/91.9700c79f9857.png'
+[32mdjango_1    |[0m Post-processed 'plots/99.png' as 'plots/99.b3b0e3555e4f.png'
+[32mdjango_1    |[0m Post-processed 'plots/91.pdf' as 'plots/91.31560c7538d8.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/96.pdf' as 'plots/96.3eca554ebd49.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/79.png' as 'plots/79.f1ee903c3a1e.png'
+[32mdjango_1    |[0m Post-processed 'plots/87.pdf' as 'plots/87.8a50d63f07e0.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/55.png' as 'plots/55.993af64993e0.png'
+[32mdjango_1    |[0m Post-processed 'plots/4.png' as 'plots/4.663b4d81b3cf.png'
+[32mdjango_1    |[0m Post-processed 'plots/37.png' as 'plots/37.a42f50fcb689.png'
+[32mdjango_1    |[0m Post-processed 'plots/58.pdf' as 'plots/58.7f39c1eaf11d.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/78.pdf' as 'plots/78.824110f2010c.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/11.pdf' as 'plots/11.430d7fd8f82f.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/83.png' as 'plots/83.64f2d2672ae4.png'
+[32mdjango_1    |[0m Post-processed 'plots/67.pdf' as 'plots/67.e6348b5c14ea.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/82.pdf' as 'plots/82.480d1bb0ac95.pdf'
+[32mdjango_1    |[0m Post-processed 'plots/87.png' as 'plots/87.9f34b976e980.png'
+[32mdjango_1    |[0m Post-processed 'sass/project.scss' as 'sass/project.e7fdd6d8f81f.scss'
+[32mdjango_1    |[0m Post-processed 'js/project.js' as 'js/project.d1c9eda2d170.js'
+[32mdjango_1    |[0m Post-processed 'css/project.css' as 'css/project.babfbdb95f25.css'
+[32mdjango_1    |[0m Post-processed 'images/favicon.ico' as 'images/favicon.a66bc42b4e8a.ico'
+[32mdjango_1    |[0m 
+[32mdjango_1    |[0m 261 static files copied to '/app/staticfiles', 261 post-processed.
+[32mdjango_1    |[0m [2016-08-26 02:47:17 +0000] [10] [INFO] Starting gunicorn 19.6.0
+[32mdjango_1    |[0m [2016-08-26 02:47:17 +0000] [10] [INFO] Listening at: http://0.0.0.0:5000 (10)
+[32mdjango_1    |[0m [2016-08-26 02:47:17 +0000] [10] [INFO] Using worker: sync
+[32mdjango_1    |[0m [2016-08-26 02:47:17 +0000] [13] [INFO] Booting worker with pid: 13
+[32mdjango_1    |[0m [2016-08-26 02:47:17 +0000] [14] [INFO] Booting worker with pid: 14
+[32mdjango_1    |[0m [2016-08-26 02:47:17 +0000] [16] [INFO] Booting worker with pid: 16
+[32mdjango_1    |[0m [2016-08-26 02:47:17 +0000] [17] [INFO] Booting worker with pid: 17
+[32mdjango_1    |[0m DEBUG 2016-08-26 02:47:29,784 base 16 139864877934336 Configuring Raven for host: <raven.conf.remote.RemoteConfig object at 0x7f34ca745f28>
+[32mdjango_1    |[0m INFO 2016-08-26 02:47:29,785 base 16 139864877934336 Raven is not configured (logging is disabled). Please see the documentation for more information.
+[35mnginx_1     |[0m 18.111.19.186 - - [26/Aug/2016:02:47:30 +0000] "GET / HTTP/1.1" 200 3203 "-" "Mozilla/5.0 (X11; Linux x86_64; rv:50.0) Gecko/20100101 Firefox/50.0" "-"
+[32mdjango_1    |[0m DEBUG 2016-08-26 02:47:30,705 base 17 139864877934336 Configuring Raven for host: <raven.conf.remote.RemoteConfig object at 0x7f34ca745f98>
+[32mdjango_1    |[0m INFO 2016-08-26 02:47:30,707 base 17 139864877934336 Raven is not configured (logging is disabled). Please see the documentation for more information.
+[35mnginx_1     |[0m 18.111.19.186 - - [26/Aug/2016:02:47:31 +0000] "GET /favicon.ico HTTP/1.1" 404 3122 "-" "Mozilla/5.0 (X11; Linux x86_64; rv:50.0) Gecko/20100101 Firefox/50.0" "-"
+[35mnginx_1     |[0m 18.111.19.186 - - [26/Aug/2016:02:47:31 +0000] "GET /favicon.ico HTTP/1.1" 404 3122 "-" "Mozilla/5.0 (X11; Linux x86_64; rv:50.0) Gecko/20100101 Firefox/50.0" "-"
+[35mnginx_1     |[0m 18.111.19.186 - - [26/Aug/2016:02:47:31 +0000] "GET /users/start/ HTTP/1.1" 200 3376 "http://game.acubed.me/" "Mozilla/5.0 (X11; Linux x86_64; rv:50.0) Gecko/20100101 Firefox/50.0" "-"
+[35mnginx_1     |[0m 18.111.19.186 - - [26/Aug/2016:02:47:35 +0000] "POST /users/start/ HTTP/1.1" 200 90 "http://game.acubed.me/users/start/" "Mozilla/5.0 (X11; Linux x86_64; rv:50.0) Gecko/20100101 Firefox/50.0" "-"
+[32mdjango_1    |[0m DEBUG 2016-08-26 02:47:35,648 base 13 139864877934336 Configuring Raven for host: <raven.conf.remote.RemoteConfig object at 0x7f34ca745e80>
+[32mdjango_1    |[0m INFO 2016-08-26 02:47:35,651 base 13 139864877934336 Raven is not configured (logging is disabled). Please see the documentation for more information.
+[35mnginx_1     |[0m 18.111.19.186 - - [26/Aug/2016:02:47:36 +0000] "GET /board/play/ HTTP/1.1" 200 4182 "http://game.acubed.me/users/start/" "Mozilla/5.0 (X11; Linux x86_64; rv:50.0) Gecko/20100101 Firefox/50.0" "-"
+[32mdjango_1    |[0m DEBUG 2016-08-26 02:47:36,791 base 14 139864877934336 Configuring Raven for host: <raven.conf.remote.RemoteConfig object at 0x7f34ca745f28>
+[32mdjango_1    |[0m INFO 2016-08-26 02:47:36,792 base 14 139864877934336 Raven is not configured (logging is disabled). Please see the documentation for more information.
+[35mnginx_1     |[0m 18.111.19.186 - - [26/Aug/2016:02:47:37 +0000] "GET /static/plots/70.png HTTP/1.1" 200 8119 "http://game.acubed.me/board/play/" "Mozilla/5.0 (X11; Linux x86_64; rv:50.0) Gecko/20100101 Firefox/50.0" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [26/Aug/2016:02:47:38 +0000] "GET / HTTP/1.1" 200 3203 "-" "Mozilla/5.0 (iPhone; CPU iPhone OS 9_3_4 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13G35 Safari/601.1" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [26/Aug/2016:02:47:39 +0000] "GET /users/start/? HTTP/1.1" 200 3376 "http://game.acubed.me/" "Mozilla/5.0 (iPhone; CPU iPhone OS 9_3_4 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13G35 Safari/601.1" "-"
+[35mnginx_1     |[0m 18.111.19.186 - - [26/Aug/2016:02:47:40 +0000] "POST /board/submit/ HTTP/1.1" 200 3536 "http://game.acubed.me/board/play/" "Mozilla/5.0 (X11; Linux x86_64; rv:50.0) Gecko/20100101 Firefox/50.0" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [26/Aug/2016:02:47:49 +0000] "POST /users/start/ HTTP/1.1" 200 90 "http://game.acubed.me/users/start/?" "Mozilla/5.0 (iPhone; CPU iPhone OS 9_3_4 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13G35 Safari/601.1" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [26/Aug/2016:02:47:49 +0000] "GET /board/play/ HTTP/1.1" 200 4182 "http://game.acubed.me/users/start/" "Mozilla/5.0 (iPhone; CPU iPhone OS 9_3_4 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13G35 Safari/601.1" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [26/Aug/2016:02:47:49 +0000] "GET /static/plots/16.png HTTP/1.1" 200 7125 "http://game.acubed.me/board/play/" "Mozilla/5.0 (iPhone; CPU iPhone OS 9_3_4 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13G35 Safari/601.1" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [26/Aug/2016:02:47:58 +0000] "POST /board/submit/ HTTP/1.1" 200 3533 "http://game.acubed.me/board/play/" "Mozilla/5.0 (iPhone; CPU iPhone OS 9_3_4 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13G35 Safari/601.1" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:51:35 +0000] "GET / HTTP/1.1" 200 3203 "-" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:51:35 +0000] "GET /static/css/project.babfbdb95f25.css HTTP/1.1" 200 418 "http://game.acubed.me/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:51:35 +0000] "GET /static/js/project.d1c9eda2d170.js HTTP/1.1" 200 45 "http://game.acubed.me/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:51:36 +0000] "GET /favicon.ico HTTP/1.1" 404 3122 "http://game.acubed.me/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:51:42 +0000] "GET /users/start/? HTTP/1.1" 200 3376 "http://game.acubed.me/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:51:59 +0000] "POST /users/start/ HTTP/1.1" 200 90 "http://game.acubed.me/users/start/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:51:59 +0000] "GET /board/play/ HTTP/1.1" 200 4182 "http://game.acubed.me/users/start/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:51:59 +0000] "GET /static/plots/35.png HTTP/1.1" 200 10680 "http://game.acubed.me/board/play/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:53:58 +0000] "POST /board/submit/ HTTP/1.1" 200 3535 "http://game.acubed.me/board/play/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:53:58 +0000] "GET /static/plots/35.png HTTP/1.1" 304 0 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:54:11 +0000] "GET /board/play/? HTTP/1.1" 200 4182 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:54:11 +0000] "GET /static/plots/70.png HTTP/1.1" 200 8119 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:54:51 +0000] "POST /board/submit/ HTTP/1.1" 200 3537 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:54:57 +0000] "GET /board/play/? HTTP/1.1" 200 4182 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:54:57 +0000] "GET /static/plots/20.png HTTP/1.1" 200 9502 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:55:22 +0000] "POST /board/submit/ HTTP/1.1" 200 3537 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:55:34 +0000] "GET /board/play/? HTTP/1.1" 200 4182 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:55:34 +0000] "GET /static/plots/45.png HTTP/1.1" 200 7252 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [26/Aug/2016:02:55:45 +0000] "GET / HTTP/1.1" 200 3203 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [26/Aug/2016:02:55:45 +0000] "GET /static/js/project.d1c9eda2d170.js HTTP/1.1" 200 45 "http://game.acubed.me/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [26/Aug/2016:02:55:57 +0000] "GET /users/start/? HTTP/1.1" 200 3376 "http://game.acubed.me/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [26/Aug/2016:02:56:00 +0000] "POST /users/start/ HTTP/1.1" 200 90 "http://game.acubed.me/users/start/?" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [26/Aug/2016:02:56:00 +0000] "GET /board/play/ HTTP/1.1" 302 5 "http://game.acubed.me/users/start/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [26/Aug/2016:02:56:00 +0000] "GET /?next=/board/play/ HTTP/1.1" 200 3203 "http://game.acubed.me/users/start/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [26/Aug/2016:02:56:01 +0000] "GET /users/start/? HTTP/1.1" 200 3376 "http://game.acubed.me/?next=/board/play/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [26/Aug/2016:02:56:05 +0000] "POST /users/start/ HTTP/1.1" 200 90 "http://game.acubed.me/users/start/?" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [26/Aug/2016:02:56:05 +0000] "GET /board/play/ HTTP/1.1" 302 5 "http://game.acubed.me/users/start/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [26/Aug/2016:02:56:05 +0000] "GET /?next=/board/play/ HTTP/1.1" 200 3203 "http://game.acubed.me/users/start/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [26/Aug/2016:02:56:06 +0000] "GET /users/start/? HTTP/1.1" 200 3376 "http://game.acubed.me/?next=/board/play/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [26/Aug/2016:02:56:10 +0000] "POST /users/start/ HTTP/1.1" 200 90 "http://game.acubed.me/users/start/?" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [26/Aug/2016:02:56:10 +0000] "GET /board/play/ HTTP/1.1" 200 4182 "http://game.acubed.me/users/start/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [26/Aug/2016:02:56:10 +0000] "GET /static/plots/30.png HTTP/1.1" 200 10391 "http://game.acubed.me/board/play/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:56:20 +0000] "POST /board/submit/ HTTP/1.1" 200 3537 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [26/Aug/2016:02:56:22 +0000] "POST /board/submit/ HTTP/1.1" 200 3537 "http://game.acubed.me/board/play/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [26/Aug/2016:02:56:24 +0000] "GET /board/play/? HTTP/1.1" 200 4180 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [26/Aug/2016:02:56:24 +0000] "GET /static/plots/9.png HTTP/1.1" 200 7556 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:56:31 +0000] "GET /board/play/? HTTP/1.1" 200 4182 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:56:31 +0000] "GET /static/plots/23.png HTTP/1.1" 200 8581 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [26/Aug/2016:02:56:32 +0000] "POST /board/submit/ HTTP/1.1" 200 3536 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [26/Aug/2016:02:56:34 +0000] "GET /board/play/? HTTP/1.1" 200 4182 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [26/Aug/2016:02:56:34 +0000] "GET /static/plots/90.png HTTP/1.1" 200 10372 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [26/Aug/2016:02:56:38 +0000] "POST /board/submit/ HTTP/1.1" 200 3537 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [26/Aug/2016:02:56:39 +0000] "GET /board/play/? HTTP/1.1" 200 4182 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [26/Aug/2016:02:56:39 +0000] "GET /static/plots/16.png HTTP/1.1" 200 7125 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [26/Aug/2016:02:56:41 +0000] "POST /board/submit/ HTTP/1.1" 200 3536 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [26/Aug/2016:02:56:44 +0000] "GET /board/play/? HTTP/1.1" 200 4182 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [26/Aug/2016:02:56:44 +0000] "GET /static/plots/62.png HTTP/1.1" 200 6969 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [26/Aug/2016:02:56:50 +0000] "GET / HTTP/1.1" 200 3203 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [26/Aug/2016:02:56:50 +0000] "GET /about/ HTTP/1.1" 200 3117 "http://game.acubed.me/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:56:51 +0000] "POST /board/submit/ HTTP/1.1" 200 3537 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:56:55 +0000] "GET /board/play/? HTTP/1.1" 200 4182 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:56:55 +0000] "GET /static/plots/10.png HTTP/1.1" 200 10636 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 66.249.83.129 - - [26/Aug/2016:02:57:10 +0000] "GET / HTTP/1.1" 200 3203 "-" "Mozilla/5.0 (Linux; Android 6.0.1; Nexus 6P Build/MTC20F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.98 Mobile Safari/537.36" "18.111.14.171"
+[35mnginx_1     |[0m 66.249.83.191 - - [26/Aug/2016:02:57:11 +0000] "GET /static/css/project.babfbdb95f25.css HTTP/1.1" 200 418 "http://game.acubed.me/" "Mozilla/5.0 (Linux; Android 6.0.1; Nexus 6P Build/MTC20F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.98 Mobile Safari/537.36" "18.111.14.171"
+[35mnginx_1     |[0m 66.249.83.191 - - [26/Aug/2016:02:57:11 +0000] "GET /static/js/project.d1c9eda2d170.js HTTP/1.1" 200 45 "http://game.acubed.me/" "Mozilla/5.0 (Linux; Android 6.0.1; Nexus 6P Build/MTC20F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.98 Mobile Safari/537.36" "18.111.14.171"
+[35mnginx_1     |[0m 66.249.83.133 - - [26/Aug/2016:02:57:11 +0000] "GET /favicon.ico HTTP/1.1" 404 3122 "http://game.acubed.me/" "Mozilla/5.0 (Linux; Android 6.0.1; Nexus 6P Build/MTC20F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.98 Mobile Safari/537.36" "18.111.14.171"
+[35mnginx_1     |[0m 66.249.83.129 - - [26/Aug/2016:02:57:12 +0000] "GET /users/start/? HTTP/1.1" 200 3376 "http://game.acubed.me/" "Mozilla/5.0 (Linux; Android 6.0.1; Nexus 6P Build/MTC20F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.98 Mobile Safari/537.36" "18.111.14.171"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:57:23 +0000] "POST /board/submit/ HTTP/1.1" 200 3537 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:57:28 +0000] "GET /board/play/? HTTP/1.1" 200 4182 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:57:28 +0000] "GET /static/plots/65.png HTTP/1.1" 200 9985 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:57:39 +0000] "POST /board/submit/ HTTP/1.1" 200 3536 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:57:42 +0000] "GET /board/play/? HTTP/1.1" 200 4182 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:57:42 +0000] "GET /static/plots/55.png HTTP/1.1" 200 10550 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:57:55 +0000] "POST /board/submit/ HTTP/1.1" 200 3537 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:57:59 +0000] "GET /board/play/? HTTP/1.1" 200 4182 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:57:59 +0000] "GET /static/plots/15.png HTTP/1.1" 200 9137 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:58:16 +0000] "POST /board/submit/ HTTP/1.1" 200 3537 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:58:22 +0000] "GET /board/play/? HTTP/1.1" 200 4182 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:58:22 +0000] "GET /static/plots/30.png HTTP/1.1" 200 10391 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:58:52 +0000] "POST /board/submit/ HTTP/1.1" 200 3537 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:58:58 +0000] "GET /board/play/? HTTP/1.1" 200 4180 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:58:58 +0000] "GET /static/plots/7.png HTTP/1.1" 200 8008 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:59:23 +0000] "POST /board/submit/ HTTP/1.1" 200 3536 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:59:27 +0000] "GET /board/play/? HTTP/1.1" 200 4182 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:02:59:27 +0000] "GET /static/plots/91.png HTTP/1.1" 200 10772 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:03:00:04 +0000] "POST /board/submit/ HTTP/1.1" 200 3537 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:03:00:11 +0000] "GET /board/play/? HTTP/1.1" 200 4182 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:03:00:11 +0000] "GET /static/plots/14.png HTTP/1.1" 200 6993 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:03:00:24 +0000] "POST /board/submit/ HTTP/1.1" 200 3537 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:03:00:31 +0000] "GET /board/play/? HTTP/1.1" 200 4182 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:03:00:31 +0000] "GET /static/plots/96.png HTTP/1.1" 200 6471 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:03:00:49 +0000] "POST /board/submit/ HTTP/1.1" 200 3537 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:03:01:04 +0000] "GET /board/play/? HTTP/1.1" 200 4180 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:03:01:04 +0000] "GET /static/plots/1.png HTTP/1.1" 200 10085 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:03:01:19 +0000] "POST /board/submit/ HTTP/1.1" 200 3536 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:03:01:25 +0000] "GET /board/play/? HTTP/1.1" 200 4180 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:03:01:25 +0000] "GET /static/plots/9.png HTTP/1.1" 200 7556 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:03:01:42 +0000] "POST /board/submit/ HTTP/1.1" 200 3536 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:03:01:46 +0000] "GET /board/play/? HTTP/1.1" 200 4182 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:03:01:46 +0000] "GET /static/plots/33.png HTTP/1.1" 200 6445 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:03:02:07 +0000] "POST /board/submit/ HTTP/1.1" 200 3537 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:03:02:11 +0000] "GET /board/play/? HTTP/1.1" 200 4182 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:03:02:11 +0000] "GET /static/plots/69.png HTTP/1.1" 200 9902 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:03:02:25 +0000] "POST /board/submit/ HTTP/1.1" 200 3537 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:03:02:29 +0000] "GET /board/play/? HTTP/1.1" 200 4182 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:03:02:29 +0000] "GET /static/plots/62.png HTTP/1.1" 200 6969 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:03:02:50 +0000] "POST /board/submit/ HTTP/1.1" 200 3537 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:03:02:55 +0000] "GET /board/play/? HTTP/1.1" 200 4182 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:03:02:55 +0000] "GET /static/plots/90.png HTTP/1.1" 200 10372 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:03:03:28 +0000] "POST /board/submit/ HTTP/1.1" 200 3537 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:03:03:35 +0000] "GET /board/play/? HTTP/1.1" 200 4182 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:03:03:35 +0000] "GET /static/plots/49.png HTTP/1.1" 200 10615 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:03:05:11 +0000] "POST /board/submit/ HTTP/1.1" 200 3537 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:03:05:11 +0000] "GET /static/plots/49.png HTTP/1.1" 304 0 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:03:05:19 +0000] "GET /board/play/? HTTP/1.1" 200 4182 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:03:05:19 +0000] "GET /static/plots/64.png HTTP/1.1" 200 8214 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:03:05:24 +0000] "GET /about/ HTTP/1.1" 200 3117 "http://game.acubed.me/board/play/?" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[35mnginx_1     |[0m 208.54.37.234 - - [26/Aug/2016:03:05:30 +0000] "GET / HTTP/1.1" 200 3203 "http://game.acubed.me/about/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36" "-"
+[32mdjango_1    |[0m ERROR 2016-08-26 03:59:13,893 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 89.248.174.4 - - [26/Aug/2016:03:59:13 +0000] "GET /xmlrpc.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-08-26 04:41:45,801 base 17 139864877934336 Invalid HTTP_HOST header: '0.0.0.0:5000'. You may need to add '0.0.0.0' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 162.243.188.75 - - [26/Aug/2016:04:41:45 +0000] "GET / HTTP/1.0" 400 26 "-" "-" "-"
+[35mnginx_1     |[0m 66.249.83.129 - - [26/Aug/2016:04:58:43 +0000] "GET /users/start/? HTTP/1.1" 200 3376 "http://game.acubed.me/" "Mozilla/5.0 (Linux; Android 6.0.1; Nexus 6P Build/MTC20F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.98 Mobile Safari/537.36" "50.138.227.185"
+[35mnginx_1     |[0m 169.229.3.91 - - [26/Aug/2016:08:47:14 +0000] "M\xB2b\x03\xB2M\x9D\xFCd\xC5\x06\x9A\x5C!a\xC8\xA1\xBD\x85\xA4\x90\xAF\xE9\xD5\xD5\x96\x0E\xD4\xCA\xFBV\xEE\xB7\x9A2%\x05,\x85\xAC\x7F\x93=\x9AV\xE4\xF2\x98\xB9\xCD\xAD\xAD\xA5)\xEFZ]\x9CkyUy\xA6m" 400 173 "-" "-" "-"
+[35mnginx_1     |[0m 158.130.6.191 - - [26/Aug/2016:13:23:59 +0000] "HEAD /images/ HTTP/1.1" 400 0 "-" "Mozilla/5.0 zgrab/0.x" "-"
+[32mdjango_1    |[0m ERROR 2016-08-26 13:23:59,774 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[32mdjango_1    |[0m ERROR 2016-08-26 15:19:28,475 base 16 139864877934336 Invalid HTTP_HOST header: 'testp4.pospr.waw.pl'. You may need to add 'testp4.pospr.waw.pl' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 91.196.50.33 - - [26/Aug/2016:15:19:28 +0000] "GET http://testp4.pospr.waw.pl/testproxy.php HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Windows NT 5.1; rv:32.0) Gecko/20100101 Firefox/31.0" "-"
+[32mdjango_1    |[0m ERROR 2016-08-26 17:33:46,448 base 13 139864877934336 Invalid HTTP_HOST header: '0.0.0.0:5000'. You may need to add '0.0.0.0' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 191.96.249.42 - - [26/Aug/2016:17:33:46 +0000] "GET /phpmyadmin/scripts/setup.php HTTP/1.0" 400 26 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-08-26 20:56:30,357 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 185.93.185.10 - - [26/Aug/2016:20:56:30 +0000] "GET / HTTP/1.1" 400 37 "-" "Scanbot" "-"
+[32mdjango_1    |[0m ERROR 2016-08-26 22:02:52,648 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 183.129.160.229 - - [26/Aug/2016:22:02:52 +0000] "GET / HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:47.0) Gecko/20100101 Firefox/47.0" "-"
+[35mnginx_1     |[0m 183.129.160.229 - - [26/Aug/2016:22:02:52 +0000] "test" 400 173 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-08-26 23:07:36,692 base 14 139864877934336 Invalid HTTP_HOST header: '0.0.0.0:5000'. You may need to add '0.0.0.0' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 192.99.204.12 - - [26/Aug/2016:23:07:36 +0000] "GET / HTTP/1.0" 400 26 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-08-27 01:59:12,329 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 128.232.110.28 - - [27/Aug/2016:01:59:12 +0000] "GET / HTTP/1.1" 400 37 "-" "Mozilla/5.0 zgrab/0.x" "-"
+[32mdjango_1    |[0m ERROR 2016-08-27 04:13:59,213 base 17 139864877934336 Invalid HTTP_HOST header: 'testp1.piwo.pila.pl'. You may need to add 'testp1.piwo.pila.pl' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 185.25.148.240 - - [27/Aug/2016:04:13:59 +0000] "GET http://testp1.piwo.pila.pl/testproxy.php HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Windows NT 5.1; rv:32.0) Gecko/20100101 Firefox/31.0" "-"
+[32mdjango_1    |[0m ERROR 2016-08-27 07:00:18,588 base 17 139864877934336 Invalid HTTP_HOST header: '0.0.0.0:5000'. You may need to add '0.0.0.0' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 64.16.214.100 - - [27/Aug/2016:07:00:18 +0000] "GET /admin HTTP/1.0" 400 26 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-08-27 08:39:15,327 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 201.172.54.50 - - [27/Aug/2016:08:39:15 +0000] "GET /hndUnblock.cgi HTTP/1.0" 400 26 "-" "Wget(linux)" "-"
+[32mdjango_1    |[0m ERROR 2016-08-27 08:39:15,488 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 201.172.54.50 - - [27/Aug/2016:08:39:15 +0000] "GET /tmUnblock.cgi HTTP/1.0" 400 26 "-" "Wget(linux)" "-"
+[35mnginx_1     |[0m 201.172.54.50 - - [27/Aug/2016:08:39:16 +0000] "GET /cgi/common.cgi HTTP/1.0" 400 26 "-" "Wget(linux)" "-"
+[32mdjango_1    |[0m ERROR 2016-08-27 08:39:16,670 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[32mdjango_1    |[0m ERROR 2016-08-27 08:39:16,908 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 201.172.54.50 - - [27/Aug/2016:08:39:16 +0000] "GET /stssys.htm HTTP/1.0" 400 26 "-" "Wget(linux)" "-"
+[32mdjango_1    |[0m ERROR 2016-08-27 08:39:20,183 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 201.172.54.50 - - [27/Aug/2016:08:39:20 +0000] "POST /command.php HTTP/1.0" 400 26 "-" "Wget(linux)" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [27/Aug/2016:10:59:16 +0000] "GET / HTTP/1.1" 200 3203 "-" "Mozilla/5.0 (iPhone; CPU iPhone OS 9_3_4 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13G35 Safari/601.1" "-"
+[35mnginx_1     |[0m 69.25.200.40 - - [27/Aug/2016:10:59:16 +0000] "GET /static/css/project.babfbdb95f25.css HTTP/1.1" 200 418 "http://game.acubed.me/" "Mozilla/5.0 (iPhone; CPU iPhone OS 9_3_4 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13G35 Safari/601.1" "-"
+[32mdjango_1    |[0m ERROR 2016-08-27 11:36:45,936 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 128.232.110.28 - - [27/Aug/2016:11:36:45 +0000] "GET / HTTP/1.1" 400 37 "-" "Mozilla/5.0 zgrab/0.x" "-"
+[32mdjango_1    |[0m ERROR 2016-08-27 13:25:28,620 base 16 139864877934336 Invalid HTTP_HOST header: '0.0.0.0:5000'. You may need to add '0.0.0.0' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 208.100.26.230 - - [27/Aug/2016:13:25:28 +0000] "GET / HTTP/1.0" 400 26 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-08-27 13:27:34,155 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 208.100.26.230 - - [27/Aug/2016:13:27:34 +0000] "HEAD / HTTP/1.1" 400 0 "-" "Mozilla/5.0 (compatible; Nmap Scripting Engine; http://nmap.org/book/nse.html)" "-"
+[32mdjango_1    |[0m ERROR 2016-08-27 13:27:34,361 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 208.100.26.230 - - [27/Aug/2016:13:27:34 +0000] "GET / HTTP/1.1" 400 37 "-" "Mozilla/5.0 (compatible; Nmap Scripting Engine; http://nmap.org/book/nse.html)" "-"
+[32mdjango_1    |[0m ERROR 2016-08-27 15:02:34,929 base 14 139864877934336 Invalid HTTP_HOST header: 'www.qyer.com'. You may need to add 'www.qyer.com' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 120.132.50.135 - - [27/Aug/2016:15:02:34 +0000] "GET http://www.qyer.com/ HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:29.0) Gecko/20100101 Firefox/29.0" "-"
+[32mdjango_1    |[0m ERROR 2016-08-27 16:26:53,002 base 13 139864877934336 Invalid HTTP_HOST header: 'testp1.piwo.pila.pl'. You may need to add 'testp1.piwo.pila.pl' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 91.196.50.33 - - [27/Aug/2016:16:26:53 +0000] "GET http://testp1.piwo.pila.pl/testproxy.php HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Windows NT 5.1; rv:32.0) Gecko/20100101 Firefox/31.0" "-"
+[32mdjango_1    |[0m ERROR 2016-08-27 17:02:15,177 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.063.164'. You may need to add '104.236.063.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 91.224.217.72 - - [27/Aug/2016:17:02:15 +0000] "GET / HTTP/1.1" 400 37 "-" "curl/7.17.1 (mips-unknown-linux-gnu) libcurl/7.17.1 OpenSSL/0.9.8i zlib/1.2.3" "-"
+[35mnginx_1     |[0m 50.138.227.185 - - [27/Aug/2016:20:52:09 +0000] "GET / HTTP/1.1" 200 3203 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[32mdjango_1    |[0m ERROR 2016-08-27 21:25:18,503 base 17 139864877934336 Invalid HTTP_HOST header: 'www.dedaland.top'. You may need to add 'www.dedaland.top' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 64.246.165.150 - - [27/Aug/2016:21:25:18 +0000] "GET /robots.txt HTTP/1.0" 400 26 "-" "Mozilla/5.0 (Windows; U; Windows NT 5.1; en; rv:1.9.0.13) Gecko/2009073022 Firefox/3.5.2 (.NET CLR 3.5.30729) SurveyBot/2.3 (DomainTools)" "-"
+[32mdjango_1    |[0m ERROR 2016-08-27 21:25:18,661 base 13 139864877934336 Invalid HTTP_HOST header: 'www.dedaland.top'. You may need to add 'www.dedaland.top' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 64.246.165.150 - - [27/Aug/2016:21:25:18 +0000] "GET / HTTP/1.1" 400 37 "http://whois.domaintools.com/dedaland.top" "Mozilla/5.0 (Windows; U; Windows NT 5.1; en; rv:1.9.0.13) Gecko/2009073022 Firefox/3.5.2 (.NET CLR 3.5.30729) SurveyBot/2.3 (DomainTools)" "-"
+[32mdjango_1    |[0m ERROR 2016-08-28 00:21:27,725 base 13 139864877934336 Invalid HTTP_HOST header: 'localhost'. You may need to add 'localhost' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 192.200.215.162 - - [28/Aug/2016:00:21:27 +0000] "POST /cgi-bin/php/%63%67%69%6E/%70%68%70?%2D%64+%61%6C%75%6F%6E+%2D%64+%6D%6F%64+%2D%64+%73%75%68%6F%6E%3D%6F%6E+%2D%64+%75%6E%63%74%73%3D%22%22+%2D%64+%64%6E%65+%2D%64+%61%75%74%6F%5F%70%72%%74+%2D%64+%63%67%69%2E%66%6F%72%63%65%5F%72%65%64%69%72%65%63%74%3D%30+%2D%64+%74%5F%3D%30+%2D%64+%75%74+%2D%6E HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-08-28 00:21:27,735 base 17 139864877934336 Invalid HTTP_HOST header: 'localhost'. You may need to add 'localhost' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 192.200.215.162 - - [28/Aug/2016:00:21:27 +0000] "POST /cgi-bin/php5/%63%67%69%6E/%70%68%70?%2D%64+%61%6C%75%6F%6E+%2D%64+%6D%6F%64+%2D%64+%73%75%68%6F%6E%3D%6F%6E+%2D%64+%75%6E%63%74%73%3D%22%22+%2D%64+%64%6E%65+%2D%64+%61%75%74%6F%5F%70%72%%74+%2D%64+%63%67%69%2E%66%6F%72%63%65%5F%72%65%64%69%72%65%63%74%3D%30+%2D%64+%74%5F%3D%30+%2D%64+%75%74+%2D%6E HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-08-28 00:21:27,741 base 13 139864877934336 Invalid HTTP_HOST header: 'localhost'. You may need to add 'localhost' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 192.200.215.162 - - [28/Aug/2016:00:21:27 +0000] "POST /cgi-bin/php-cgi/%63%67%69%6E/%70%68%70?%2D%64+%61%6C%75%6F%6E+%2D%64+%6D%6F%64+%2D%64+%73%75%68%6F%6E%3D%6F%6E+%2D%64+%75%6E%63%74%73%3D%22%22+%2D%64+%64%6E%65+%2D%64+%61%75%74%6F%5F%70%72%%74+%2D%64+%63%67%69%2E%66%6F%72%63%65%5F%72%65%64%69%72%65%63%74%3D%30+%2D%64+%74%5F%3D%30+%2D%64+%75%74+%2D%6E HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-08-28 00:21:27,750 base 16 139864877934336 Invalid HTTP_HOST header: 'localhost'. You may need to add 'localhost' to ALLOWED_HOSTS.
+[32mdjango_1    |[0m ERROR 2016-08-28 00:21:27,754 base 14 139864877934336 Invalid HTTP_HOST header: '-h'. You may need to add '-h' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 192.200.215.162 - - [28/Aug/2016:00:21:27 +0000] "POST /cgi-bin/php.cgi/%63%67%69%6E/%70%68%70?%2D%64+%61%6C%75%6F%6E+%2D%64+%6D%6F%64+%2D%64+%73%75%68%6F%6E%3D%6F%6E+%2D%64+%75%6E%63%74%73%3D%22%22+%2D%64+%64%6E%65+%2D%64+%61%75%74%6F%5F%70%72%%74+%2D%64+%63%67%69%2E%66%6F%72%63%65%5F%72%65%64%69%72%65%63%74%3D%30+%2D%64+%74%5F%3D%30+%2D%64+%75%74+%2D%6E HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-08-28 00:21:27,762 base 17 139864877934336 Invalid HTTP_HOST header: 'localhost'. You may need to add 'localhost' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 192.200.215.162 - - [28/Aug/2016:00:21:27 +0000] "POST /cgi-bin/php4/%63%67%69%6E/%70%68%70?%2D%64+%61%6C%75%6F%6E+%2D%64+%6D%6F%64+%2D%64+%73%75%68%6F%6E%3D%6F%6E+%2D%64+%75%6E%63%74%73%3D%22%22+%2D%64+%64%6E%65+%2D%64+%61%75%74%6F%5F%70%72%%74+%2D%64+%63%67%69%2E%66%6F%72%63%65%5F%72%65%64%69%72%65%63%74%3D%30+%2D%64+%74%5F%3D%30+%2D%64+%75%74+%2D%6E HTTP/1.1" 400 37 "-" "-" "-"
+[35mnginx_1     |[0m 192.200.215.162 - - [28/Aug/2016:00:21:27 +0000] "POST //%63%67%69%2d%62%69%6e/%70%68%70?%2d%64+%61%6c%6c%6f%77%5f%75%72%6c%5f%69%6e%63%6c%75%64%65%3d%6f%6e+%2d%64+%73%61%66%65%5f%6d%6f%64%65%3d%6f%66%66+%2d%64+%73%75%68%6f%73%69%6e%2e%73%69%6d%75%6c%61%74%69%6f%6e%3d%6f%6e+%2d%64+%64%69%73%61%62%6c%65%5f%66%75%6e%63%74%69%6f%6e%73%3d%22%22+%2d%64+%6f%70%65%6e%5f%62%61%73%65%64%69%72%3d%6e%6f%6e%65+%2d%64+%61%75%74%6f%5f%70%72%65%70%65%6e%64%5f%66%69%6c%65%3d%70%68%70%3a%2f%2f%69%6e%70%75%74+%2d%64+%63%67%69%2e%66%6f%72%63%65%5f%72%65%64%69%72%65%63%74%3d%30+%2d%64+%63%67%69%2e%72%65%64%69%72%65%63%74%5f%73%74%61%74%75%73%5f%65%6e%76%3d%30+%2d%64+%61%75%74%6f%5f%70%72%65%70%65%6e%64%5f%66%69%6c%65%3d%70%68%70%3a%2f%2f%69%6e%70%75%74+%2d%6e HTTP/1.1" 400 37 "-" "-" "-"
+[35mnginx_1     |[0m 192.200.215.162 - - [28/Aug/2016:00:21:27 +0000] "" 400 0 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-08-28 02:04:27,883 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 78.27.140.4 - - [28/Aug/2016:02:04:27 +0000] "GET / HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Windows NT 5.1; rv:9.0.1) Gecko/20100101 Firefox/9.0.1" "-"
+[32mdjango_1    |[0m ERROR 2016-08-28 02:04:28,150 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 78.27.140.4 - - [28/Aug/2016:02:04:28 +0000] "GET / HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Windows NT 5.1; rv:9.0.1) Gecko/20100101 Firefox/9.0.1" "-"
+[32mdjango_1    |[0m ERROR 2016-08-28 02:04:28,394 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 78.27.140.4 - - [28/Aug/2016:02:04:28 +0000] "GET / HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Windows NT 5.1; rv:9.0.1) Gecko/20100101 Firefox/9.0.1" "-"
+[32mdjango_1    |[0m ERROR 2016-08-28 02:21:12,710 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 128.232.110.28 - - [28/Aug/2016:02:21:12 +0000] "GET / HTTP/1.1" 400 37 "-" "Mozilla/5.0 zgrab/0.x" "-"
+[32mdjango_1    |[0m ERROR 2016-08-28 05:10:39,053 base 16 139864877934336 Invalid HTTP_HOST header: 'testp4.pospr.waw.pl'. You may need to add 'testp4.pospr.waw.pl' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 91.196.50.33 - - [28/Aug/2016:05:10:39 +0000] "GET http://testp4.pospr.waw.pl/testproxy.php HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Windows NT 5.1; rv:32.0) Gecko/20100101 Firefox/31.0" "-"
+[35mnginx_1     |[0m 71.6.158.166 - - [28/Aug/2016:12:51:51 +0000] "GET / HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36" "-"
+[32mdjango_1    |[0m ERROR 2016-08-28 12:51:51,965 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[32mdjango_1    |[0m ERROR 2016-08-28 12:51:52,125 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 71.6.158.166 - - [28/Aug/2016:12:51:52 +0000] "GET /robots.txt HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-08-28 12:51:52,267 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 71.6.158.166 - - [28/Aug/2016:12:51:52 +0000] "GET /sitemap.xml HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-08-28 13:44:54,674 base 16 139864877934336 Invalid HTTP_HOST header: '0.0.0.0:5000'. You may need to add '0.0.0.0' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 45.79.150.75 - - [28/Aug/2016:13:44:54 +0000] "GET / HTTP/1.0" 400 26 "-" "-" "-"
+[35mnginx_1     |[0m 141.212.122.32 - - [28/Aug/2016:14:07:30 +0000] "GET /x HTTP/1.1" 400 173 "-" "Telesphoreo" "-"
+[32mdjango_1    |[0m ERROR 2016-08-28 15:43:41,575 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 167.114.229.246 - - [28/Aug/2016:15:43:41 +0000] "GET / HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36" "-"
+[32mdjango_1    |[0m ERROR 2016-08-28 18:16:16,687 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 183.129.160.229 - - [28/Aug/2016:18:16:16 +0000] "GET / HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:47.0) Gecko/20100101 Firefox/47.0" "-"
+[35mnginx_1     |[0m 183.129.160.229 - - [28/Aug/2016:18:16:21 +0000] "test" 400 173 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-08-28 18:36:39,390 base 13 139864877934336 Invalid HTTP_HOST header: 'testp4.pospr.waw.pl'. You may need to add 'testp4.pospr.waw.pl' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 185.25.148.240 - - [28/Aug/2016:18:36:39 +0000] "GET http://testp4.pospr.waw.pl/testproxy.php HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Windows NT 5.1; rv:32.0) Gecko/20100101 Firefox/31.0" "-"
+[32mdjango_1    |[0m ERROR 2016-08-28 20:22:26,539 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.063.164'. You may need to add '104.236.063.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.185.2.249 - - [28/Aug/2016:20:22:26 +0000] "GET / HTTP/1.1" 400 37 "-" "curl/7.17.1 (mips-unknown-linux-gnu) libcurl/7.17.1 OpenSSL/0.9.8i zlib/1.2.3" "-"
+[32mdjango_1    |[0m ERROR 2016-08-29 02:49:04,006 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.063.164'. You may need to add '104.236.063.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 185.69.5.161 - - [29/Aug/2016:02:49:04 +0000] "GET / HTTP/1.1" 400 37 "-" "curl/7.17.1 (mips-unknown-linux-gnu) libcurl/7.17.1 OpenSSL/0.9.8i zlib/1.2.3" "-"
+[32mdjango_1    |[0m ERROR 2016-08-29 05:18:51,937 base 16 139864877934336 Invalid HTTP_HOST header: 'api.ipify.org'. You may need to add 'api.ipify.org' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 104.193.254.244 - - [29/Aug/2016:05:18:51 +0000] "GET http://api.ipify.org/ HTTP/1.1" 400 37 "-" "Mozilla/5.0" "-"
+[32mdjango_1    |[0m ERROR 2016-08-29 06:24:32,914 base 17 139864877934336 Invalid HTTP_HOST header: 'testp1.piwo.pila.pl'. You may need to add 'testp1.piwo.pila.pl' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 91.196.50.33 - - [29/Aug/2016:06:24:32 +0000] "GET http://testp1.piwo.pila.pl/testproxy.php HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Windows NT 5.1; rv:32.0) Gecko/20100101 Firefox/31.0" "-"
+[35mnginx_1     |[0m 213.128.81.66 - - [29/Aug/2016:11:13:51 +0000] "GET / HTTP/1.0" 400 26 "-" "masscan/1.0 (https://github.com/robertdavidgraham/masscan)" "-"
+[32mdjango_1    |[0m ERROR 2016-08-29 11:13:51,008 base 13 139864877934336 Invalid HTTP_HOST header: '0.0.0.0:5000'. You may need to add '0.0.0.0' to ALLOWED_HOSTS.
+[32mdjango_1    |[0m ERROR 2016-08-29 11:50:51,940 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.077.164'. You may need to add '104.236.077.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 185.135.68.30 - - [29/Aug/2016:11:50:51 +0000] "GET / HTTP/1.1" 400 37 "-" "curl/7.17.1 (mips-unknown-linux-gnu) libcurl/7.17.1 OpenSSL/0.9.8i zlib/1.2.3" "-"
+[32mdjango_1    |[0m ERROR 2016-08-29 13:17:53,468 base 13 139864877934336 Invalid HTTP_HOST header: 'www.bipm.org'. You may need to add 'www.bipm.org' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 104.193.253.48 - - [29/Aug/2016:13:17:53 +0000] "GET http://www.bipm.org/ HTTP/1.1" 400 37 "-" "Mozilla/5.0" "-"
+[32mdjango_1    |[0m ERROR 2016-08-29 20:22:24,431 base 14 139864877934336 Invalid HTTP_HOST header: 'testp3.pospr.waw.pl'. You may need to add 'testp3.pospr.waw.pl' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 91.196.50.33 - - [29/Aug/2016:20:22:24 +0000] "GET http://testp3.pospr.waw.pl/testproxy.php HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Windows NT 5.1; rv:32.0) Gecko/20100101 Firefox/31.0" "-"
+[32mdjango_1    |[0m ERROR 2016-08-30 08:46:27,517 base 13 139864877934336 Invalid HTTP_HOST header: 'testp1.piwo.pila.pl'. You may need to add 'testp1.piwo.pila.pl' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 185.49.14.190 - - [30/Aug/2016:08:46:27 +0000] "GET http://testp1.piwo.pila.pl/testproxy.php HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Windows NT 5.1; rv:32.0) Gecko/20100101 Firefox/31.0" "-"
+[32mdjango_1    |[0m ERROR 2016-08-30 09:45:53,129 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.063.164'. You may need to add '104.236.063.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 37.77.51.220 - - [30/Aug/2016:09:45:53 +0000] "GET / HTTP/1.1" 400 37 "-" "curl/7.17.1 (mips-unknown-linux-gnu) libcurl/7.17.1 OpenSSL/0.9.8i zlib/1.2.3" "-"
+[32mdjango_1    |[0m ERROR 2016-08-30 10:37:32,261 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 54.238.199.102 - - [30/Aug/2016:10:37:32 +0000] "GET / HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36" "-"
+[32mdjango_1    |[0m ERROR 2016-08-30 17:02:49,239 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 104.223.226.162 - - [30/Aug/2016:17:02:49 +0000] "GET /user/login HTTP/1.1" 400 37 "-" "python-requests/2.7.0 CPython/2.7.8 Windows/2003Server" "-"
+[32mdjango_1    |[0m ERROR 2016-08-30 17:05:45,818 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 104.223.226.162 - - [30/Aug/2016:17:05:45 +0000] "GET /user/login HTTP/1.1" 400 37 "-" "python-requests/2.7.0 CPython/2.7.8 Windows/2003Server" "-"
+[32mdjango_1    |[0m ERROR 2016-08-30 17:10:57,471 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 104.223.226.162 - - [30/Aug/2016:17:10:57 +0000] "GET /user/login HTTP/1.1" 400 37 "-" "python-requests/2.7.0 CPython/2.7.8 Windows/2003Server" "-"
+[32mdjango_1    |[0m ERROR 2016-08-30 18:45:53,651 base 17 139864877934336 Invalid HTTP_HOST header: '0.0.0.0:5000'. You may need to add '0.0.0.0' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 94.103.150.195 - - [30/Aug/2016:18:45:53 +0000] "GET / HTTP/1.0" 400 26 "-" "masscan/1.0 (https://github.com/robertdavidgraham/masscan)" "-"
+[32mdjango_1    |[0m ERROR 2016-08-30 21:19:39,569 base 13 139864877934336 Invalid HTTP_HOST header: 'testp1.piwo.pila.pl'. You may need to add 'testp1.piwo.pila.pl' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 185.25.148.240 - - [30/Aug/2016:21:19:39 +0000] "GET http://testp1.piwo.pila.pl/testproxy.php HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Windows NT 5.1; rv:32.0) Gecko/20100101 Firefox/31.0" "-"
+[32mdjango_1    |[0m ERROR 2016-08-30 21:46:11,786 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 141.212.122.144 - - [30/Aug/2016:21:46:11 +0000] "GET / HTTP/1.1" 400 37 "-" "Mozilla/5.0 zgrab/0.x" "-"
+[32mdjango_1    |[0m ERROR 2016-08-31 07:08:36,917 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 187.160.84.151 - - [31/Aug/2016:07:08:36 +0000] "GET /hndUnblock.cgi HTTP/1.0" 400 26 "-" "Wget(linux)" "-"
+[32mdjango_1    |[0m ERROR 2016-08-31 07:08:37,111 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 187.160.84.151 - - [31/Aug/2016:07:08:37 +0000] "GET /tmUnblock.cgi HTTP/1.0" 400 26 "-" "Wget(linux)" "-"
+[32mdjango_1    |[0m ERROR 2016-08-31 07:08:37,337 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 187.160.84.151 - - [31/Aug/2016:07:08:37 +0000] "GET /cgi/common.cgi HTTP/1.0" 400 26 "-" "Wget(linux)" "-"
+[32mdjango_1    |[0m ERROR 2016-08-31 07:08:37,484 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 187.160.84.151 - - [31/Aug/2016:07:08:37 +0000] "GET /stssys.htm HTTP/1.0" 400 26 "-" "Wget(linux)" "-"
+[32mdjango_1    |[0m ERROR 2016-08-31 07:08:37,628 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 187.160.84.151 - - [31/Aug/2016:07:08:37 +0000] "GET / HTTP/1.0" 400 26 "-" "Wget(linux)" "-"
+[32mdjango_1    |[0m ERROR 2016-08-31 07:08:38,053 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 187.160.84.151 - - [31/Aug/2016:07:08:38 +0000] "POST /command.php HTTP/1.0" 400 26 "-" "Wget(linux)" "-"
+[32mdjango_1    |[0m ERROR 2016-08-31 07:18:21,904 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 89.248.174.4 - - [31/Aug/2016:07:18:21 +0000] "GET / HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-08-31 11:08:10,871 base 17 139864877934336 Invalid HTTP_HOST header: 'testp4.pospr.waw.pl'. You may need to add 'testp4.pospr.waw.pl' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 185.49.14.190 - - [31/Aug/2016:11:08:10 +0000] "GET http://testp4.pospr.waw.pl/testproxy.php HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Windows NT 5.1; rv:32.0) Gecko/20100101 Firefox/31.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:07:58 +0000] "GET / HTTP/1.1" 200 3203 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:07:58 +0000] "GET /static/css/project.babfbdb95f25.css HTTP/1.1" 200 418 "http://game.acubed.me/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:07:58 +0000] "GET /static/js/project.d1c9eda2d170.js HTTP/1.1" 200 45 "http://game.acubed.me/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:07:58 +0000] "GET /favicon.ico HTTP/1.1" 404 3122 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:10:38 +0000] "GET /users/start/ HTTP/1.1" 200 3376 "http://game.acubed.me/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:11:01 +0000] "GET /users/start/ HTTP/1.1" 200 3376 "http://game.acubed.me/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:11:22 +0000] "POST /users/start/ HTTP/1.1" 200 90 "http://game.acubed.me/users/start/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:11:22 +0000] "GET /board/play/ HTTP/1.1" 200 4182 "http://game.acubed.me/users/start/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:11:22 +0000] "GET /static/plots/35.png HTTP/1.1" 200 10680 "http://game.acubed.me/board/play/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:11:54 +0000] "POST /board/submit/ HTTP/1.1" 200 3536 "http://game.acubed.me/board/play/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:11:59 +0000] "GET /board/play/ HTTP/1.1" 200 4182 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:11:59 +0000] "GET /static/plots/20.png HTTP/1.1" 200 9502 "http://game.acubed.me/board/play/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:12:02 +0000] "POST /board/submit/ HTTP/1.1" 200 3537 "http://game.acubed.me/board/play/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:12:16 +0000] "GET /board/play/ HTTP/1.1" 200 4182 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:12:16 +0000] "GET /static/plots/65.png HTTP/1.1" 200 9985 "http://game.acubed.me/board/play/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:12:20 +0000] "POST /board/submit/ HTTP/1.1" 200 3537 "http://game.acubed.me/board/play/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:12:21 +0000] "GET /board/play/ HTTP/1.1" 200 4182 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:12:21 +0000] "GET /static/plots/14.png HTTP/1.1" 200 6993 "http://game.acubed.me/board/play/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:12:22 +0000] "POST /board/submit/ HTTP/1.1" 200 3537 "http://game.acubed.me/board/play/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:12:23 +0000] "GET /board/play/ HTTP/1.1" 200 4180 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:12:23 +0000] "GET /static/plots/9.png HTTP/1.1" 200 7556 "http://game.acubed.me/board/play/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:12:24 +0000] "POST /board/submit/ HTTP/1.1" 200 3534 "http://game.acubed.me/board/play/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:12:25 +0000] "GET /board/play/ HTTP/1.1" 200 4182 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:12:25 +0000] "GET /static/plots/94.png HTTP/1.1" 200 9343 "http://game.acubed.me/board/play/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:12:26 +0000] "POST /board/submit/ HTTP/1.1" 200 3537 "http://game.acubed.me/board/play/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:12:28 +0000] "GET /board/play/ HTTP/1.1" 200 4182 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:12:28 +0000] "GET /static/plots/22.png HTTP/1.1" 200 7489 "http://game.acubed.me/board/play/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:12:29 +0000] "POST /board/submit/ HTTP/1.1" 200 3535 "http://game.acubed.me/board/play/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:12:30 +0000] "GET /board/play/ HTTP/1.1" 200 4182 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:12:30 +0000] "GET /static/plots/30.png HTTP/1.1" 200 10391 "http://game.acubed.me/board/play/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:12:41 +0000] "POST /board/submit/ HTTP/1.1" 200 3535 "http://game.acubed.me/board/play/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:12:56 +0000] "GET /board/play/ HTTP/1.1" 200 4182 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:12:56 +0000] "GET /static/plots/62.png HTTP/1.1" 200 6969 "http://game.acubed.me/board/play/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:12:57 +0000] "POST /board/submit/ HTTP/1.1" 200 3535 "http://game.acubed.me/board/play/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:12:58 +0000] "GET /board/play/ HTTP/1.1" 200 4182 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:12:58 +0000] "GET /static/plots/96.png HTTP/1.1" 200 6471 "http://game.acubed.me/board/play/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:12:59 +0000] "POST /board/submit/ HTTP/1.1" 200 3535 "http://game.acubed.me/board/play/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:13:00 +0000] "GET /board/play/ HTTP/1.1" 200 4182 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:13:00 +0000] "GET /static/plots/69.png HTTP/1.1" 200 9902 "http://game.acubed.me/board/play/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:13:01 +0000] "POST /board/submit/ HTTP/1.1" 200 3535 "http://game.acubed.me/board/play/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:13:02 +0000] "GET /board/play/ HTTP/1.1" 200 4182 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:13:02 +0000] "GET /static/plots/49.png HTTP/1.1" 200 10615 "http://game.acubed.me/board/play/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:13:03 +0000] "POST /board/submit/ HTTP/1.1" 200 3535 "http://game.acubed.me/board/play/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:13:04 +0000] "GET /board/play/ HTTP/1.1" 200 4180 "http://game.acubed.me/board/submit/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.85.35.211 - - [31/Aug/2016:15:13:04 +0000] "GET /static/plots/7.png HTTP/1.1" 200 8008 "http://game.acubed.me/board/play/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[32mdjango_1    |[0m ERROR 2016-08-31 15:33:08,299 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 183.129.160.229 - - [31/Aug/2016:15:33:08 +0000] "GET / HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:47.0) Gecko/20100101 Firefox/47.0" "-"
+[35mnginx_1     |[0m 183.129.160.229 - - [31/Aug/2016:15:33:08 +0000] "test" 400 173 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-08-31 17:01:27,460 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.063.164'. You may need to add '104.236.063.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 78.136.111.11 - - [31/Aug/2016:17:01:27 +0000] "GET / HTTP/1.1" 400 37 "-" "curl/7.17.1 (mips-unknown-linux-gnu) libcurl/7.17.1 OpenSSL/0.9.8i zlib/1.2.3" "-"
+[32mdjango_1    |[0m ERROR 2016-08-31 18:16:42,998 base 16 139864877934336 Invalid HTTP_HOST header: '180.163.113.82'. You may need to add '180.163.113.82' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 180.97.106.161 - - [31/Aug/2016:18:16:43 +0000] "HEAD http://180.163.113.82/check_proxy HTTP/1.1" 400 0 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-08-31 19:04:46,599 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 182.118.54.29 - - [31/Aug/2016:19:04:46 +0000] "GET / HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2251.0 Safari/537.36" "-"
+[32mdjango_1    |[0m ERROR 2016-08-31 22:38:54,236 base 13 139864877934336 Invalid HTTP_HOST header: 'testp1.piwo.pila.pl'. You may need to add 'testp1.piwo.pila.pl' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 185.49.14.190 - - [31/Aug/2016:22:38:54 +0000] "GET http://testp1.piwo.pila.pl/testproxy.php HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Windows NT 5.1; rv:32.0) Gecko/20100101 Firefox/31.0" "-"
+[32mdjango_1    |[0m ERROR 2016-08-31 22:41:24,609 base 14 139864877934336 Invalid HTTP_HOST header: 'testp1.piwo.pila.pl'. You may need to add 'testp1.piwo.pila.pl' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 185.25.148.240 - - [31/Aug/2016:22:41:24 +0000] "GET http://testp1.piwo.pila.pl/testproxy.php HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Windows NT 5.1; rv:32.0) Gecko/20100101 Firefox/31.0" "-"
+[35mnginx_1     |[0m 180.97.106.161 - - [01/Sep/2016:02:15:19 +0000] "\x04\x01\x00P\xB4\xA3qR\x00" 400 173 "-" "-" "-"
+[35mnginx_1     |[0m 180.97.106.162 - - [01/Sep/2016:04:50:39 +0000] "\x05\x02\x00\x02" 400 173 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-01 06:58:04,085 base 16 139864877934336 Invalid HTTP_HOST header: '0.0.0.0:5000'. You may need to add '0.0.0.0' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 192.241.145.53 - - [01/Sep/2016:06:58:04 +0000] "GET / HTTP/1.0" 400 26 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-01 08:10:43,785 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 176.9.70.189 - - [01/Sep/2016:08:10:43 +0000] "GET / HTTP/1.1" 400 37 "-" "Mozilla/5.0 (compatible; MJ12bot/v1.4.5; http://www.majestic12.co.uk/bot.php?+)" "-"
+[32mdjango_1    |[0m ERROR 2016-09-01 09:30:15,879 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 128.232.110.28 - - [01/Sep/2016:09:30:15 +0000] "HEAD / HTTP/1.1" 400 0 "-" "Mozilla/5.0 zgrab/0.x" "-"
+[32mdjango_1    |[0m ERROR 2016-09-01 11:33:30,075 base 14 139864877934336 Invalid HTTP_HOST header: 'testp3.pospr.waw.pl'. You may need to add 'testp3.pospr.waw.pl' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 185.25.148.240 - - [01/Sep/2016:11:33:30 +0000] "GET http://testp3.pospr.waw.pl/testproxy.php HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Windows NT 5.1; rv:32.0) Gecko/20100101 Firefox/31.0" "-"
+[32mdjango_1    |[0m ERROR 2016-09-01 16:13:39,138 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 62.138.2.83 - - [01/Sep/2016:16:13:39 +0000] "GET /OnlineUpdate/questions.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-01 19:32:58,968 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 185.130.6.49 - - [01/Sep/2016:19:32:58 +0000] "GET /muieblackcat HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-01 19:32:59,268 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 185.130.6.49 - - [01/Sep/2016:19:32:59 +0000] "GET //phpMyAdmin/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-01 19:32:59,549 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 185.130.6.49 - - [01/Sep/2016:19:32:59 +0000] "GET //phpmyadmin/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-01 19:32:59,816 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 185.130.6.49 - - [01/Sep/2016:19:32:59 +0000] "GET //pma/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-01 19:33:00,088 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 185.130.6.49 - - [01/Sep/2016:19:33:00 +0000] "GET //myadmin/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-01 19:33:00,367 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 185.130.6.49 - - [01/Sep/2016:19:33:00 +0000] "GET //MyAdmin/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-01 21:38:17,522 base 13 139864877934336 Invalid HTTP_HOST header: 'search.tarheelcode.io'. You may need to add 'search.tarheelcode.io' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 169.54.244.93 - - [01/Sep/2016:21:38:17 +0000] "GET / HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-01 23:50:38,205 base 16 139864877934336 Invalid HTTP_HOST header: 'testp4.pospr.waw.pl'. You may need to add 'testp4.pospr.waw.pl' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 91.196.50.33 - - [01/Sep/2016:23:50:38 +0000] "GET http://testp4.pospr.waw.pl/testproxy.php HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Windows NT 5.1; rv:32.0) Gecko/20100101 Firefox/31.0" "-"
+[32mdjango_1    |[0m ERROR 2016-09-02 10:38:23,169 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 178.32.227.47 - - [02/Sep/2016:10:38:23 +0000] "GET /etc/lib/pChart2/examples/index.php?Action=View&Script=../../../../cnf/db.php HTTP/1.1" 400 37 "-" "HTTP_Request2/2.3.0 (http://pear.php.net/package/http_request2) PHP/5.3.3" "-"
+[32mdjango_1    |[0m ERROR 2016-09-02 12:41:51,217 base 17 139864877934336 Invalid HTTP_HOST header: 'testp1.piwo.pila.pl'. You may need to add 'testp1.piwo.pila.pl' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 91.196.50.33 - - [02/Sep/2016:12:41:51 +0000] "GET http://testp1.piwo.pila.pl/testproxy.php HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Windows NT 5.1; rv:32.0) Gecko/20100101 Firefox/31.0" "-"
+[35mnginx_1     |[0m 18.111.22.61 - - [02/Sep/2016:20:54:57 +0000] "GET / HTTP/1.1" 200 3203 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.111.22.61 - - [02/Sep/2016:20:54:57 +0000] "GET /static/css/project.babfbdb95f25.css HTTP/1.1" 200 418 "http://game.acubed.me/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.111.22.61 - - [02/Sep/2016:20:54:57 +0000] "GET /static/js/project.d1c9eda2d170.js HTTP/1.1" 200 45 "http://game.acubed.me/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.111.22.61 - - [02/Sep/2016:20:54:57 +0000] "GET /favicon.ico HTTP/1.1" 404 3122 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 18.111.22.61 - - [02/Sep/2016:20:54:58 +0000] "GET /favicon.ico HTTP/1.1" 404 3122 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[32mdjango_1    |[0m ERROR 2016-09-02 22:16:40,357 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 185.93.185.10 - - [02/Sep/2016:22:16:40 +0000] "GET / HTTP/1.1" 400 37 "-" "Scanbot" "-"
+[32mdjango_1    |[0m ERROR 2016-09-02 23:43:16,417 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 128.232.110.28 - - [02/Sep/2016:23:43:16 +0000] "GET / HTTP/1.1" 400 37 "-" "Mozilla/5.0 zgrab/0.x" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 01:24:13,198 base 16 139864877934336 Invalid HTTP_HOST header: 'testp3.pospr.waw.pl'. You may need to add 'testp3.pospr.waw.pl' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 91.196.50.33 - - [03/Sep/2016:01:24:13 +0000] "GET http://testp3.pospr.waw.pl/testproxy.php HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Windows NT 5.1; rv:32.0) Gecko/20100101 Firefox/31.0" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 05:44:50,380 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 183.129.160.229 - - [03/Sep/2016:05:44:50 +0000] "GET / HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:47.0) Gecko/20100101 Firefox/47.0" "-"
+[35mnginx_1     |[0m 183.129.160.229 - - [03/Sep/2016:05:44:55 +0000] "test" 400 173 "-" "-" "-"
+[35mnginx_1     |[0m 209.235.26.89 - - [03/Sep/2016:11:54:23 +0000] "GET http://microsoft.com HTTP/1.0" 400 0 "-" "-" "-"
+[35mnginx_1     |[0m 209.235.26.89 - - [03/Sep/2016:12:44:03 +0000] "GET http://microsoft.com HTTP/1.0" 400 0 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:13,498 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:13 +0000] "GET /muieblackcat HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:13,671 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:13 +0000] "GET //scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:13,840 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:13 +0000] "GET //admin/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:14,005 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:14 +0000] "GET //admin/pma/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:14,171 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:14 +0000] "GET //admin/phpmyadmin/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:14,335 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:14 +0000] "GET //db/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:14,502 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:14 +0000] "GET //dbadmin/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:14,665 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:14 +0000] "GET //myadmin/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:14,829 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:14 +0000] "GET //mysql/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:14,993 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:14 +0000] "GET //mysqladmin/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:15,156 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:15 +0000] "GET //typo3/phpmyadmin/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:15,317 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:15 +0000] "GET //phpadmin/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:15,481 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:15 +0000] "GET //pma/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:15,645 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:15 +0000] "GET //web/phpMyAdmin/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:16,810 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:16 +0000] "GET //xampp/phpmyadmin/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:16,977 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:16 +0000] "GET //web/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:17,144 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:17 +0000] "GET //php-my-admin/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:17,305 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:17 +0000] "GET //websql/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:17,469 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:17 +0000] "GET //phpMyAdmin-2/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:17,632 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:17 +0000] "GET //_phpmyadmin/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:17,794 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:17 +0000] "GET //administrator/components/com_joommyadmin/phpmyadmin/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:17,957 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:17 +0000] "GET //apache-default/phpmyadmin/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:18,116 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:18 +0000] "GET //blog/phpmyadmin/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:18,276 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:18 +0000] "GET //cpanelphpmyadmin/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:18,440 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:18 +0000] "GET //cpphpmyadmin/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:18,604 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:18 +0000] "GET //forum/phpmyadmin/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:18,768 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:18 +0000] "GET //php/phpmyadmin/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:18,949 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:18 +0000] "GET //phpmyadmin/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:19,128 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:19 +0000] "GET //phpMyAdmin-2.10.0.0/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:19,292 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:19 +0000] "GET //phpMyAdmin-2.10.0.1/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:19,459 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:19 +0000] "GET //phpMyAdmin-2.10.0.2/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:19,718 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:19 +0000] "GET //phpMyAdmin-2.10.0/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:19,883 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:19 +0000] "GET //phpMyAdmin-2.10.1.0/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:20,046 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:20 +0000] "GET //phpMyAdmin-2.10.2.0/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:20,208 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:20 +0000] "GET //phpMyAdmin-2.11.0.0/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:20,373 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:20 +0000] "GET //phpMyAdmin-2.11.1-all-languages/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:20,537 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:20 +0000] "GET //phpMyAdmin-2.11.1.0/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:20,701 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:20 +0000] "GET //phpMyAdmin-2.11.1.1/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:20,869 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:20 +0000] "GET //phpMyAdmin-2.11.1.2/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:21,036 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:21 +0000] "GET //phpMyAdmin-2.6.1-pl2/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:21,200 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:21 +0000] "GET //phpMyAdmin-2.6.1-pl3/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:21,381 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:21 +0000] "GET //phpMyAdmin-2.6.4-pl3/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:21,545 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:21 +0000] "GET //phpMyAdmin-2.6.4-pl4/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:21,963 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:21 +0000] "GET //phpMyAdmin-2.6.4-rc1/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:22,128 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:22 +0000] "GET //phpMyAdmin-2.6.5/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:22,296 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:22 +0000] "GET //phpMyAdmin-2.6.6/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:22,469 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:22 +0000] "GET //phpMyAdmin-2.6.9/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:22,637 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:22 +0000] "GET //phpMyAdmin-2.7.0-beta1/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:22,798 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:22 +0000] "GET //phpMyAdmin-2.7.0-pl1/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:22,967 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:22 +0000] "GET //phpMyAdmin-2.7.0-pl2/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:23,136 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:23 +0000] "GET //phpMyAdmin-2.7.0-rc1/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:23,299 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:23 +0000] "GET //phpMyAdmin-2.7.5/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:23,462 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:23 +0000] "GET //phpMyAdmin-2.7.6/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:23,627 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:23 +0000] "GET //phpMyAdmin-2.7.7/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:23,789 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:23 +0000] "GET //phpMyAdmin-2.8.2.3/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:23,956 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:23 +0000] "GET //phpMyAdmin-2.8.2/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:24,125 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:24 +0000] "GET //phpMyAdmin-2.8.3/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:24,294 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:24 +0000] "GET //phpMyAdmin-2.8.4/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:24,458 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:24 +0000] "GET //phpMyAdmin-2.8.5/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:24,633 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:24 +0000] "GET //phpMyAdmin-2.8.6/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:24,800 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:24 +0000] "GET //phpMyAdmin-2.8.7/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:24,963 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:24 +0000] "GET //phpMyAdmin-2.8.8/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:25,128 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:25 +0000] "GET //phpMyAdmin-2.8.9/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:25,298 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:25 +0000] "GET //phpMyAdmin-2.9.0-rc1/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:25,465 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:25 +0000] "GET //phpMyAdmin-2.9.0.1/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:25,630 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:25 +0000] "GET //phpMyAdmin-2.9.0.2/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:25,791 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:25 +0000] "GET //phpMyAdmin-2.9.0/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:25,954 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:25 +0000] "GET //phpMyAdmin-2.9.1/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:26,116 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:26 +0000] "GET //phpMyAdmin-2.9.2/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:26,280 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:26 +0000] "GET //phpMyAdmin-2/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:26,442 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:26 +0000] "GET //phpMyAdmin-3.0.0-rc1-english/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:26,602 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:26 +0000] "GET //phpMyAdmin-3.0.0.0-all-languages/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:26,768 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:26 +0000] "GET //phpMyAdmin-3.0.1.0-english/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:26,933 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:26 +0000] "GET //phpMyAdmin-3.0.1.0/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:27,097 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:27 +0000] "GET //phpMyAdmin-3.0.1.1/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:27,265 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:27 +0000] "GET //phpMyAdmin-3.1.0.0-english/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:27,430 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:27 +0000] "GET //phpMyAdmin-3.1.0.0/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:27,598 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:27 +0000] "GET //phpMyAdmin-3.1.1.0-all-languages/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:27,761 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:27 +0000] "GET //phpMyAdmin-3.1.2.0-all-languages/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:27,925 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:27 +0000] "GET //phpMyAdmin-3.1.2.0-english/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:28,086 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:28 +0000] "GET //phpMyAdmin-3.1.2.0/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:28,247 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:28 +0000] "GET //phpMyAdmin-3.4.3.1/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:28,411 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:28 +0000] "GET //phpMyAdmin2/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 13:31:28,575 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 93.174.93.99 - - [03/Sep/2016:13:31:28 +0000] "GET //phpMyAdmin3/scripts/setup.php HTTP/1.1" 400 37 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 15:09:06,730 base 17 139864877934336 Invalid HTTP_HOST header: 'testp4.pospr.waw.pl'. You may need to add 'testp4.pospr.waw.pl' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 91.196.50.33 - - [03/Sep/2016:15:09:06 +0000] "GET http://testp4.pospr.waw.pl/testproxy.php HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Windows NT 5.1; rv:32.0) Gecko/20100101 Firefox/31.0" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 19:58:00,192 base 14 139864877934336 Invalid HTTP_HOST header: '0.0.0.0:5000'. You may need to add '0.0.0.0' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 67.205.142.239 - - [03/Sep/2016:19:58:00 +0000] "GET / HTTP/1.0" 400 26 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 20:11:03,939 base 14 139864877934336 Invalid HTTP_HOST header: '0.0.0.0:5000'. You may need to add '0.0.0.0' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 162.243.1.165 - - [03/Sep/2016:20:11:03 +0000] "GET / HTTP/1.0" 400 26 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-03 23:34:37,688 base 17 139864877934336 Invalid HTTP_HOST header: '0.0.0.0:5000'. You may need to add '0.0.0.0' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 52.161.29.141 - - [03/Sep/2016:23:34:37 +0000] "GET / HTTP/1.0" 400 26 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-04 00:03:48,337 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 201.166.239.206 - - [04/Sep/2016:00:03:48 +0000] "GET /cgi/common.cgi HTTP/1.0" 400 26 "-" "Wget(linux)" "-"
+[32mdjango_1    |[0m ERROR 2016-09-04 00:03:48,536 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 201.166.239.206 - - [04/Sep/2016:00:03:48 +0000] "GET /stssys.htm HTTP/1.0" 400 26 "-" "Wget(linux)" "-"
+[32mdjango_1    |[0m ERROR 2016-09-04 00:03:48,717 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 201.166.239.206 - - [04/Sep/2016:00:03:48 +0000] "GET / HTTP/1.0" 400 26 "-" "Wget(linux)" "-"
+[32mdjango_1    |[0m ERROR 2016-09-04 00:03:48,953 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 201.166.239.206 - - [04/Sep/2016:00:03:49 +0000] "POST /command.php HTTP/1.0" 400 26 "-" "Wget(linux)" "-"
+[32mdjango_1    |[0m ERROR 2016-09-04 03:14:54,111 base 16 139864877934336 Invalid HTTP_HOST header: 'testp3.pospr.waw.pl'. You may need to add 'testp3.pospr.waw.pl' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 185.49.14.190 - - [04/Sep/2016:03:14:54 +0000] "GET http://testp3.pospr.waw.pl/testproxy.php HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Windows NT 5.1; rv:32.0) Gecko/20100101 Firefox/31.0" "-"
+[35mnginx_1     |[0m 80.82.70.24 - - [04/Sep/2016:03:42:34 +0000] "\x00" 400 173 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-04 03:43:18,297 base 17 139864877934336 Invalid HTTP_HOST header: 'httpheader.net'. You may need to add 'httpheader.net' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 80.82.70.24 - - [04/Sep/2016:03:43:18 +0000] "GET http://httpheader.net/ HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.28) Gecko/20120306 Firefox/3.6.28 (.NET CLR 3.5.30729)" "-"
+[35mnginx_1     |[0m 80.82.70.24 - - [04/Sep/2016:03:43:24 +0000] "\x04\x01\x00P\xA3\xAC\x07\xA20\x00" 400 173 "-" "-" "-"
+[35mnginx_1     |[0m 80.82.70.24 - - [04/Sep/2016:03:43:28 +0000] "\x05\x01\x00" 400 173 "-" "-" "-"
+[35mnginx_1     |[0m 80.82.70.24 - - [04/Sep/2016:03:43:30 +0000] "\x04\x01\x00P\xA3\xAC\x07\xA20\x00" 400 173 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-04 03:54:43,241 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.063.164'. You may need to add '104.236.063.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 177.74.154.237 - - [04/Sep/2016:03:54:43 +0000] "GET / HTTP/1.1" 400 37 "-" "curl/7.17.1 (mips-unknown-linux-gnu) libcurl/7.17.1 OpenSSL/0.9.8i zlib/1.2.3" "-"
+[32mdjango_1    |[0m ERROR 2016-09-04 16:40:26,118 base 17 139864877934336 Invalid HTTP_HOST header: '0.0.0.0:5000'. You may need to add '0.0.0.0' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 52.161.29.141 - - [04/Sep/2016:16:40:26 +0000] "GET / HTTP/1.0" 400 26 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-04 16:50:07,777 base 13 139864877934336 Invalid HTTP_HOST header: 'testp1.piwo.pila.pl'. You may need to add 'testp1.piwo.pila.pl' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 185.25.151.159 - - [04/Sep/2016:16:50:07 +0000] "GET http://testp1.piwo.pila.pl/testproxy.php HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Windows NT 5.1; rv:32.0) Gecko/20100101 Firefox/31.0" "-"
+[32mdjango_1    |[0m ERROR 2016-09-04 18:41:39,689 base 16 139864877934336 Invalid HTTP_HOST header: 'www.ctrip.com'. You may need to add 'www.ctrip.com' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 123.59.59.52 - - [04/Sep/2016:18:41:39 +0000] "GET http://www.ctrip.com/ HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:29.0) Gecko/20100101 Firefox/29.0" "-"
+[32mdjango_1    |[0m ERROR 2016-09-04 21:46:42,390 base 14 139864877934336 Invalid HTTP_HOST header: '0.0.0.0:5000'. You may need to add '0.0.0.0' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 52.166.195.219 - - [04/Sep/2016:21:46:42 +0000] "GET / HTTP/1.0" 400 26 "-" "-" "-"
+[35mnginx_1     |[0m 141.212.122.80 - - [05/Sep/2016:00:02:35 +0000] "GET /x HTTP/1.1" 400 173 "-" "Telesphoreo" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 00:56:44,041 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 185.100.86.167 - - [05/Sep/2016:00:56:44 +0000] "GET /xmlrpc.php HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 01:37:41,354 base 14 139864877934336 Invalid HTTP_HOST header: '0.0.0.0:5000'. You may need to add '0.0.0.0' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 109.236.84.106 - - [05/Sep/2016:01:37:41 +0000] "HEAD / HTTP/1.0" 400 0 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 01:43:44,263 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 176.126.252.12 - - [05/Sep/2016:01:43:44 +0000] "GET /xmlrpc.php HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 01:44:13,428 base 17 139864877934336 Invalid HTTP_HOST header: '0.0.0.0:5000'. You may need to add '0.0.0.0' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 109.236.84.106 - - [05/Sep/2016:01:44:13 +0000] "HEAD / HTTP/1.0" 400 0 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 02:27:24,114 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 163.172.139.114 - - [05/Sep/2016:02:27:24 +0000] "GET / HTTP/1.1" 400 37 "-" "Python-urllib/2.7" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 02:27:24,505 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 163.172.139.114 - - [05/Sep/2016:02:27:24 +0000] "GET /script HTTP/1.1" 400 37 "-" "Python-urllib/2.7" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 02:27:24,781 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 163.172.139.114 - - [05/Sep/2016:02:27:24 +0000] "GET /jenkins/script HTTP/1.1" 400 37 "-" "Python-urllib/2.7" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 02:27:25,020 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 163.172.139.114 - - [05/Sep/2016:02:27:25 +0000] "GET /hudson/script HTTP/1.1" 400 37 "-" "Python-urllib/2.7" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 02:27:25,287 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 163.172.139.114 - - [05/Sep/2016:02:27:25 +0000] "GET /login HTTP/1.1" 400 37 "-" "Python-urllib/2.7" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 02:27:25,550 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 163.172.139.114 - - [05/Sep/2016:02:27:25 +0000] "GET /jenkins/login HTTP/1.1" 400 37 "-" "Python-urllib/2.7" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 02:27:25,899 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 163.172.139.114 - - [05/Sep/2016:02:27:25 +0000] "GET /hudson/login HTTP/1.1" 400 37 "-" "Python-urllib/2.7" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 02:27:26,255 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 163.172.139.114 - - [05/Sep/2016:02:27:26 +0000] "GET /jmx-console HTTP/1.1" 400 37 "-" "Python-urllib/2.7" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 02:27:26,493 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 163.172.139.114 - - [05/Sep/2016:02:27:26 +0000] "GET / HTTP/1.1" 400 37 "-" "Python-urllib/2.7" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 02:27:26,851 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 163.172.139.114 - - [05/Sep/2016:02:27:26 +0000] "GET / HTTP/1.1" 400 37 "-" "Python-urllib/2.7" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 02:27:27,081 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 163.172.139.114 - - [05/Sep/2016:02:27:27 +0000] "GET /manager/html HTTP/1.1" 400 37 "-" "Python-urllib/2.7" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 02:27:27,272 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 163.172.139.114 - - [05/Sep/2016:02:27:27 +0000] "GET / HTTP/1.1" 400 37 "-" "Python-urllib/2.7" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 02:27:27,613 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 163.172.139.114 - - [05/Sep/2016:02:27:27 +0000] "GET / HTTP/1.1" 400 37 "-" "Python-urllib/2.7" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 02:27:27,803 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 163.172.139.114 - - [05/Sep/2016:02:27:27 +0000] "GET /msd HTTP/1.1" 400 37 "-" "Python-urllib/2.7" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 02:27:28,098 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 163.172.139.114 - - [05/Sep/2016:02:27:28 +0000] "GET /mySqlDumper HTTP/1.1" 400 37 "-" "Python-urllib/2.7" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 02:27:28,410 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 163.172.139.114 - - [05/Sep/2016:02:27:28 +0000] "GET /msd1.24stable HTTP/1.1" 400 37 "-" "Python-urllib/2.7" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 02:27:28,727 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 163.172.139.114 - - [05/Sep/2016:02:27:28 +0000] "GET /msd1.24.4 HTTP/1.1" 400 37 "-" "Python-urllib/2.7" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 02:27:28,964 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 163.172.139.114 - - [05/Sep/2016:02:27:28 +0000] "GET /mysqldumper HTTP/1.1" 400 37 "-" "Python-urllib/2.7" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 02:27:29,227 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 163.172.139.114 - - [05/Sep/2016:02:27:29 +0000] "GET /MySQLDumper HTTP/1.1" 400 37 "-" "Python-urllib/2.7" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 02:27:29,441 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 163.172.139.114 - - [05/Sep/2016:02:27:29 +0000] "GET /mysql HTTP/1.1" 400 37 "-" "Python-urllib/2.7" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 02:27:29,669 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 163.172.139.114 - - [05/Sep/2016:02:27:29 +0000] "GET /sql HTTP/1.1" 400 37 "-" "Python-urllib/2.7" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 02:27:29,899 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 163.172.139.114 - - [05/Sep/2016:02:27:29 +0000] "GET /phpmyadmin HTTP/1.1" 400 37 "-" "Python-urllib/2.7" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 02:27:30,163 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 163.172.139.114 - - [05/Sep/2016:02:27:30 +0000] "GET /phpMyAdmin HTTP/1.1" 400 37 "-" "Python-urllib/2.7" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 02:27:30,372 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 163.172.139.114 - - [05/Sep/2016:02:27:30 +0000] "GET /mysql HTTP/1.1" 400 37 "-" "Python-urllib/2.7" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 02:27:30,589 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 163.172.139.114 - - [05/Sep/2016:02:27:30 +0000] "GET /sql HTTP/1.1" 400 37 "-" "Python-urllib/2.7" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 02:27:30,840 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 163.172.139.114 - - [05/Sep/2016:02:27:30 +0000] "GET /myadmin HTTP/1.1" 400 37 "-" "Python-urllib/2.7" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 02:27:31,023 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 163.172.139.114 - - [05/Sep/2016:02:27:31 +0000] "GET /phpMyAdmin-4.2.1-all-languages HTTP/1.1" 400 37 "-" "Python-urllib/2.7" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 02:27:31,364 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 163.172.139.114 - - [05/Sep/2016:02:27:31 +0000] "GET /phpMyAdmin-4.2.1-english HTTP/1.1" 400 37 "-" "Python-urllib/2.7" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 02:27:31,662 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 163.172.139.114 - - [05/Sep/2016:02:27:31 +0000] "GET / HTTP/1.1" 400 37 "-" "Python-urllib/2.7" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 02:27:31,915 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 163.172.139.114 - - [05/Sep/2016:02:27:31 +0000] "GET /sqlite/main.php HTTP/1.1" 400 37 "-" "Python-urllib/2.7" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 02:27:32,186 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 163.172.139.114 - - [05/Sep/2016:02:27:32 +0000] "GET /SQLite/SQLiteManager-1.2.4/main.php HTTP/1.1" 400 37 "-" "Python-urllib/2.7" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 02:27:32,359 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 163.172.139.114 - - [05/Sep/2016:02:27:32 +0000] "GET /SQLiteManager-1.2.4/main.php HTTP/1.1" 400 37 "-" "Python-urllib/2.7" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 02:27:32,559 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 163.172.139.114 - - [05/Sep/2016:02:27:32 +0000] "GET /sqlitemanager/main.php HTTP/1.1" 400 37 "-" "Python-urllib/2.7" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 02:27:32,926 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 163.172.139.114 - - [05/Sep/2016:02:27:32 +0000] "GET /SQlite/main.php HTTP/1.1" 400 37 "-" "Python-urllib/2.7" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 02:27:33,158 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 163.172.139.114 - - [05/Sep/2016:02:27:33 +0000] "GET /SQLiteManager/main.php HTTP/1.1" 400 37 "-" "Python-urllib/2.7" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 03:15:54,200 base 13 139864877934336 Invalid HTTP_HOST header: '104.236.063.164'. You may need to add '104.236.063.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 91.228.136.18 - - [05/Sep/2016:03:15:54 +0000] "GET / HTTP/1.1" 400 37 "-" "curl/7.17.1 (mips-unknown-linux-gnu) libcurl/7.17.1 OpenSSL/0.9.8i zlib/1.2.3" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 04:50:20,575 base 13 139864877934336 Invalid HTTP_HOST header: 'testp3.pospr.waw.pl'. You may need to add 'testp3.pospr.waw.pl' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 185.49.14.190 - - [05/Sep/2016:04:50:20 +0000] "GET http://testp3.pospr.waw.pl/testproxy.php HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Windows NT 5.1; rv:32.0) Gecko/20100101 Firefox/31.0" "-"
+[35mnginx_1     |[0m 37.26.128.179 - - [05/Sep/2016:06:01:16 +0000] "CONNECT a2.50na50.net:80 HTTP/1.1" 400 173 "-" "-" "-"
+[35mnginx_1     |[0m 37.26.128.179 - - [05/Sep/2016:06:01:16 +0000] "CONNECT hideface.tk:80 HTTP/1.1" 400 173 "-" "-" "-"
+[35mnginx_1     |[0m 37.26.128.179 - - [05/Sep/2016:06:01:17 +0000] "CONNECT 50na50.net:80 HTTP/1.1" 400 173 "-" "-" "-"
+[35mnginx_1     |[0m 37.26.128.179 - - [05/Sep/2016:06:01:17 +0000] "CONNECT a2.50na50.net:80 HTTP/1.1" 400 173 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 06:01:17,732 base 16 139864877934336 Invalid HTTP_HOST header: 'static.90.170.46.78.clients.your-server.de'. You may need to add 'static.90.170.46.78.clients.your-server.de' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 37.26.128.179 - - [05/Sep/2016:06:01:17 +0000] "GET http://static.90.170.46.78.clients.your-server.de/myiphb.php?rnd=3da2fefb93784425a538577ffb783a22&rn=147305527770860 HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0" "-"
+[35mnginx_1     |[0m 37.26.128.179 - - [05/Sep/2016:06:01:18 +0000] "\x04\x01\x00PN.\xAAZ\x00" 400 173 "-" "-" "-"
+[35mnginx_1     |[0m 37.26.128.179 - - [05/Sep/2016:06:01:18 +0000] "\x04\x01\x00PN.\xAAZ\x00" 400 173 "-" "-" "-"
+[35mnginx_1     |[0m 37.26.128.179 - - [05/Sep/2016:06:01:18 +0000] "\x04\x01\x00PN.\xAAZ\x00" 400 173 "-" "-" "-"
+[35mnginx_1     |[0m 37.26.128.179 - - [05/Sep/2016:06:01:19 +0000] "\x04\x01\x00PN.\xAAZ\x00" 400 173 "-" "-" "-"
+[35mnginx_1     |[0m 37.26.128.179 - - [05/Sep/2016:06:01:19 +0000] "\x05\x01\x00" 400 173 "-" "-" "-"
+[35mnginx_1     |[0m 37.26.128.179 - - [05/Sep/2016:06:01:20 +0000] "\x05\x01\x00" 400 173 "-" "-" "-"
+[35mnginx_1     |[0m 37.26.128.179 - - [05/Sep/2016:06:01:20 +0000] "\x05\x01\x00" 400 173 "-" "-" "-"
+[35mnginx_1     |[0m 37.26.128.179 - - [05/Sep/2016:06:01:20 +0000] "\x05\x01\x00" 400 173 "-" "-" "-"
+[35mnginx_1     |[0m 37.26.128.179 - - [05/Sep/2016:06:01:21 +0000] "\x04\x01\x00P\x00\x00\x00\x01\x00hideface.tk\x00" 400 173 "-" "-" "-"
+[35mnginx_1     |[0m 37.26.128.179 - - [05/Sep/2016:06:01:21 +0000] "\x04\x01\x00P\x00\x00\x00\x01\x00static.90.170.46.78.clients.your-server.de\x00" 400 173 "-" "-" "-"
+[35mnginx_1     |[0m 37.26.128.179 - - [05/Sep/2016:06:01:21 +0000] "\x04\x01\x00P\x00\x00\x00\x01\x0050na50.net\x00" 400 173 "-" "-" "-"
+[35mnginx_1     |[0m 37.26.128.179 - - [05/Sep/2016:06:01:22 +0000] "\x04\x01\x00P\x00\x00\x00\x01\x00a2.50na50.net\x00" 400 173 "-" "-" "-"
+[35mnginx_1     |[0m 37.26.128.179 - - [05/Sep/2016:06:01:22 +0000] "\x05\x01\x00" 400 173 "-" "-" "-"
+[35mnginx_1     |[0m 37.26.128.179 - - [05/Sep/2016:06:01:22 +0000] "\x05\x01\x00" 400 173 "-" "-" "-"
+[35mnginx_1     |[0m 37.26.128.179 - - [05/Sep/2016:06:01:23 +0000] "\x05\x01\x00" 400 173 "-" "-" "-"
+[35mnginx_1     |[0m 37.26.128.179 - - [05/Sep/2016:06:01:23 +0000] "\x05\x01\x00" 400 173 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 06:16:10,767 base 14 139864877934336 Invalid HTTP_HOST header: '0.0.0.0:5000'. You may need to add '0.0.0.0' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 109.236.84.106 - - [05/Sep/2016:06:16:10 +0000] "HEAD / HTTP/1.0" 400 0 "-" "-" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 12:27:36,234 base 16 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 109.163.234.2 - - [05/Sep/2016:12:27:36 +0000] "GET /xmlrpc.php HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 14:07:31,290 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 149.62.148.41 - - [05/Sep/2016:14:07:31 +0000] "GET /xmlrpc.php HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 17:28:36,304 base 16 139864877934336 Invalid HTTP_HOST header: 'testp1.piwo.pila.pl'. You may need to add 'testp1.piwo.pila.pl' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 91.196.50.33 - - [05/Sep/2016:17:28:36 +0000] "GET http://testp1.piwo.pila.pl/testproxy.php HTTP/1.1" 400 37 "-" "Mozilla/5.0 (Windows NT 5.1; rv:32.0) Gecko/20100101 Firefox/31.0" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 18:21:08,257 base 17 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 141.212.122.32 - - [05/Sep/2016:18:21:08 +0000] "GET / HTTP/1.1" 400 37 "-" "Mozilla/5.0 zgrab/0.x" "-"
+[32mdjango_1    |[0m ERROR 2016-09-05 23:18:36,127 base 14 139864877934336 Invalid HTTP_HOST header: '0.0.0.0:5000'. You may need to add '0.0.0.0' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 213.128.81.66 - - [05/Sep/2016:23:18:36 +0000] "GET / HTTP/1.0" 400 26 "-" "masscan/1.0 (https://github.com/robertdavidgraham/masscan)" "-"
+[32mdjango_1    |[0m ERROR 2016-09-06 03:01:02,488 base 14 139864877934336 Invalid HTTP_HOST header: '104.236.63.164:80'. You may need to add '104.236.63.164' to ALLOWED_HOSTS.
+[35mnginx_1     |[0m 128.232.110.28 - - [06/Sep/2016:03:01:02 +0000] "GET / HTTP/1.1" 400 37 "-" "Mozilla/5.0 zgrab/0.x" "-"
