@@ -36,3 +36,15 @@
 [hidden][style="display: block;"] {
   display: block !important;
 }
+
+#guess {
+  font-size: 20px;
+}
+
+#slider {
+  width: 400px;
+}
+
+#submit {
+  margin-left: 10px;
+}
