@@ -14,6 +14,10 @@ class User(AbstractUser):
     # First Name and Last Name do not cover name patterns
     # around the globe.
     name = models.CharField(_('Name of User'), blank=True, max_length=255)
+    game_type = models.CharField(_('User Type'), max_length=10, choices=(
+        ('c', 'Control'),
+        ('i', 'Interactive'),
+    ))
 
     def __str__(self):
         return self.username

@@ -71,3 +71,5 @@ game/media/
 # Hitch directory
 tests/.hitch
 
+# Python virtual evnironment
+env/
