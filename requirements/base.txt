@@ -5,7 +5,7 @@
 wheel==0.29.0
 
 # Bleeding edge Django
-django==1.9.9
+Django==1.10.1
 
 # Configuration
 django-environ==0.4.0
@@ -49,3 +49,5 @@ redis>=2.10.0
 
 
 # Your custom requirements go here
+channels==0.17.2
+asgi-redis==0.14.1

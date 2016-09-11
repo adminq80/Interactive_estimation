@@ -29,6 +29,7 @@ services:
       - "8000:8000"
     links:
       - postgres
+      - redis
 
 
 
@@ -44,6 +45,12 @@ services:
       - .:/app
     links:
       - postgres
+
+
+
+  redis:
+    image: redis:latest
+
 
 
 

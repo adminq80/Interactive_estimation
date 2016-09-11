@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load staticfiles i18n %}
+
+{% block content %}
+
+
+    <form action="" method="post">
+        {% csrf_token %}
+        <div>
+            <img src="/static/plots/{{ round.plot }}" class="img-responsive"/>
+            <input type="hidden" id='id_plot' name="plot" value="{{ round.plot }}">
+        </div>
+        <div class="row">
+            <label>Your guess:</label>
+        </div>
+        <div class="row text-center">
+            <div id="correlation">0.5</div>
+        </div>
+        <div class='row'>
+{#            <div class="col-md-1">0</div>#}
+            <input class="col-md-6" id="id_guess" name="guess" type="range" min="0" max="1" step="0.001" value="0.5"
+                   oninput="updateCorrelation(this.value)">
+{#            <div class="col-md-1">1</div>#}
+        </div>
+        <div class="row">
+            <div class="col-md-6">0</div>
+            <div class="col-md-6">1</div>
+        </div>
+        <div class="row">
+            <input class='btn btn-primary col-md-6' type="submit" value="Submit answer">
+        </div>
+    </form>
+
+
+{% endblock %}
+
+{% block extra_javascript %}
+        <script>
+        function updateCorrelation(value){
+            document.querySelector('#correlation').value = value;
+        }
+        </script>
+
+{% endblock %}

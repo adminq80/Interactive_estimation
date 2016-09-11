@@ -80,5 +80,10 @@ def start(request):
             u = authenticate(username=email, password=passwd)
             if u is not None:
                 login(request, u)
-            return render(request, 'users/redirect.html')  # (reverse('board:match'))
+                if u.game_type == 'i':
+                    # Interactive game
+                    return redirect(reverse('control:play'))
+                elif u.game_type == 'c':
+                    return redirect(reverse('control:play'))
+                raise Exception('User must be either Control or Interactive')
     return render(request, 'users/start.html', {'form': form})
