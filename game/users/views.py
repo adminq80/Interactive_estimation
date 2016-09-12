@@ -9,9 +9,14 @@ from django.views.generic import DetailView, ListView, RedirectView, UpdateView
 from django.shortcuts import redirect, render
 from django.contrib.auth import login, authenticate
 
+from django.contrib.auth.decorators import login_required
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.core.mail import send_mass_mail
+
+from game.interactive.models import Interactive
+from game.control.models import Control
 
 from .models import User
 from .forms import UserForm
@@ -82,8 +87,16 @@ def start(request):
                 login(request, u)
                 if u.game_type == 'i':
                     # Interactive game
-                    return redirect(reverse('control:play'))
+                    Interactive.objects.create(user=u).save()
+                    return redirect(reverse('interactive:lobby'))
                 elif u.game_type == 'c':
+                    Control.objects.create(user=u).save()
                     return redirect(reverse('control:play'))
                 raise Exception('User must be either Control or Interactive')
     return render(request, 'users/start.html', {'form': form})
+
+
+@login_required(login_url='/')
+def done(request):
+    c = Control.objects.get(user=request.user)
+    return render(request, 'users/done.html', {'score': c.score})

@@ -1,25 +1,57 @@
 from random import choice
+from decimal import Decimal
 
+from django.utils import timezone
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+
+from game.contrib.calculate import calculate_score
+
+from game.round.models import Round, Plot
 
 from .forms import RoundForm
-from game.round.models import Round, Plot
+from .models import Control
 
 
 # Create your views here.
 @login_required(login_url='/')
 def play(request):
     u = request.user
-    matches = {i.board.pk for i in Round.objects.filter(user=u)}
 
-    if len(matches) == Plot.objects.count():
-        pass
-        #return redirect('/done')
+    played_rounds = Round.objects.filter(user=u)
+    plot_pks = {i.plot.pk for i in played_rounds}
 
-    plots = Plot.objects.exclude(pk__in=matches)
+    score = calculate_score(played_rounds)
+    remaining = Plot.objects.count() - len(plot_pks)
 
-    plot = choice(plots)
+    if remaining == 0:
+        c = Control.objects.get(user=u)
+        c.score = Decimal(score)
+        c.end_time = timezone.now()
+        c.save()
+        return redirect('users:done')
+
+    if request.session.get('PLOT'):  # Or None
+        plot = Plot.objects.get(plot=request.session.get('PLOT'))
+    else:
+        plots = Plot.objects.exclude(pk__in=plot_pks)
+        plot = choice(plots)
+
+    request.session['PLOT'] = plot.plot
     form = RoundForm()
 
-    return render(request, 'round/play.html', {'round': plot, 'form': form})
+    return render(request, 'control/play.html', {'round': plot, 'form': form, 'score': score, 'remaining': remaining})
+
+
+def submit_answer(request):
+    if request.method == 'POST':
+        form = RoundForm(request.POST)
+        if form.is_valid():
+            guess = form.cleaned_data['guess']
+            plot = request.session.get('PLOT', None)
+            p = Plot.objects.get(plot=plot)
+            Round.objects.create(user=request.user, guess=guess, plot=p).save()
+            request.session.pop('PLOT')
+            return render(request, 'control/answer.html', {'round': p, 'guess': guess})
+
+    return redirect('control:play')

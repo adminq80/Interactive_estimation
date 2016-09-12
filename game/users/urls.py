@@ -8,6 +8,7 @@ from . import views
 urlpatterns = [
     # URL pattern for the UserListView
     url(r'^start/$', views.start, name='start-game'),
+    url(r'^done/$', views.done, name='done'),
     url(
         regex=r'^$',
         view=views.UserListView.as_view(),
