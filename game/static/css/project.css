@@ -37,8 +37,8 @@
   display: block !important;
 }
 
-#guess {
-  font-size: 20px;
+body {
+  font-size: 18px;
 }
 
 #slider {
@@ -47,4 +47,8 @@
 
 #submit {
   margin-left: 10px;
+}
+
+#logo {
+  width: 40px;
 }

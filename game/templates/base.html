@@ -30,9 +30,9 @@
   <body>
 
     <div class="m-b-1">
-      <nav class="navbar navbar-dark navbar-static-top bg-inverse">
+      <nav class="navbar navbar-dark navbar-static-top bg-primary">
         <div class="container">
-          <a class="navbar-brand" href="/">Game</a>
+          <a class="navbar-brand" href="/"><img id="logo" src="../../static/images/logo.gif" /></a>
           <button type="button" class="navbar-toggler hidden-sm-up pull-xs-right" data-toggle="collapse" data-target="#bs-navbar-collapse-1">
             &#9776;
           </button>
@@ -40,11 +40,11 @@
           <!-- Collect the nav links, forms, and other content for toggling -->
           <div class="collapse navbar-toggleable-xs" id="bs-navbar-collapse-1">
             <ul class="nav navbar-nav">
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'home' %}">Home</a>
+             <li class="nav-item">
+                <a class="nav-link" href="{% url 'about' %}">Consent Form</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'about' %}">About</a>
+                <a class="nav-link" href="{% url 'home' %}">Instructions</a>
               </li>
             </ul>
 						
