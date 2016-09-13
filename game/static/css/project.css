@@ -41,12 +41,19 @@ body {
   font-size: 18px;
 }
 
-#slider {
-  width: 95%;
+.navbar {
+  background-color: #deedf8;
 }
 
-.next {
-  margin-top: 10px;
+a {
+  color: #000;
+}
+#slider {
+  width: 90%;
+  margin-bottom: 20px;
+}
+
+.btn-primary {
   float: right;
 }
 
