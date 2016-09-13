@@ -42,16 +42,12 @@ body {
 }
 
 #slider {
-  width: 400px;
+  width: 95%;
 }
 
 .next {
   margin-top: 10px;
-  margin-left: 380px;
-}
-
-.form {
-  margin-left: 40px;
+  float: right;
 }
 
 #counter {
@@ -61,6 +57,7 @@ body {
 
 #timer {
   font-size: 20px;
+  vertical-align: middle;
 }
 
 #logo {

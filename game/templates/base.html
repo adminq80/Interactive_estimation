@@ -47,21 +47,19 @@
 
     <div class="container">
       <div class="row">
-        {% block content %}
-        {% endblock %}
         <div class="col-md-3">
         {% block leftCol %}
         {% endblock %}
         </div>
 
-        <div class="col-md-8">
-        <br>
-        <h1>Guess the correlation of the line.</h1>
+        <div class="col-md-7">
+        <h3>Guess the correlation of the line.</h3>
         <br>
         {% block center %}
         {% endblock %}
         </div>
 
+        <div class="col-md-1"></div>
         <div class="col-md-1">
         {% block rightCol %}
         {% endblock %}
