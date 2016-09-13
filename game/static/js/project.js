@@ -3,3 +3,21 @@
   var box = document.getElementById("correlation");
   box.innerHTML = value;
 }
+
+function countdown() {
+    var seconds = 60;
+    function tick() {
+        var counter = document.getElementById("counter");
+        seconds--;
+        counter.innerHTML = "0:" + (seconds < 10 ? "0" : "") + String(seconds);
+        if( seconds > 0 ) {
+            setTimeout(tick, 1000);
+        } else {
+            var submit = document.getElementById("submit");
+            submit.click();
+        }
+    }
+    tick();
+}
+
+countdown();

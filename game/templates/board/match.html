@@ -6,7 +6,7 @@
   <form action="{% url "board:submit" %}" method="post">
     {% csrf_token %}
     <div class="row">
-      <div class="col-md-4"></div>
+      <div class="col-md-3"></div>
       <div class="col-md-8">
         <div>
           <h1>Guess the correlation of the line.</h1>
@@ -28,6 +28,13 @@
           <input class="btn btn-primary col-md-2 next" id="submit" type="submit" value="Submit">
         </div>
       </div>
+      </div>
+      <div class="col-md-1">
+        <div id="timer">
+          Timer
+          <div id="counter">
+          </div>
+        </div>
       </div>
     </div>
 

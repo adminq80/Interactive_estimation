@@ -54,6 +54,15 @@ body {
   margin-left: 40px;
 }
 
+#counter {
+  padding: 0px 10px;
+  border: 2px solid #000;
+}
+
+#timer {
+  font-size: 20px;
+}
+
 #logo {
   width: 40px;
 }
