@@ -1,24 +1,27 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-    <div class="row">
-        <img src="/static/plots/{{ board.plot }}" class="img-responsive">
-    </div>
-
-    <div class="row">
-        <div class="col-md-6">
-            <div>
-                Your Guess was: {{ guess }}
-            </div>
+  <div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-8">
+      <div>
+        <h1>Guess the correlation of the line.</h1>
+      </div>
+      <br>
+      <img src="/static/plots/{{ board.plot }}" class="img-responsive" />
+      <div class="form">
+        <div>
+          Your guess: {{ guess }}
         </div>
-        <div class="col-md-6">
-            <div>
-                The correlation is : {{ board.answer }}
-            </div>
+        <div>
+          Actual correlation: {{ board.answer }}
         </div>
+        <form action="{% url 'board:match' %}">
+          <input type="submit" value="Next" class="btn btn-primary col-md-2">
+        </form>
+      </div>
+      </div>    
     </div>
-    <form action="{% url 'board:match' %}">
-        <input type="submit" value="Next" class="btn btn-primary col-md-6">
-    </form>
+  </div>
+</div>
 {% endblock %}

@@ -45,8 +45,13 @@ body {
   width: 400px;
 }
 
-#submit {
-  margin-left: 10px;
+.btn-primary {
+  margin-top: 10px;
+  margin-left: 380px;
+}
+
+.form {
+  margin-left: 40px;
 }
 
 #logo {

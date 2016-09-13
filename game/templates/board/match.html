@@ -14,7 +14,7 @@
         <br>
         <img src="/static/plots/{{ board.plot }}" class="img-responsive"/>
         <input type="hidden" id="id_plot" name="plot" value="{{ board.plot }}">
-
+        <div class="form">
         <div class="next">
         <div id="guess">
           <label>Your guess:</label>
@@ -24,18 +24,12 @@
             <span>0</span>
             <input id="slider" name="guess" type="range" min="0" max="1" step="0.001" value="0.5" oninput="updateCorrelation(this.value)">
             <span>1</span>
-
-          <input class="btn btn-primary" id="submit" type="submit" value="Submit">
+        </div>
+        <div>
+          <input class="btn btn-primary col-md-2" id="submit" type="submit" value="Submit">
         </div>
         </div>
-
-        <div class="next">
-          {{ guess }}
-          {{board.answer}}
-          <form action="{% url 'board:match' %}">
-            <input type="submit" value="Next" class="btn btn-primary col-md-6">
-           </form>
-        </div>
+      </div>
       </div>
     </div>
 
