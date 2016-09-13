@@ -1,25 +1,15 @@
 {% extends 'base.html' %}
 
-{% block content %}
-
-    <div class="row">
-        <img src="/static/plots/{{ round.plot }}" class="img-responsive">
-    </div>
-
-    <div class="row">
-        <div class="col-md-6">
-            <div>
-                Your Guess was: {{ guess }}
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div>
-                The correlation is : {{ round.answer }}
-            </div>
-        </div>
-    </div>
-    <form action="{% url 'control:play' %}">
-        <input type="submit" value="Next" class="btn btn-primary col-md-6">
-    </form>
-{% endblock %}
-~                
+{% block center %}
+<img src="/static/plots/{{ round.plot }}" class="img-responsive" />
+<div class="form">
+  <div>
+    Your guess: {{ guess }}
+  </div>
+  <div>
+    Actual correlation: {{ round.answer }}
+  </div>
+  <form action="{% url 'control:play' %}">
+    <input type="submit" value="Next" class="btn btn-primary col-md-2 next">
+  </form>
+</div>

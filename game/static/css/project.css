@@ -36,3 +36,37 @@
 [hidden][style="display: block;"] {
   display: block !important;
 }
+
+body {
+  font-size: 18px;
+}
+
+.navbar {
+  background-color: #deedf8;
+}
+
+a {
+  color: #000;
+}
+#slider {
+  width: 90%;
+  margin-bottom: 20px;
+}
+
+.btn-primary {
+  float: right;
+}
+
+#counter {
+  padding: 0px 10px;
+  border: 2px solid #000;
+}
+
+#timer {
+  font-size: 20px;
+  vertical-align: middle;
+}
+
+#logo {
+  width: 40px;
+}
