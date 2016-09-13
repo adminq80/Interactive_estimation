@@ -1,46 +1,40 @@
 {% extends "base.html" %}
 {% load staticfiles i18n %}
 
-{% block content %}
-<div class="container">
-  <form action="{% url "board:submit" %}" method="post">
-    {% csrf_token %}
-    <div class="row">
-      <div class="col-md-3"></div>
-      <div class="col-md-8">
-        <div>
-          <h1>Guess the correlation of the line.</h1>
-        </div>
-        <br>
-        <img src="/static/plots/{{ board.plot }}" class="img-responsive"/>
-        <input type="hidden" id="id_plot" name="plot" value="{{ board.plot }}">
-        <div class="form">
-        <div id="guess">
-          <label>Your guess:</label>
-          <span id="correlation">0.5</span>
-        </div>
-        <div>
-            <span>0</span>
-            <input id="slider" name="guess" type="range" min="0" max="1" step="0.001" value="0.5" oninput="updateCorrelation(this.value)">
-            <span>1</span>
-        </div>
-        <div>
-          <input class="btn btn-primary col-md-2 next" id="submit" type="submit" value="Submit">
-        </div>
-      </div>
-      </div>
-      <div class="col-md-1">
-        <div id="timer">
-          Timer
-          <div id="counter">
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </form>
+{% block leftCol %}
+<div>
+  Put 3 people you're following here.
 </div>
-
 {% endblock %}
 
+{% block center %}
+<form action="{% url "board:submit" %}" method="post">
+  {% csrf_token %}
+  <img src="/static/plots/{{ board.plot }}" class="img-responsive"/>
+  <input type="hidden" id="id_plot" name="plot" value="{{ board.plot }}">
+  <div class="form">
+    <div id="guess">
+      <label>Your guess:</label>
+      <span id="correlation">0.5</span>
+    </div>
+    <div>
+      <span>0</span>
+      <input id="slider" name="guess" type="range" min="0" max="1" step="0.001" value="0.5" oninput="updateCorrelation(this.value)">
+      <span>1</span>
+    </div>
+    <div>
+      <input class="btn btn-primary col-md-2 next" id="submit" type="submit" value="Submit">
+    </div>
+  </div>
 
+</form>
+  
+{% endblock %}
+
+{% block rightCol %}
+<div id="timer">
+  Timer
+  <div id="counter">
+  </div>
+</div>
+{% endblock %}

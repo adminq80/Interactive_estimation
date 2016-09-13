@@ -15,12 +15,8 @@
     <![endif]-->
 
     {% block css %}
-    <!-- Latest compiled and minified Bootstrap 4 Alpha 3 CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/css/bootstrap.min.css" integrity="sha384-MIwDKRSSImVFAZCVLtU0LMDdON6KVCrZHyVQQj6e8wIEJkW4tvwqXrbMIya1vriY" crossorigin="anonymous">
 
-    <!-- Your stuff: Third-party CSS libraries go here -->
-    
-    <!-- This file stores project-specific CSS -->
     <link href="{% static 'css/project.css' %}" rel="stylesheet">
     
     {% endblock %}
@@ -33,9 +29,6 @@
       <nav class="navbar navbar-dark navbar-static-top bg-primary">
         <div class="container">
           <a class="navbar-brand" href="/"><img id="logo" src="../../static/images/logo.gif" /></a>
-          <button type="button" class="navbar-toggler hidden-sm-up pull-xs-right" data-toggle="collapse" data-target="#bs-navbar-collapse-1">
-            &#9776;
-          </button>
 
           <!-- Collect the nav links, forms, and other content for toggling -->
           <div class="collapse navbar-toggleable-xs" id="bs-navbar-collapse-1">
@@ -47,27 +40,35 @@
                 <a class="nav-link" href="{% url 'home' %}">Instructions</a>
               </li>
             </ul>
-						
           </div>
         </div>
       </nav>
     </div>
 
     <div class="container">
+      <div class="row">
+        {% block content %}
+        {% endblock %}
+        <div class="col-md-3">
+        {% block leftCol %}
+        {% endblock %}
+        </div>
 
-      {% if messages %}
-          {% for message in messages %}
-              <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}</div>
-          {% endfor %}
-      {% endif %}
+        <div class="col-md-8">
+        <br>
+        <h1>Guess the correlation of the line.</h1>
+        <br>
+        {% block center %}
+        {% endblock %}
+        </div>
 
-      {% block content %}
-        <p>Use this document as a way to quick start any new project.</p>
-      {% endblock content %}
+        <div class="col-md-1">
+        {% block rightCol %}
+        {% endblock %}
+        </div>
 
     </div> <!-- /container -->
 
-    {% block modal %}{% endblock modal %}
 
     <!-- Le javascript
     ================================================== -->
