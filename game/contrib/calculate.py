@@ -21,4 +21,4 @@ def calculate_score(rounds):
             score += 1/math.sqrt(calc**2)
         else:
             score += 100
-    return round(score, 4)
+    return round(score, 2)
