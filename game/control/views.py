@@ -12,7 +12,6 @@ from game.round.models import Round, Plot
 from .forms import RoundForm
 from .models import Control
 
-
 # Create your views here.
 @login_required(login_url='/')
 def play(request):

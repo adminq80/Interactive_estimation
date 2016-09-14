@@ -1,44 +1,53 @@
 {% extends 'base.html' %}
 {% load staticfiles i18n %}
 
-{% block content %}
-    <form action='{% url "control:submit" %}' method="post">
-        {% csrf_token %}
-        <div>
-            <img src="/static/plots/{{ round.plot }}" class="img-responsive"/>
-        </div>
-        <div class="row">
-            <label>Your guess:</label>
-        </div>
-        <div class="row text-center">
-            <output for="id_guess" id="correlation">0.5</output>
-        </div>
-        <div class='row'>
-{#            <div class="col-md-1">0</div>#}
-            <input class="col-md-6" id="id_guess" name="guess" type="range" min="0" max="1" step="0.001" value="0.5"
-                   oninput="updateCorrelation(this.value);">
-{#            <div class="col-md-1">1</div>#}
-        </div>
-        <div class="row">
-            <div class="col-md-6">0</div>
-            <div class="col-md-6">1</div>
-        </div>
-        <div class="row">
-            <input class='btn btn-primary col-md-6' type="submit" value="Submit answer">
-        </div>
-    </form>
-    <div class="row">
-        <div class="col-md-6">Score: {{ score }}</div>
-        <div class="col-mo-6">Remaining Questions: {{ remaining }}</div>
-    </div>
+{% block center %}
+<form action='{% url "control:submit" %}' method="post">
+  {% csrf_token %}
+  <div>
+    <img src="/static/plots/{{ round.plot }}" class="img-responsive"/>
+  </div>
+  <div class="row">
+    <label>Your guess:&nbsp;</label><output for="slider" id="correlation">0.5</output>
+  </div>
+
+  <div class='row'>
+    <span>0</span>
+    <input id="slider" name="guess" type="range" min="0" max="1" step="0.001" value="0.5"
+           oninput="updateCorrelation(this.value);">
+    <span>1</span>
+  </div>
+  <div class="row">
+    <input class='btn btn-primary col-md-6' type="submit" value="Submit answer">
+  </div>
+</form>
+
 {% endblock %}
 
+{% block rightCol %}
+<div>
+  <div id="timer" class="info">
+    Timer
+    <div class="box">
+      <div id="counter"></div>
+    </div>
+  </div>
+  <div class="info">
+    Score 
+    <div class="box">
+      {{ score }}
+    </div>
+  </div>
+  <div class="info">Remaining Questions {{ remaining }}</div>
+</div>
+{% endblock %}
+
+
 {% block extra_javascript %}
-        <script>
-        function updateCorrelation(value){
-            console.log(value);
-            document.querySelector('#correlation').value = value;
-        }
-        </script>
+<script>
+function updateCorrelation(value){
+  document.querySelector('#correlation').value = value;
+}
+</script>
 
 {% endblock %}

@@ -48,6 +48,7 @@ body {
 a {
   color: #000;
 }
+
 #slider {
   width: 90%;
   margin-bottom: 20px;
@@ -57,16 +58,18 @@ a {
   float: right;
 }
 
-#counter {
+.box {
   padding: 0px 10px;
   border: 2px solid #000;
 }
 
-#timer {
+.rightCol {
   font-size: 20px;
-  vertical-align: middle;
 }
 
+.info {
+  padding-bottom: 20px;
+}
 #logo {
   width: 40px;
 }

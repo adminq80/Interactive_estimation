@@ -13,8 +13,8 @@ class Plot(models.Model):
 
 
 class Round(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    plot = models.ForeignKey(Plot)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    plot = models.ForeignKey(Plot, on_delete=models.CASCADE)
 
     guess = models.DecimalField(max_digits=4, decimal_places=3)
 

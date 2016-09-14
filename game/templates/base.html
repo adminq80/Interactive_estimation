@@ -28,7 +28,7 @@
     <div class="m-b-1">
       <nav class="navbar">
         <div class="container-fluid">
-          <a class="navbar-brand" href="/"><img id="logo" src="../../static/images/logo.gif" /></a>
+          <a class="navbar-brand" href="/"><img id="logo" src="{% static 'images/logo.gif' %}" /></a>
 
           <!-- Collect the nav links, forms, and other content for toggling -->
           <div class="collapse navbar-toggleable-xs" id="bs-navbar-collapse-1">
@@ -60,8 +60,9 @@
         </div>
 
         <div class="col-md-1"></div>
-        <div class="col-md-1">
+        <div class="col-md-1 rightCol">
         {% block rightCol %}
+   
         {% endblock %}
         </div>
         <div class="col-md-1"></div>
