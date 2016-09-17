@@ -5,7 +5,7 @@
 }
 
 function countdown() {
-  var seconds = 60;
+  var seconds = 30;
   function tick() {
     var counter = document.getElementById("counter");
     seconds--;
@@ -20,5 +20,19 @@ function countdown() {
   }
   tick();
 }
+
+$("#slider").slider({
+  min: 0,
+  max: 1,
+  step: 0.001,
+  slide: function(event, ui) {
+    $('#correlation')[0].innerHTML = ui.value;
+  },
+  change: function(event, ui) {
+    $('.ui-slider-handle').show();
+  }
+});
+
+$('.ui-slider-handle').hide();
 
 countdown();

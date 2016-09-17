@@ -8,17 +8,20 @@
     <img src="/static/plots/{{ round.plot }}" class="img-responsive"/>
   </div>
   <div class="row">
-    <label>Your guess:&nbsp;</label><output for="slider" id="correlation">0.5</output>
-  </div>
-
-  <div class='row'>
-    <span>0</span>
-    <input id="slider" name="guess" type="range" min="0" max="1" step="0.001" value="0.5"
-           oninput="updateCorrelation(this.value);">
-    <span>1</span>
+    <label>Your guess:&nbsp;</label><span id="correlation"></span>
   </div>
   <div class="row">
-    <input class='btn btn-primary col-md-3' type="submit" value="Submit">
+    <label>Pick a value on the line.</label>
+  </div>
+  <div class='row'>
+    <div id="slider" oninput="updateCorrelation(ui.value);"></div>
+    <span id="min">0</span>
+    <span id="mid">0.5</span>
+    <span id="max">1</span>
+
+  </div>
+  <div class="row">
+    <input class='btn btn-primary col-md-3' type="submit" id="submit" value="Submit">
   </div>
 </form>
 

@@ -50,8 +50,7 @@ a {
 }
 
 #slider {
-  width: 90%;
-  margin-bottom: 20px;
+  /*margin-bottom: 20px;*/
 }
 
 .btn-primary {
@@ -64,6 +63,17 @@ a {
   padding: 0px 5px;
   margin-top: 5px;
   border: 2px solid #000;
+}
+
+#min {
+  float: left;
+}
+#mid {
+  margin-left: 46%;
+}
+
+#max {
+  float: right;
 }
 
 .info {
