@@ -68,8 +68,9 @@ a {
 #min {
   float: left;
 }
-#mid {
-  margin-left: 46%;
+
+.quarter {
+  margin-left: 20%;
 }
 
 #max {
