@@ -10,7 +10,8 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - postgres_backup:/backups
-    env_file: .env
+    env_file: 
+      - .env
 
   django:
     build:
@@ -21,7 +22,8 @@ services:
       - postgres
       - redis
     command: /gunicorn.sh
-    env_file: .env
+    env_file: 
+      - .env
 
   nginx:
     build: ./compose/nginx
