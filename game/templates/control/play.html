@@ -18,7 +18,7 @@
     <span id="min">0</span>
     <span id="mid">0.5</span>
     <span id="max">1</span>
-
+    <input name="guess" id="guess" hidden></input>
   </div>
   <div class="row">
     <input class='btn btn-primary col-md-3' type="submit" id="submit" value="Submit">
@@ -43,14 +43,4 @@
   </div>
   <div class="info">Plots remaining: {{ remaining }} </div>
 </div>
-{% endblock %}
-
-
-{% block extra_javascript %}
-<script>
-function updateCorrelation(value){
-  document.querySelector('#correlation').value = value;
-}
-</script>
-
 {% endblock %}
