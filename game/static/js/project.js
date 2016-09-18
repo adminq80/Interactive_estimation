@@ -24,7 +24,7 @@ function countdown() {
 $("#slider").slider({
   min: 0,
   max: 1,
-  step: 0.001,
+  step: 0.01,
   slide: function(event, ui) {
     $('#correlation')[0].innerHTML = ui.value;
   },
