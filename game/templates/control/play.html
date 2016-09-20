@@ -1,6 +1,26 @@
 {% extends 'base.html' %}
 {% load staticfiles i18n %}
 
+{% block leftCol %}
+<div class="container">
+  <div><b>You are following:</b></div>
+  <table class="table table-bordered following">
+    <tbody>
+      <tr>
+        <td><img src={% static 'images/avatars/bee.png' %} class="avatar" /> 0.7</td>
+      </tr>
+      <tr>
+        <td><img src={% static 'images/avatars/elephant.png' %} class="avatar" /> 0.7</td>
+      </tr>
+      <tr>
+        <td><img src={% static 'images/avatars/pig.png' %} class="avatar" /> 0.7</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}
+
 {% block center %}
 <form action='{% url "control:submit" %}' method="post">
   {% csrf_token %}

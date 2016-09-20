@@ -73,6 +73,19 @@ a {
   margin-left: 20%;
 }
 
+.table {
+  width: 60%;
+  padding: 10px;
+}
+
+.table td {
+  border-color: #000;
+}
+
+.avatar {
+  margin-right: 10px;
+}
+
 #max {
   float: right;
 }
