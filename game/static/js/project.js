@@ -13,7 +13,6 @@ function countdown() {
     if( seconds > 0 ) {
         setTimeout(tick, 1000);
     } else {
-      counter.style.color = "#F00";
       var submit = document.getElementById("submit");
       submit.click();
     }

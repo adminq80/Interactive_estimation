@@ -3,9 +3,16 @@
 {% block center %}
 <img src="/static/plots/{{ round.plot }}" class="img-responsive" />
 <div class="form">
+  {% if guess > 0 %}
   <div>
     Your guess: {{ guess }}
   </div>
+  {% else %}
+  <div>
+    Your guess: N/A
+  </div>
+  {% endif %}
+
   <div>
     Actual correlation: {{ round.answer }}
   </div>

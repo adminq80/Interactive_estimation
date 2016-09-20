@@ -17,8 +17,10 @@ def calculate_score(rounds):
         guess = r.guess
         answer = r.plot.answer
         calc = answer - guess
-        if calc != 0.0:
-            score += 1/math.sqrt(calc**2)
-        else:
+        if calc == 0.0:
             score += 100
+        else:
+            if guess > 0:
+                score += 1/math.sqrt(calc**2)
+            
     return round(score, 2)
