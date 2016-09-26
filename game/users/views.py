@@ -87,10 +87,7 @@ def start(request):
                 login(request, u)
                 if u.game_type == 'i':
                     # Interactive game
-                    # Interactive.objects.create(user=u).save()
-                    # return redirect(reverse('interactive:lobby'))
-                    Control.objects.create(user=u).save()
-                    return redirect(reverse('control:play'))
+                    return redirect(reverse('interactive:lobby'))
                 elif u.game_type == 'c':
                     Control.objects.create(user=u).save()
                     return redirect(reverse('control:play'))

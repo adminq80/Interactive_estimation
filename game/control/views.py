@@ -12,6 +12,7 @@ from game.round.models import Round, Plot
 from .forms import RoundForm
 from .models import Control
 
+
 # Create your views here.
 @login_required(login_url='/')
 def play(request):
@@ -42,14 +43,18 @@ def play(request):
     return render(request, 'control/play.html', {'round': plot, 'form': form, 'score': score, 'remaining': remaining})
 
 
+@login_required(login_url='/')
 def submit_answer(request):
     if request.method == 'POST':
         form = RoundForm(request.POST)
         if form.is_valid():
             guess = form.cleaned_data['guess']
             plot = request.session.get('PLOT', None)
+
+            played_rounds = Round.objects.filter(user=request.user).count()
+
             p = Plot.objects.get(plot=plot)
-            Round.objects.create(user=request.user, guess=guess, plot=p).save()
+            Round.objects.create(user=request.user, guess=guess, plot=p, round_order=played_rounds).save()
             request.session.pop('PLOT')
             return render(request, 'control/answer.html', {'round': p, 'guess': guess})
 
