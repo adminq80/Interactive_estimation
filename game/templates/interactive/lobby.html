@@ -11,11 +11,8 @@
 {% endblock %}
 
 {% block extra_javascript %}
-    <script
-			  src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
-			  integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc="
-			  crossorigin="anonymous"></script>
 
+    <script src="{% static "js/jquery-1.12.2.min.js" %}"></script>
     <script src="{% static "js/reconnecting-websocket.min.js" %}" type="text/javascript"></script>
 
     <script>
@@ -36,11 +33,22 @@
             };
 
             socket.onmessage = function (msg) {
-                console.log(msg)
-                var msg = JSON.parse(msg.data);
-                console.log(msg)
-                alert(msg.text);
-            }
+
+                var data = JSON.parse(msg.data);
+
+                console.log("JUST got a message " + msg);
+
+                if(data.action == "info"){
+                    document.querySelector('#waiting').innerHTML = data.text;
+                }
+                else if(data.action == "redirect"){
+                    var proto = ws_scheme == "wss" ? "https://" : "http://";
+                    window.location.href = proto + window.location.host + data.url;
+                }
+                else{
+                    console.log(data)
+                }
+            };
         });
     </script>
 {% endblock %}

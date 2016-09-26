@@ -1,6 +1,7 @@
 import logging
 
 from django.shortcuts import render
+from django.db import transaction
 from django.contrib.auth.decorators import login_required
 
 from .models import Settings, Interactive, InteractiveRound
@@ -20,7 +21,8 @@ def lobby(request):
     u = request.user.id
 
     try:
-        game = Interactive.objects.get(users=u)
+        with transaction.atomic():
+            game = Interactive.objects.get(users=u)
         return render(request, 'interactive/lobby.html')
     except Interactive.DoesNotExist:
         pass
@@ -59,7 +61,7 @@ def lobby(request):
 
 @login_required(login_url='/')
 def play(request):
-    pass
+    return render(request, 'interactive/play.html')
 
 
 @login_required(login_url='/')

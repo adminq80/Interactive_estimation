@@ -1,3 +1,4 @@
+import json
 import uuid
 
 from django.db import models
@@ -41,17 +42,24 @@ class Interactive(models.Model):
 
     def __init__(self, *args, **kwargs):
         super(Interactive, self).__init__(*args, **kwargs)
-        self.channel = str(uuid.uuid4())
+        self.channel = str(uuid.uuid4()).replace('-', '')
 
     def __str__(self):
         return 'Interactive {}'.format(self.id)
 
     @property
     def group_channel(self):
-        return Group('channel-{}'.format(self.channel))
+        return Group('game-{}'.format(self.id))
+
+    def broadcast(self, action, msg):
+        packet = json.dumps({
+            'action': action,
+            'text': msg,
+        })
+        self.group_channel.send({'text': packet})
 
     def user_channel(self, user):
         if user.is_authenticated:
-            return Group('channel-{}_{}'.format(self.channel, user.username.replace('@', '-').replace('!', '')))
+            return Group('{}_{}'.format(self.channel, user.username.replace('@', '_').replace('!', '')))
         else:
             return None

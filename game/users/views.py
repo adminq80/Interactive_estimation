@@ -4,6 +4,8 @@ from __future__ import absolute_import, unicode_literals
 from random import choice
 
 from django.core.urlresolvers import reverse
+from django.db import IntegrityError
+from django.db import transaction
 from django.views.generic import DetailView, ListView, RedirectView, UpdateView
 
 from django.shortcuts import redirect, render
@@ -66,21 +68,27 @@ def start(request):
     if request.method == 'POST':
         if form.is_valid():
             email = form.cleaned_data['email']
-            u, created = User.objects.get_or_create(username=email, game_type=choice(['i', 'c']))
+            try:
+                with transaction.atomic():
+                    u = User(username=email, game_type=choice(['i', 'c']))
+                    u.save()
+            except IntegrityError:
+                with transaction.atomic():
+                    u = User(username=email+'.old', game_type=choice(['i', 'c']))
+                    u.save()
             passwd = None
-            if created:
-                # new user
-                passwd = User.objects.make_random_password()
-                u.set_password(passwd)
-                u.save()
 
-                datatuple = (
-                    ('Interactive estimation Game', 'Your username is {} and your password is {}'.format(
-                        u.username, passwd), 'admin@game.acubed.me', [u.username]),
-                    ('Interactive estimation Game', 'Your username is {} and your password is {}'.format(
-                        u.username, passwd), 'admin@game.acubed.me', ['adminq80@gmail.com'])
-                )
-                send_mass_mail(datatuple=datatuple)
+            passwd = User.objects.make_random_password()
+            u.set_password(passwd)
+            u.save()
+
+            datatuple = (
+                ('Interactive estimation Game', 'Your username is {} and your password is {}'.format(
+                    u.username, passwd), 'admin@game.acubed.me', [u.username]),
+                ('Interactive estimation Game', 'Your username is {} and your password is {}'.format(
+                    u.username, passwd), 'admin@game.acubed.me', ['adminq80@gmail.com'])
+            )
+            send_mass_mail(datatuple=datatuple)
 
             u = authenticate(username=email, password=passwd)
             if u is not None:
