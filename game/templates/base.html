@@ -25,32 +25,14 @@
 
   <body>
 
-    <div class="m-b-1">
-      <nav class="navbar">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="/"><img id="logo" src="{% static 'images/logo.gif' %}" /></a>
-
-          <!-- Collect the nav links, forms, and other content for toggling -->
-          <div class="collapse navbar-toggleable-xs" id="bs-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-             <li class="nav-item">
-                <a class="nav-link" href="{% url 'about' %}">Consent Form</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'home' %}">Instructions</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-    </div>
-
     <div class="container">
+      <div class="row header">
+        <a class="navbar-brand" href="/"><img id="logo" src="{% static 'images/logo.gif' %}" /></a>
+        <span class="breadcrumbs"> Guess > Social > Results </span>
+        <button class="btn btn-danger quit">Exit Game</button>
+      </div>
+
       <div class="row">
-        <div class="col-md-3">
-        {% block leftCol %}
-        {% endblock %}
-        </div>
 
         <div class="col-md-6">
         <h3>Guess the correlation of the line.</h3>
@@ -59,8 +41,14 @@
         {% endblock %}
         </div>
 
-        <div class="col-md-1"></div>
-        <div class="col-md-2">
+
+        <div class="col-md-3">
+        {% block leftCol %}
+        {% endblock %}
+        </div>
+
+
+        <div class="col-md-3">
         {% block rightCol %}
    
         {% endblock %}
