@@ -21,6 +21,9 @@ class Settings(models.Model):
                                                                    self.min_influencers, self.max_influencers
                                                                    )
 
+    class Meta:
+        verbose_name_plural = 'Settings'
+
 
 class InteractiveRound(Round):
     influencers = models.ManyToManyField(settings.AUTH_USER_MODEL)
@@ -38,12 +41,6 @@ class Interactive(models.Model):
 
     started = models.BooleanField(default=False)
 
-    # channel = models.CharField(max_length=100, unique=True)
-    #
-    # def __init__(self, *args, **kwargs):
-    #     super(Interactive, self).__init__(*args, **kwargs)
-    #     self.channel = str(uuid.uuid4()).replace('-', '')
-
     def __str__(self):
         return 'Interactive {}'.format(self.id)
 
@@ -60,6 +57,6 @@ class Interactive(models.Model):
 
     def user_channel(self, user):
         if user.is_authenticated:
-            return Group('{}_{}'.format(self.channel, user.username.replace('@', '_').replace('!', '')))
+            return Group('user-{}-{}'.format(self.id, user.username))
         else:
             return None

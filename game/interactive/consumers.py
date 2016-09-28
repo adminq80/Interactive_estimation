@@ -60,3 +60,15 @@ def exit_game(message):
     user, game = user_and_game(message)
     # logging.info('user {} just exited'.format(user.username))
     game.group_channel.discard(message.reply_channel)
+
+
+@channel_session_user
+def send_data(message):
+    _, game = user_and_game(message)
+    text = json.loads(message['text'])
+    for user in game.users.all():
+        game.user_channel(user).send({'text': json.dumps({
+            'action': 'info',
+            'text': text,
+        }
+        )})

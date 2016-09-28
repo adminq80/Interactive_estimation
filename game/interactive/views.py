@@ -1,9 +1,11 @@
 import logging
 
-from django.shortcuts import render
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect
 from django.db import transaction
 from django.contrib.auth.decorators import login_required
 
+from game.contrib.random_user import random_user
 from .models import Settings, Interactive, InteractiveRound
 
 
@@ -16,9 +18,16 @@ def new_interactive_game(game_settings, user):
 
 
 # Create your views here.
-@login_required(login_url='/')
 def lobby(request):
-    u = request.user.id
+
+    if request.user.is_anonymous:
+        u, password = random_user('i')
+        u = authenticate(username=u.username, password=password)
+        login(request, u)
+    else:
+        u = request.user
+        if u.game_type != 'i':
+            return redirect('/')
 
     try:
         with transaction.atomic():
