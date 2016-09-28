@@ -42,7 +42,7 @@ def play(request):
 
     return render(request, 'control/play.html', {'round': plot, 'form': form, 'score': score, 'remaining': remaining})
 
-
+# TO-DO score, plots remaining off by one
 @login_required(login_url='/')
 def submit_answer(request):
     if request.method == 'POST':
@@ -51,11 +51,14 @@ def submit_answer(request):
             guess = form.cleaned_data['guess']
             plot = request.session.get('PLOT', None)
 
-            played_rounds = Round.objects.filter(user=request.user).count()
+            played_rounds = Round.objects.filter(user=request.user)
+            plot_pks = {i.plot.pk for i in played_rounds}
 
+            score = calculate_score(played_rounds)
+            remaining = Plot.objects.count() - len(plot_pks)
             p = Plot.objects.get(plot=plot)
-            Round.objects.create(user=request.user, guess=guess, plot=p, round_order=played_rounds).save()
+            Round.objects.create(user=request.user, guess=guess, plot=p, round_order=played_rounds.count()).save()
             request.session.pop('PLOT')
-            return render(request, 'control/answer.html', {'round': p, 'guess': guess})
+            return render(request, 'control/answer.html', {'round': p, 'guess': guess, 'score': score, 'remaining': remaining})
 
     return redirect('control:play')

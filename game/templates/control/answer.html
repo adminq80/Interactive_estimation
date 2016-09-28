@@ -18,7 +18,7 @@
     Actual correlation: {{ round.answer }}
   </div>
   <form action="{% url 'control:play' %}">
-    <input type="submit" value="Next" class="btn btn-primary nextButton">
+    <input type="submit" value="Next" id="submit" class="btn btn-primary nextButton">
   </form>
 </div>
 {% endblock %}
@@ -41,6 +41,22 @@
       </tr>
     </tbody>
   </table>
+</div>
+
+<div>
+  <div id="timer" class="info">
+    Timer
+    <div class="box">
+      <div id="counter"></div>
+    </div>
+  </div>
+  <div class="info">
+    Score 
+    <div class="box">
+      {{ score }}
+    </div>
+  </div>
+  <div class="info">Plots remaining: {{ remaining }} </div>
 </div>
 {% endblock %}
 
