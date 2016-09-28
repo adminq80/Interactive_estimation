@@ -33,26 +33,26 @@ def lobby(message):
 
     logging.info("Channel NAME is {}".format(message.reply_channel.name))
 
-    # channel = game.user_channel(user)
-    # if channel:
-    #     channel.add(message.reply_channel)
-    # else:
-    #     logging.error("Couldn't create a user channel")
-    #     raise Exception("Couldn't create user channel")
-    #
-    # users_count = game.users.count()
-    # waiting_for = game.constraints.max_users - users_count
-    # # TODO: add time to the condition
-    # if waiting_for == 0:
-    #     game.group_channel.send({'text': json.dumps({
-    #         'action': 'redirect',
-    #         'url': reverse('interactive:play'),
-    #     })
-    #     })
-    #     return
+    channel = game.user_channel(user)
+    if channel:
+        channel.add(message.reply_channel)
+    else:
+        logging.error("Couldn't create a user channel")
+        raise Exception("Couldn't create user channel")
+
+    users_count = game.users.count()
+    waiting_for = game.constraints.max_users - users_count
+    # TODO: add time to the condition
+    if waiting_for == 0:
+        game.group_channel.send({'text': json.dumps({
+            'action': 'redirect',
+            'url': reverse('interactive:play'),
+        })
+        })
+        return
 
     game.broadcast('info', 'There is/are {} players connected waiting for {} more to connect'.
-                   format(game.users.count(),game.constraints.max_users - game.users.count()))
+                   format(game.users.count(), game.constraints.max_users - game.users.count()))
 
 
 @channel_session_user

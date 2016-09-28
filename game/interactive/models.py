@@ -38,11 +38,11 @@ class Interactive(models.Model):
 
     started = models.BooleanField(default=False)
 
-    channel = models.CharField(max_length=100, unique=True)
-
-    def __init__(self, *args, **kwargs):
-        super(Interactive, self).__init__(*args, **kwargs)
-        self.channel = str(uuid.uuid4()).replace('-', '')
+    # channel = models.CharField(max_length=100, unique=True)
+    #
+    # def __init__(self, *args, **kwargs):
+    #     super(Interactive, self).__init__(*args, **kwargs)
+    #     self.channel = str(uuid.uuid4()).replace('-', '')
 
     def __str__(self):
         return 'Interactive {}'.format(self.id)
