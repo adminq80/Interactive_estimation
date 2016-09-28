@@ -22,7 +22,7 @@ def lobby(request):
 
     try:
         with transaction.atomic():
-            game = Interactive.objects.get(users=u)
+            Interactive.objects.get(users=u)
         return render(request, 'interactive/lobby.html')
     except Interactive.DoesNotExist:
         pass
