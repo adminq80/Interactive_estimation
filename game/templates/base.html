@@ -26,14 +26,15 @@
             <a href="/"><img id="logo" src="../../static/images/logo.gif" /></a>
             &nbsp;MIT Human Dynamics Group  
           </span>
-          <button class="btn btn-danger quit">Exit Game</button>
+          <form action='{% url "account_logout" %}' method="post">
+            {% csrf_token %}
+            <button class="btn btn-danger quit" type="submit">Exit Game</button>
+          </form>
         </div>
       </nav>
     </div>
 
     <div class="container">
-
-
       <div class="row">
         <div class="col-md-3">
         {% block rightCol %}

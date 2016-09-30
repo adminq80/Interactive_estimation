@@ -6,6 +6,7 @@ from random import choice
 from django.core.urlresolvers import reverse
 from django.db import IntegrityError
 from django.db import transaction
+from django.http import Http404
 from django.views.generic import DetailView, ListView, RedirectView, UpdateView
 
 from django.shortcuts import redirect, render
@@ -64,43 +65,60 @@ class UserListView(LoginRequiredMixin, ListView):
 
 
 def start(request):
-    form = UserForm(request.POST or None)
-    if request.method == 'POST':
-        if form.is_valid():
-            email = form.cleaned_data['email']
-            try:
-                with transaction.atomic():
-                    u = User(username=email, game_type=choice(['i', 'c']))
-                    u.save()
-            except IntegrityError:
-                with transaction.atomic():
-                    u = User(username=email+'.old', game_type=choice(['i', 'c']))
-                    u.save()
-            passwd = None
 
-            passwd = User.objects.make_random_password()
-            u.set_password(passwd)
-            u.save()
+    c = choice(['i', 'c'])
 
-            datatuple = (
-                ('Interactive estimation Game', 'Your username is {} and your password is {}'.format(
-                    u.username, passwd), 'admin@game.acubed.me', [u.username]),
-                ('Interactive estimation Game', 'Your username is {} and your password is {}'.format(
-                    u.username, passwd), 'admin@game.acubed.me', ['adminq80@gmail.com'])
-            )
-            send_mass_mail(datatuple=datatuple)
+    if request.user.is_authenticated:
+        print("User is authenticated")
+        c = request.user.game_type
 
-            u = authenticate(username=email, password=passwd)
-            if u is not None:
-                login(request, u)
-                if u.game_type == 'i':
-                    # Interactive game
-                    return redirect(reverse('interactive:lobby'))
-                elif u.game_type == 'c':
-                    Control.objects.create(user=u).save()
-                    return redirect(reverse('control:play'))
-                raise Exception('User must be either Control or Interactive')
-    return render(request, 'users/start.html', {'form': form})
+    print("CCCCCCCCCCCCCCCCCCCCCCCCCCCCC == {}".format(c))
+    if c == 'i':
+        return redirect('interactive:lobby')
+    elif c == 'c':
+        return redirect('control:play')
+    else:
+        raise Http404('{} not implemented'.format(c))
+
+
+# def start(request):
+#     form = UserForm(request.POST or None)
+#     if request.method == 'POST':
+#         if form.is_valid():
+#             email = form.cleaned_data['email']
+#             try:
+#                 with transaction.atomic():
+#                     u = User(username=email, game_type=choice(['i', 'c']))
+#                     u.save()
+#             except IntegrityError:
+#                 with transaction.atomic():
+#                     u = User(username=email+'.old', game_type=choice(['i', 'c']))
+#                     u.save()
+#             passwd = None
+#
+#             passwd = User.objects.make_random_password()
+#             u.set_password(passwd)
+#             u.save()
+#
+#             datatuple = (
+#                 ('Interactive estimation Game', 'Your username is {} and your password is {}'.format(
+#                     u.username, passwd), 'admin@game.acubed.me', [u.username]),
+#                 ('Interactive estimation Game', 'Your username is {} and your password is {}'.format(
+#                     u.username, passwd), 'admin@game.acubed.me', ['adminq80@gmail.com'])
+#             )
+#             send_mass_mail(datatuple=datatuple)
+#
+#             u = authenticate(username=email, password=passwd)
+#             if u is not None:
+#                 login(request, u)
+#                 if u.game_type == 'i':
+#                     # Interactive game
+#                     return redirect(reverse('interactive:lobby'))
+#                 elif u.game_type == 'c':
+#                     Control.objects.create(user=u).save()
+#                     return redirect(reverse('control:play'))
+#                 raise Exception('User must be either Control or Interactive')
+#     return render(request, 'users/start.html', {'form': form})
 
 
 @login_required(login_url='/')

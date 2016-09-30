@@ -18,7 +18,7 @@ urlpatterns = [
 
     # User management
     url(r'^users/', include('game.users.urls', namespace='users')),
-    # url(r'^accounts/', include('allauth.urls')),
+    url(r'^accounts/', include('allauth.urls')),
 
     # Your stuff: custom urls includes go here
     # url(r'start/', include('game.player.urls')),

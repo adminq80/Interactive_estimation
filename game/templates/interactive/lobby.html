@@ -24,7 +24,7 @@
             var ws_path = ws_scheme + '://' + window.location.host + "/multiplayer/lobby/";
 
             console.log("Connecting to " + ws_path);
-            var socket = new ReconnectingWebSocket(ws_path);
+            socket = new ReconnectingWebSocket(ws_path);
 
             // Helpful debugging
             socket.onopen = function () {

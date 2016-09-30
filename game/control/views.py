@@ -1,11 +1,13 @@
 from random import choice
 from decimal import Decimal
 
+from django.contrib.auth import authenticate, login
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
 from game.contrib.calculate import calculate_score
+from game.contrib.random_user import random_user
 
 from game.round.models import Round, Plot
 
@@ -14,9 +16,16 @@ from .models import Control
 
 
 # Create your views here.
-@login_required(login_url='/')
 def play(request):
-    u = request.user
+
+    if request.user.is_anonymous:
+        u, password = random_user('c', length=130)
+        u = authenticate(username=u.username, password=password)
+        login(request, u)
+    else:
+        u = request.user
+        if u.game_type != 'c':
+            return redirect('/')
 
     played_rounds = Round.objects.filter(user=u)
     plot_pks = {i.plot.pk for i in played_rounds}
