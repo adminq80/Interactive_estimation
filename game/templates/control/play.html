@@ -1,17 +1,27 @@
 {% extends 'base.html' %}
 {% load staticfiles i18n %}
 
+{% block breadcrumbs %}
+<div class="row">
+  <span class="breadcrumbs"> 
+    <span class="guess active">Guess</span>
+     >
+    <span class="results">Results</span>
+  </span>
+</div>
+{% endblock %}
+
 {% block center %}
 <form action='{% url "control:submit" %}' method="post">
   {% csrf_token %}
   <div>
     <img src="/static/plots/{{ round.plot }}" class="img-responsive"/>
   </div>
-  {% include 'slider.html' %}
+  {% include 'components/slider.html' %}
 </form>
 
 {% endblock %}
 
 {% block leftCol %}
-{% include 'timer.html' %}
+{% include 'components/timer.html' %}
 {% endblock %}

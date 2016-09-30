@@ -3,14 +3,7 @@
   color: #a9a9a9;
 }
 
-.guess {
-
-}
-
-.social {
-
-}
-
-.results {
-    
+.active {
+  color: #0000cd;
+  text-decoration: underline;
 }

@@ -46,7 +46,8 @@ body {
   padding-bottom: 20px;
 }
 
-.quit {
+.logout {
+  display: inline-block;
   float: right;
 }
 

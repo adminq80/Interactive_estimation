@@ -1,6 +1,18 @@
 {% extends 'base.html' %}
 {% load staticfiles i18n %}
 
+{% block breadcrumbs %}
+<div class="row">
+  <span class="breadcrumbs"> 
+    <span class="guess">Guess</span>
+     >
+    <span class="social">Social</span>
+     >
+    <span class="results active">Results</span>
+  </span>
+</div>
+{% endblock %}
+
 {% block center %}
 <img src="/static/plots/{{ round.plot }}" class="img-responsive" />
 <div class="form">
@@ -31,7 +43,6 @@
 
   <table class="table table-bordered">
   <div>{{ following }}</div>
-    
     <tbody>
       <tr>
         <td>
@@ -48,21 +59,7 @@
   </table>
 </div>
 
-<div>
-  <div id="timer" class="info">
-    Timer
-    <div class="box">
-      <div id="counter"></div>
-    </div>
-  </div>
-  <div class="info">
-    Score 
-    <div class="box">
-      {{ score }}
-    </div>
-  </div>
-  <div class="info">Plots remaining: {{ remaining }} </div>
-</div>
+{% include 'components/timer.html' %}
 {% endblock %}
 
 {% block rightCol %}

@@ -13,7 +13,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/css/bootstrap.min.css" integrity="sha384-MIwDKRSSImVFAZCVLtU0LMDdON6KVCrZHyVQQj6e8wIEJkW4tvwqXrbMIya1vriY" crossorigin="anonymous">
 
     <link href="{% static 'css/project.css' %}" rel="stylesheet">
-    
+    <link href="{% static 'css/social.css' %}" rel="stylesheet">
+    <link href="{% static 'css/breadcrumbs.css' %}" rel="stylesheet">
+
     {% endblock %}
 
   </head>
@@ -25,16 +27,22 @@
           <span>
             <a href="/"><img id="logo" src="../../static/images/logo.gif" /></a>
             &nbsp;MIT Human Dynamics Group  
-          </span>
-          <form action='{% url "account_logout" %}' method="post">
+           <form class="logout" action='{% url "account_logout" %}' method="post">
             {% csrf_token %}
             <button class="btn btn-danger quit" type="submit">Exit Game</button>
           </form>
+          </span>
+ 
         </div>
       </nav>
     </div>
 
     <div class="container">
+      <div class="row">
+        {% block breadcrumbs %}
+        {% endblock %}
+      </div>
+
       <div class="row">
         <div class="col-md-3">
         {% block rightCol %}
@@ -71,9 +79,9 @@
 
       <!-- place project specific Javascript in this file -->
       
-      <script src="{% static 'js/project.js' %}"></script>
+      <script src="{% static 'js/game.js' %}"></script>
+      <script src="{% static 'js/social.js' %}"></script>
       
-
     {% endblock javascript %}
   {% block extra_javascript %}{% endblock %}
   </body>
