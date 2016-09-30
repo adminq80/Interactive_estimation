@@ -1,0 +1,11 @@
+#min {
+  float: left;
+}
+
+.quarter {
+  margin-left: 20%;
+}
+
+#max {
+  float: right;
+}

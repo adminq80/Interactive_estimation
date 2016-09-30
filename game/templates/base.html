@@ -9,11 +9,6 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
     {% block css %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/css/bootstrap.min.css" integrity="sha384-MIwDKRSSImVFAZCVLtU0LMDdON6KVCrZHyVQQj6e8wIEJkW4tvwqXrbMIya1vriY" crossorigin="anonymous">
 
@@ -24,15 +19,31 @@
   </head>
 
   <body>
+    <div class="m-b-1">
+      <nav class="navbar navbar-dark navbar-static-top bg-faded">
+        <div class="container">
+          <span>
+            <a href="/"><img id="logo" src="../../static/images/logo.gif" /></a>
+            &nbsp;MIT Human Dynamics Group  
+          </span>
+          <button class="btn btn-danger quit">Exit Game</button>
+        </div>
+      </nav>
+    </div>
 
     <div class="container">
-      <div class="row header">
-        <a class="navbar-brand" href="/"><img id="logo" src="{% static 'images/logo.gif' %}" /></a>
-        <span class="breadcrumbs"> Guess > Social > Results </span>
-        <button class="btn btn-danger quit">Exit Game</button>
-      </div>
+
 
       <div class="row">
+        <div class="col-md-3">
+        {% block rightCol %}
+        {% endblock %}
+        </div>
+
+        <div class="col-md-3">
+        {% block leftCol %}
+        {% endblock %}
+        </div>
 
         <div class="col-md-6">
         <h3>Guess the correlation of the line.</h3>
@@ -40,20 +51,8 @@
         {% block center %}
         {% endblock %}
         </div>
-
-
-        <div class="col-md-3">
-        {% block leftCol %}
-        {% endblock %}
-        </div>
-
-
-        <div class="col-md-3">
-        {% block rightCol %}
-   
-        {% endblock %}
-        </div>
-    </div> <!-- /container -->
+      </div>
+    </div>
 
 
     <!-- Le javascript

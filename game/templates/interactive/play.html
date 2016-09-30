@@ -1,6 +1,88 @@
 {% extends 'base.html' %}
+{% load staticfiles i18n %}
 
 {% block center %}
-Working on it
+<img src="/static/plots/{{ round.plot }}" class="img-responsive" />
+<div class="form">
+  {% if guess > 0 %}
+  <div>
+    Your guess: {{ guess }}
+  </div>
+  {% else %}
+  <div>
+    Your guess: N/A
+  </div>
+  {% endif %}
 
+  <div>
+    Actual correlation: {{ round.answer }}
+  </div>
+  <form action="{% url 'control:play' %}">
+    <input type="submit" value="Next" id="submit" class="btn btn-primary nextButton">
+  </form>
+</div>
+{% endblock %}
+
+{% block leftCol %}
+<div class="container">
+<!-- [{"user_id": "a"}, {"user_id": "b"}] -->
+ 
+  <div><b>You are following:</b></div>
+
+  <table class="table table-bordered">
+  <div>{{ following }}</div>
+    
+    <tbody>
+      <tr>
+        <td>
+          <img src={% static 'images/avatars/bee.png' %} class="avatar" /> 100<button type="button" class="btn btn-primary unfollow">Unfollow</button></td>
+      </tr>
+      <tr>
+        <td>
+          <img src={% static 'images/avatars/elephant.png' %} class="avatar" /> 100<button type="button" class="btn btn-primary unfollow">Unfollow</button></td>
+      </tr>
+      <tr>
+        <td><img src={% static 'images/avatars/pig.png' %} class="avatar" /> 100<button type="button" class="btn btn-primary unfollow">Unfollow</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div>
+  <div id="timer" class="info">
+    Timer
+    <div class="box">
+      <div id="counter"></div>
+    </div>
+  </div>
+  <div class="info">
+    Score 
+    <div class="box">
+      {{ score }}
+    </div>
+  </div>
+  <div class="info">Plots remaining: {{ remaining }} </div>
+</div>
+{% endblock %}
+
+{% block rightCol %}
+<div class="container">
+  <div><b>You can follow:</b></div>
+  <div class="user">
+    <img src={% static 'images/plus.ico' %} class="plusIcon" />
+    <img src={% static 'images/avatars/bird.png' %} class="avatar" /> 100 
+  </div>
+  <div class="user">
+    <img src={% static 'images/plus.ico' %} class="plusIcon" />
+    <img src={% static 'images/avatars/cat.png' %} class="avatar" /> 100
+  </div>
+  <div class="user">
+    <img src={% static 'images/plus.ico' %} class="plusIcon" />
+    <img src={% static 'images/avatars/cow.png' %} class="avatar" /> 100
+  </div>
+  <div class="user">
+    <img src={% static 'images/plus.ico' %} class="plusIcon" />
+    <img src={% static 'images/avatars/lion.png' %} class="avatar" /> 100 
+  </div>
+</div>
 {% endblock %}

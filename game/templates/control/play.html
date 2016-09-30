@@ -7,60 +7,11 @@
   <div>
     <img src="/static/plots/{{ round.plot }}" class="img-responsive"/>
   </div>
-  <div class="row">
-    <label>Your guess:&nbsp;</label><span id="correlation"></span>
-  </div>
-  <div class="row">
-    <label>Pick a value on the line.</label>
-  </div>
-  <div class='row'>
-    <div id="slider" oninput="updateCorrelation(ui.value);"></div>
-    <span id="min">0</span>
-    <span class="quarter">0.25</span>
-    <span class="quarter">0.5</span>
-    <span class="quarter">0.75</span>
-    <span id="max">1</span>
-    <input name="guess" id="guess" value="-1" hidden></input>
-  </div>
-  <div class="row">
-    <input class='btn btn-primary nextButton' type="submit" id="submit" value="Submit">
-  </div>
+  {% include 'slider.html' %}
 </form>
 
 {% endblock %}
 
-
 {% block leftCol %}
-<div class="container">
-  <div><b>You are following:</b></div>
-  <table class="table table-bordered following">
-    <tbody>
-      <tr>
-        <td><img src={% static 'images/avatars/bee.png' %} class="avatar" /> 0.7</td>
-      </tr>
-      <tr>
-        <td><img src={% static 'images/avatars/elephant.png' %} class="avatar" /> 0.7</td>
-      </tr>
-      <tr>
-        <td><img src={% static 'images/avatars/pig.png' %} class="avatar" /> 0.7</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-<div>
-  <div id="timer" class="info">
-    Timer
-    <div class="box">
-      <div id="counter"></div>
-    </div>
-  </div>
-  <div class="info">
-    Score 
-    <div class="box">
-      {{ score }}
-    </div>
-  </div>
-  <div class="info">Plots remaining: {{ remaining }} </div>
-</div>
+{% include 'timer.html' %}
 {% endblock %}

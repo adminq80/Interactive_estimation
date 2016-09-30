@@ -1,5 +1,5 @@
 /* Project specific Javascript goes here. */
- function updateCorrelation(value){
+function updateCorrelation(value){
   var box = document.getElementById("correlation");
   box.innerHTML = value;
 }
@@ -19,6 +19,7 @@ function countdown() {
   }
   tick();
 }
+countdown();
 
 $("#slider").slider({
   min: 0,
@@ -35,4 +36,3 @@ $("#slider").slider({
 
 $('.ui-slider-handle').hide();
 
-countdown();
