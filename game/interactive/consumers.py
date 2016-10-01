@@ -51,9 +51,9 @@ def lobby(message):
         })
         return
 
-    game.broadcast('info', 'There is/are {} players connected waiting for {} more to connect'.
-                   format(game.users.count(), game.constraints.max_users - game.users.count()))
-
+    # TODO I think this should go to the lobby template .. only the variables are passed
+    game.broadcast('info', 'There are currently a total of {} out of {} required participants waiting for the game to start'.
+                   format(game.constraints.max_users - game.users.count(), game.users.count()))
 
 @channel_session_user
 def exit_game(message):
