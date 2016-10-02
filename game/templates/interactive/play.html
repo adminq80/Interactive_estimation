@@ -14,7 +14,7 @@
 {% endblock %}
 
 {% block center %}
-<img src="/static/plots/{{ round.plot }}" class="img-responsive" />
+    <img src="/static/plots/{{ round.plot }}" class="img-responsive" />
 <div class="form">
   {% if guess > 0 %}
   <div>
@@ -29,7 +29,7 @@
   <div>
     Actual correlation: {{ round.answer }}
   </div>
-  <form action="{% url 'control:play' %}">
+  <form action="{% url 'interactive:play' %}">
     <input type="submit" value="Next" id="submit" class="btn btn-primary nextButton">
   </form>
 </div>
@@ -82,4 +82,27 @@
     <img src={% static 'images/avatars/lion.png' %} class="avatar" /> 100 
   </div>
 </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div>
+
+    I am logged in as {{ user.username }}
+
+    Users in the game are
+    {% for u in users %}
+        <div>
+            {{ forloop.counter }}/ {{ u.username }}
+        </div>
+    {% endfor %}
+    </div>
 {% endblock %}

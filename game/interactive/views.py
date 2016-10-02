@@ -70,7 +70,10 @@ def lobby(request):
 
 @login_required(login_url='/')
 def play(request):
-    return render(request, 'interactive/play.html')
+    u = request.user
+    game = Interactive.objects.get(users=u)
+    users = game.users.all()
+    return render(request, 'interactive/play.html', {'users': users, 'state': 'initial'})
 
 
 @login_required(login_url='/')
