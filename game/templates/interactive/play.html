@@ -2,14 +2,13 @@
 {% load staticfiles i18n %}
 
 {% block breadcrumbs %}
-<div class="row">
-  <span class="breadcrumbs"> 
-    <span class="guess">Guess</span>
-     >
-    <span class="social">Social</span>
-     >
-    <span class="results active">Results</span>
-  </span>
+<div>
+   <ul class="nav nav-wizard">
+     <li>Current Round: {{currentRoundq}}</li>
+     <li><a>Your Guess</a></li>
+     <li><a>Social Guess</a></li>
+     <li class='active'><a>Round Outcome</a></li>
+   </ul>
 </div>
 {% endblock %}
 

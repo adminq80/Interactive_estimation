@@ -25,8 +25,10 @@
       <nav class="navbar navbar-dark navbar-static-top bg-faded">
         <div class="container">
           <span>
-            <img id="logo" src="../../static/images/media-lab.png" />
-            <a href="/"><img id="logo" src="../../static/images/logo.gif" /></a>
+            <a href="/">
+              <img id="logo" src="../../static/images/media-lab.png" />
+            </a>
+            <img id="logo" src="../../static/images/logo.gif" />
             &nbsp;Guess the Correlation Game
            <form class="logout" action='{% url "account_logout" %}' method="post">
             {% csrf_token %}

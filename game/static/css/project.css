@@ -51,6 +51,11 @@ body {
   float: right;
 }
 
+.consent {
+  width: 50%;
+  margin: auto;
+}
+
 .nextButton {
   float: right;
 }
