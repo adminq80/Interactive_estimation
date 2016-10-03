@@ -13,34 +13,44 @@
 </div>
 {% endblock %}
 
-{% block center %}
-    <img src="/static/plots/{{ round.plot }}" class="img-responsive" />
+{% block container %}
 <div class="form">
   {% if guess > 0 %}
   <div>
     Your guess: {{ guess }}
   </div>
-  {% else %}
-  <div>
-    Your guess: N/A
-  </div>
   {% endif %}
-
-  <div>
-    Actual correlation: {{ round.answer }}
+<div class="col-md-3">
+  <div><b>You can follow:</b></div>
+  <div class="user">
+    <img src={% static 'images/plus.ico' %} class="plusIcon" />
+    <img src={% static 'images/avatars/bird.png' %} class="avatar" /> 100 
   </div>
-  <form action="{% url 'interactive:play' %}">
-    <input type="submit" value="Next" id="submit" class="btn btn-primary nextButton">
-  </form>
+  <div class="user">
+    <img src={% static 'images/plus.ico' %} class="plusIcon" />
+    <img src={% static 'images/avatars/cat.png' %} class="avatar" /> 100
+  </div>
+  <div class="user">
+    <img src={% static 'images/plus.ico' %} class="plusIcon" />
+    <img src={% static 'images/avatars/cow.png' %} class="avatar" /> 100
+  </div>
+
+  <div class="user">
+    <img src={% static 'images/plus.ico' %} class="plusIcon" />
+    <img src={% static 'images/avatars/lion.png' %} class="avatar" /> 100 
+  </div>
+
 </div>
-{% endblock %}
 
-{% block leftCol %}
-<div class="container">
-<!-- [{"user_id": "a"}, {"user_id": "b"}] -->
- 
+<div class="col-md-3">
   <div><b>You are following:</b></div>
+<!-- m logged in as {{ user.username }}
 
+    {% for u in users %}
+        <div>
+            {{ forloop.counter }}/ {{u.id}}
+        </div>
+    {% endfor %} -->
   <table class="table table-bordered">
   <div>{{ following }}</div>
     <tbody>
@@ -57,52 +67,20 @@
       </tr>
     </tbody>
   </table>
+  {% include 'components/timer.html' %}
 </div>
 
-{% include 'components/timer.html' %}
-{% endblock %}
-
-{% block rightCol %}
-<div class="container">
-  <div><b>You can follow:</b></div>
-  <div class="user">
-    <img src={% static 'images/plus.ico' %} class="plusIcon" />
-    <img src={% static 'images/avatars/bird.png' %} class="avatar" /> 100 
-  </div>
-  <div class="user">
-    <img src={% static 'images/plus.ico' %} class="plusIcon" />
-    <img src={% static 'images/avatars/cat.png' %} class="avatar" /> 100
-  </div>
-  <div class="user">
-    <img src={% static 'images/plus.ico' %} class="plusIcon" />
-    <img src={% static 'images/avatars/cow.png' %} class="avatar" /> 100
-  </div>
-  <div class="user">
-    <img src={% static 'images/plus.ico' %} class="plusIcon" />
-    <img src={% static 'images/avatars/lion.png' %} class="avatar" /> 100 
-  </div>
-</div>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
+<div class="col-md-6">
+  <h3>Guess the correlation</h3>
+  {{round}}
+  <img src="/static/plots/{{ round.plot }}" class="img-responsive" />
+  <div class="form">
     <div>
-
-    I am logged in as {{ user.username }}
-
-    Users in the game are
-    {% for u in users %}
-        <div>
-            {{ forloop.counter }}/ {{ u.username }}
-        </div>
-    {% endfor %}
+      Actual correlation: {{ round.answer }}
     </div>
+  </div>
+  <form action="{% url 'interactive:play' %}">
+    <input type="submit" value="Next" id="submit" class="btn btn-primary nextButton">
+  </form>
+</div>
 {% endblock %}

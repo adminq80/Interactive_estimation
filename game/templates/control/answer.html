@@ -2,37 +2,41 @@
 {% load staticfiles i18n %}
 
 {% block breadcrumbs %}
-<div class="row">
-  <span class="breadcrumbs"> 
-    <span class="guess">Guess</span>
-     >
-    <span class="results active">Results</span>
-  </span>
+<div>
+   <ul class="nav nav-wizard">
+       <li>Current Round: {{currentRound}}</li>
+       <li><a>Your Guess</a></li>
+       <li class='active'><a>Round Outcome</a></li>
+   </ul>
 </div>
 {% endblock %}
 
-{% block center %}
-<img src="/static/plots/{{ round.plot }}" class="img-responsive" />
-<div class="form">
-  {% if guess > 0 %}
-  <div>
-    Your guess: {{ guess }}
-  </div>
-  {% else %}
-  <div>
-    Your guess: N/A
-  </div>
-  {% endif %}
-
-  <div>
-    Actual correlation: {{ round.answer }}
-  </div>
-  <form action="{% url 'control:play' %}">
-    <input type="submit" value="Next" id="submit" class="btn btn-primary nextButton">
-  </form>
+{% block container %}
+<div class="col-md-3">
 </div>
-{% endblock %}
+<div class="col-md-3">
+  {% include 'components/timer.html' %}
+</div>
+<div class="col-md-6">
+  <h3>Your results</h3>
+  <img src="/static/plots/{{ round.plot }}" class="img-responsive" />
+  <div class="form">
+    {% if guess > 0 %}
+    <div>
+      Your guess: {{ guess }}
+    </div>
+    {% else %}
+    <div>
+      Your guess: N/A
+    </div>
+    {% endif %}
 
-{% block leftCol %}
-{% include 'components/timer.html' %}
+    <div>
+      Actual correlation: {{ round.answer }}
+    </div>
+    <form action="{% url 'control:play' %}">
+      <input type="submit" value="Next" id="submit" class="btn btn-primary nextButton">
+    </form>
+  </div>
+</div>
 {% endblock %}

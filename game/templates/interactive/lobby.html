@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 
-{% block center %}
+{% block container %}
     <div class="row">
 {#        <h1 class="text-center">Lobby for {{ game }}</h1>#}
 
@@ -13,6 +13,7 @@
     <h4 align = "center">Please wait a few moments while we try to find the needed participants.<br><br> If we can't find enough participants within {{lobbyTimeout}} minutes we will end the HIT and pay you for your time.<br><br>Please make sure your sound is on as a bell will ring to indicate the start of a new game.</h4>
     </div>
 {% endblock %}
+
 
 {% block extra_javascript %}
 
