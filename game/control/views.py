@@ -20,6 +20,7 @@ def play(request):
 
     if request.user.is_anonymous:
         u, password = random_user('c', length=130)
+        Control.objects.create(user=u)
         u = authenticate(username=u.username, password=password)
         login(request, u)
     else:
