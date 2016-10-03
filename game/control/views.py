@@ -61,15 +61,17 @@ def submit_answer(request):
             guess = form.cleaned_data['guess']
             plot = request.session.get('PLOT', None)
 
+            p = Plot.objects.get(plot=plot)
             played_rounds = Round.objects.filter(user=request.user)
+            
+            Round.objects.create(user=request.user, guess=guess, plot=p, round_order=played_rounds.count()).save()
+            request.session.pop('PLOT')
+
             plot_pks = {i.plot.pk for i in played_rounds}
 
             score = calculate_score(played_rounds)
             currentRound = len(plot_pks)
             remaining = Plot.objects.count() - currentRound
-            p = Plot.objects.get(plot=plot)
-            Round.objects.create(user=request.user, guess=guess, plot=p, round_order=played_rounds.count()).save()
-            request.session.pop('PLOT')
             return render(request, 'control/answer.html', {'round': p, 'guess': guess, 'score': score, 'remaining': remaining, 'currentRound': currentRound})
 
     return redirect('control:play')
