@@ -26,9 +26,8 @@
         <div class="container">
           <span>
             <a href="/">
-              <img id="logo" src="../../static/images/media-lab.png" />
+              <img id="logo" src={% static 'images/logo.png' %} />
             </a>
-            <img id="logo" src="../../static/images/logo.gif" />
             &nbsp;Guess the Correlation Game
            <form class="logout" action='{% url "account_logout" %}' method="post">
             {% csrf_token %}

@@ -69,7 +69,7 @@ def submit_answer(request):
             request.session.pop('PLOT')
 
             plot_pks = {i.plot.pk for i in played_rounds}
-
+            
             score = calculate_score(played_rounds)
             currentRound = len(plot_pks)
             remaining = Plot.objects.count() - currentRound
