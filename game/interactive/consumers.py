@@ -92,10 +92,13 @@ def lobby(message):
         round_ = get_round(game)
         game.group_channel.send({'text': json.dumps({
             'action': 'initial',
+<<<<<<< HEAD
             'players': l,
             'plot': round_.get('plot'),
             'remaining': round_.get('remaining'),
             'current_round': round_.get('current_round'),
+=======
+>>>>>>> 338cdb247052518de3c82c1bbff7b0fb8877d270
         })
         })
         return
