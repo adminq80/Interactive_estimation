@@ -88,15 +88,15 @@ def lobby(message):
     waiting_for = game.constraints.max_users - users_count
     # TODO: add time to the condition
     if waiting_for == 0:
-        l = game.users.exclude(username=user.username).value_list('username', 'avatar')
+        users = game.users.exclude(username=user.username)
+        l = [{'username': i.username, 'avatar': i.get_avatar} for i in users]
         round_ = get_round(game)
         game.group_channel.send({'text': json.dumps({
             'action': 'initial',
-            'players': l,
+            'users': l,
             'plot': round_.get('plot'),
             'remaining': round_.get('remaining'),
             'current_round': round_.get('current_round'),
-
         })
         })
         return
