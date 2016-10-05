@@ -19,6 +19,8 @@
     Your guess: {{ guess }}
   </div>
   {% endif %}
+</div> {#  Abdullah added this closing tag #}
+
 <div class="col-md-3">
   <div><b>You can follow:</b></div>
   <div class="user">
@@ -38,7 +40,6 @@
     <img src={% static 'images/plus.ico' %} class="plusIcon" />
     <img src={% static 'images/avatars/lion.png' %} class="avatar" /> 100 
   </div>
-
 </div>
 
 <div class="col-md-3">
@@ -76,4 +77,6 @@
     <input type="submit" value="Next" id="submit" class="btn btn-primary nextButton">
   </form>
 </div>
+
+
 {% endblock %}
