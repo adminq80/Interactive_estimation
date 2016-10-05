@@ -19,7 +19,7 @@ def get_round(game):
     plots = Plot.objects.exclude(pk__in=plot_pks)
     plot = choice(plots)
 
-    return {'round': plot, 'remaining': remaining, 'current_round': current_round}
+    return {'plot': plot.plot, 'remaining': remaining, 'current_round': current_round}
     # played_rounds = InteractiveRound.objects.filter(user=u)
     # plot_pks = {i.plot.pk for i in played_rounds}
     #
