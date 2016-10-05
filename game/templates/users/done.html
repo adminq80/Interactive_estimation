@@ -1,6 +1,47 @@
 {% extends 'base.html' %}
 
 {% block container %}
-<h1>Thank you for participating</h1>
-    <h2>Your final score is: {{ score }}</h2>
+<div class="container survey">
+  <h2>Exit Survey</h2>
+  <p>Thank you for participating. Your final score is {{score}}.</p>
+  <p>You do not have to provide any information you feel uncomfortable with.</p>
+  <form class="form-inline">
+    <div class="form-group">
+      <p>1. Please provide your age and gender below.</p>
+      <div class="row">
+        <div class="col-xs-5">
+          <label for="age">Age <label>
+          <input class="form-control" id="age">
+        </div>
+        <div class="col-xs-6">
+          <label>Gender</label>
+          <label class="form-check-inline">
+            <input class="form-check-input" type="radio" name="male" id="male" value="male"> Male
+          </label>
+          <label class="form-check-inline">
+            <input class="form-check-input" type="radio" name="female" id="female" value="female"> Female
+          </label>
+        </div>
+    </div>
+    <div class="form-group">
+      <br>
+      <p>2. How convinced were you that you were playing with real people?</p>
+      <div>
+      <span>Not at all </span>
+      <input type="range" class="slider">
+      <span> Completely</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <br>
+      <p>
+      3. Please enter any feedback, including problems you encountered.
+      </p>
+      <div class="col-xs-12">
+        <textarea class="form-control"></textarea>
+      </div>
+    </div>
+  </form>
+  <button class="btn btn-primary nextButton">Submit HIT</button>
+</div>
 {% endblock %}

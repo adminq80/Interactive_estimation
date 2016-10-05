@@ -51,9 +51,13 @@ body {
   float: right;
 }
 
-.consent {
-  width: 50%;
+.survey {
+  width: 60%;
   margin: auto;
+}
+
+.slider {
+  width: 50%;
 }
 
 .nextButton {

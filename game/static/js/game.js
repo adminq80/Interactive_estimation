@@ -1,9 +1,9 @@
 /* Project specific Javascript goes here. */
-
 function countdown() {
   var seconds = 30;
+  var counter = $("#counter")[0];
+
   function tick() {
-    var counter = $("#counter")[0];
     seconds--;
     counter.innerHTML = "0:" + (seconds < 10 ? "0" : "") + String(seconds);
     if( seconds > 0 ) {
@@ -13,7 +13,10 @@ function countdown() {
       submit.click();
     }
   }
-  tick();
+  console.log(counter);
+  if(counter) {
+    tick();
+  }
 }
 countdown();
 
