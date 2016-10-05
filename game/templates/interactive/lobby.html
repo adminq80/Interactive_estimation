@@ -1,6 +1,17 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 
+{% block breadcrumbs %}
+<div hidden="true">
+   <ul class="nav nav-wizard">
+     <li>Current Round: {{currentRound}}</li>
+     <li id="yourGuess"><a>Your Guess</a></li>
+     <li id="socialGuess"><a>Social Guess</a></li>
+     <li id="outcome"><a>Round Outcome</a></li>
+   </ul>
+</div>
+{% endblock %}
+
 {% block container %}
 
     <div id="lobby">
@@ -118,10 +129,11 @@
                     var proto = ws_scheme == "wss" ? "https://" : "http://";
                     window.location.href = proto + window.location.host + data.url;
                 }
-                else if(data.action == 'start'){
+                else if(data.action == 'initial'){
                     document.querySelector('#lobby').style.display = 'none';
                     document.querySelector('#game').style.display = 'block';
-
+                    document.querySelector('#breadcrumbs').style.display = 'block';
+                    document.querySelector('#yourGuess').className = 'active';
                 }
                 else{
                     console.log(data)
