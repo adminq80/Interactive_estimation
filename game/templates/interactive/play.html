@@ -61,7 +61,6 @@
       </tr>
     </tbody>
   </table>
-{#  {% include 'components/timer.html' %}#}
 </div>
 
 <div class="col-md-6">
@@ -73,6 +72,7 @@
       Actual correlation: {{ round.answer }}
     </div>
   </div>
+  {% include 'components/slider.html' %}
   <form action="{% url 'interactive:play' %}">
     <input type="submit" value="Next" id="submit" class="btn btn-primary nextButton">
   </form>

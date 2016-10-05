@@ -30,6 +30,7 @@ $("#slider").slider({
   change: function(event, ui) {
     $('.ui-slider-handle').show();
     $('#guess').val(ui.value);
+    socket.send(JSON.stringify({"sliderValue": ui.value}));
   }
 });
 
