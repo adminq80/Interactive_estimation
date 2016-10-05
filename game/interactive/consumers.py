@@ -45,7 +45,7 @@ def lobby(message):
     # TODO: add time to the condition
     if waiting_for == 0:
         game.group_channel.send({'text': json.dumps({
-            'action': 'start',
+            'action': 'initial',
         })
         })
         return
