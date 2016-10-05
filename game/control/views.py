@@ -102,4 +102,4 @@ def instruction(request):
 
 @login_required(login_url='/')
 def exit_survey(request):
-    pass
+    return render(request, 'control/survey.html')

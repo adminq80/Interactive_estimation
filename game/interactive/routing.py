@@ -1,6 +1,6 @@
 from channels import route
 from .consumers import data_submit, exit_game, lobby, send_data
-from .consumers import data_broadcast, follow_list, unfollow
+from .consumers import data_broadcast, follow_list, unfollow, lobby2
 
 
 data_routing = [
@@ -15,8 +15,9 @@ followers = [
 
 
 websocket_routing = [
-    route('websocket.connect', lobby),
+    route('websocket.connect', lobby),  # , path=r'^/multiplayer/lobby/$'),
     route('websocket.disconnect', exit_game),
     route('websocket.receive', send_data),
+    # route('websocket.connect', lobby2, path='^/some/$'),
 
 ] + data_routing + followers

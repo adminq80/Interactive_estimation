@@ -61,7 +61,7 @@
       </tr>
     </tbody>
   </table>
-  {% include 'components/timer.html' %}
+{#  {% include 'components/timer.html' %}#}
 </div>
 
 <div class="col-md-6">
@@ -78,5 +78,17 @@
   </form>
 </div>
 
+{% endblock %}
 
+{% block extra_javascript %}
+<script>
+    function sendInitial(val){
+            payload = {
+                'text': '',
+                'action': '',
+                'data': val
+            };
+            socket.send(payload);
+    }
+</script>
 {% endblock %}

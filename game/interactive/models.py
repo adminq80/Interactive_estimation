@@ -27,6 +27,7 @@ class Settings(models.Model):
 
 class InteractiveRound(Round):
     influencers = models.ManyToManyField(settings.AUTH_USER_MODEL)
+    influenced_guess = models.DecimalField(max_digits=3, decimal_places=2, null=True)
 
     def __str__(self):
         return self.user.username

@@ -45,8 +45,7 @@ def lobby(message):
     # TODO: add time to the condition
     if waiting_for == 0:
         game.group_channel.send({'text': json.dumps({
-            'action': 'redirect',
-            'url': reverse('interactive:play'),
+            'action': 'start',
         })
         })
         return
@@ -92,3 +91,6 @@ def follow_list(message):
 
 def unfollow(message):
     pass
+
+def lobby2(message):
+    message.reply_channel()

@@ -7,6 +7,10 @@ from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
+from game.contrib.calculate import calculate_score
+from game.interactive.models import InteractiveRound
+from game.round.models import Round
+
 
 @python_2_unicode_compatible
 class User(AbstractUser):
@@ -18,9 +22,25 @@ class User(AbstractUser):
         ('c', 'Control'),
         ('i', 'Interactive'),
     ))
+    avatar = models.URLField(null=True)
 
     def __str__(self):
         return self.username
 
     def get_absolute_url(self):
         return reverse('users:detail', kwargs={'username': self.username})
+
+    def get_avatar(self):
+        return 'images/avatars/{}'.format(self.avatar)
+
+    @property
+    def get_score(self):
+        if self.game_type == 'i':
+            cls = InteractiveRound
+        elif self.game_type == 'c':
+            cls = Round
+        else:
+            raise NotImplemented('Not Implemented')
+
+        played_rounds = cls.objects.filter(user=self)
+        return calculate_score(played_rounds)

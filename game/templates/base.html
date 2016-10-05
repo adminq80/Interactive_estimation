@@ -28,10 +28,12 @@
               <img id="logo" src={% static 'images/logo.png' %} />
             </a>
             &nbsp;Guess the Correlation Game
-           <form class="logout" action='{% url "account_logout" %}' method="post">
-            {% csrf_token %}
-            <button class="btn btn-danger quit" type="submit">End Game</button>
-          </form>
+            {% if user.is_authenticated %}
+              <form class="logout" action='{% url "account_logout" %}' method="post">
+                {% csrf_token %}
+                <button class="btn btn-danger quit" type="submit">End Game</button>
+              </form>
+              {% endif %}
           </span>
  
         </div>
