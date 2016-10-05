@@ -92,11 +92,10 @@
       </table>
     </div>
   </div>
-
   <div class="col-md-6">
       <h3>Guess the correlation</h3>
       <div id="round">
-        <img src={% static 'images/plots/96.png' %} />
+        <img src={% static 'plots/96.png' %} />
       </div>
       <img class="img-responsive" />
       <div class="form">
@@ -153,7 +152,10 @@
         document.querySelector('#game').style.display = 'block';
         document.querySelector('#breadcrumbs').style.display = 'block';
         document.querySelector('#yourGuess').className = 'active';
-
+        console.log(data.users);
+        console.log(data.plot);
+        console.log(data.remaining);
+        console.log(data.current_round);
         // document.querySelector('#yourGuess').className = '';
         // document.querySelector('#socialGuess').className = 'active';
         // document.querySelector('.interactive').style.display = 'block';

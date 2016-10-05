@@ -115,8 +115,10 @@ def exit_game(message):
 @channel_session_user
 def send_data(message):
     _, game = user_and_game(message)
-    val = json.loads(message['sliderValue'])
-    print(val)
+    payload = json.loads(message['text'])
+    print(payload['initialGuess'])
+    # val = message['initialGuess']
+    # print(val)
     # for user in game.users.all():
     #     game.user_channel(user).send({'text': json.dumps({
     #         'action': 'info',
