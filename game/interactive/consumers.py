@@ -1,12 +1,56 @@
 import json
 import logging
+from random import choice
 
 from django.urls import reverse
 
 from channels.auth import channel_session_user_from_http, channel_session_user
 
-from .models import Interactive
+from game.round.models import Plot
+from .models import Interactive, InteractiveRound
 
+
+def get_round(game):
+    users = game.users.all()
+    played_rounds = InteractiveRound.objects.filter(user=users[0])
+    plot_pks = {i.plot.pk for i in played_rounds}
+    current_round = len(plot_pks)
+    remaining = Plot.objects.count() - current_round
+    plots = Plot.objects.exclude(pk__in=plot_pks)
+    plot = choice(plots)
+
+    return {'round': plot, 'remaining': remaining, 'current_round': current_round}
+    # played_rounds = InteractiveRound.objects.filter(user=u)
+    # plot_pks = {i.plot.pk for i in played_rounds}
+    #
+    # score = calculate_score(played_rounds)
+    # currentRound = len(plot_pks)
+    #
+    # remaining = Plot.objects.count() - currentRound
+    #
+    # if remaining == 0:
+    #     i = Interactive.objects.get(user=u)
+    #     i.end_time = timezone.now()
+    #     i.save()
+    #     return redirect('interactive:exit_survey')
+    #
+    # if request.session.get('PLOT'):
+    #     plot = Plot.objects.get(plot=request.session.get('PLOT'))
+    # else:
+    #     plots = Plot.objects.exclude(pk__in=plot_pks)
+    #     plot = choice(plots)
+    #
+    # request.session['PLOT'] = plot.plot
+    # form = RoundForm()
+    #
+    # return render(request, 'interactive/play.html', {'users': users,
+    #                                                  'state': 'initial',
+    #                                                  'round': plot,
+    #                                                  'form': form,
+    #                                                  'remaining': remaining,
+    #                                                  'currentRound': currentRound
+    #                                                  })
+    #
 
 def user_and_game(message):
 
@@ -44,15 +88,21 @@ def lobby(message):
     waiting_for = game.constraints.max_users - users_count
     # TODO: add time to the condition
     if waiting_for == 0:
+        l = game.users.exclude(username=user.username).value_list('username', 'avatar')
+        round_ = get_round(game)
         game.group_channel.send({'text': json.dumps({
-            'action': 'start',
+            'action': 'initial',
+            'players': l,
+            'plot': round_.get('plot'),
+            'remaining': round_.get('remaining'),
+            'current_round': round_.get('current_round'),
         })
         })
         return
 
     # TODO I think this should go to the lobby template .. only the variables are passed
     game.broadcast('info', 'There are currently a total of {} out of {} required participants waiting for the game to start.'.
-                   format(game.users.count(),game.constraints.max_users - game.users.count()))
+                   format(game.users.count(), game.constraints.max_users - game.users.count()))
 
 @channel_session_user
 def exit_game(message):
@@ -64,13 +114,14 @@ def exit_game(message):
 @channel_session_user
 def send_data(message):
     _, game = user_and_game(message)
-    text = json.loads(message['text'])
-    for user in game.users.all():
-        game.user_channel(user).send({'text': json.dumps({
-            'action': 'info',
-            'text': text,
-        }
-        )})
+    val = json.loads(message['sliderValue'])
+    print(val)
+    # for user in game.users.all():
+    #     game.user_channel(user).send({'text': json.dumps({
+    #         'action': 'info',
+    #         'text': text,
+    #     }
+    #     )})
 
 
 @channel_session_user

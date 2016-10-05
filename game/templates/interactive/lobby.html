@@ -118,9 +118,11 @@
                     var proto = ws_scheme == "wss" ? "https://" : "http://";
                     window.location.href = proto + window.location.host + data.url;
                 }
-                else if(data.action == 'start'){
+                else if(data.action == 'initial'){
                     document.querySelector('#lobby').style.display = 'none';
                     document.querySelector('#game').style.display = 'block';
+
+
 
                 }
                 else{
