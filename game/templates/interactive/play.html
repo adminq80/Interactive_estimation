@@ -2,18 +2,12 @@
 {% load staticfiles i18n %}
 
 {% block breadcrumbs %}
-<div>
+<div id="breadcrumbs">
    <ul class="nav nav-wizard">
-<<<<<<< HEAD
      <li>Current Round: {{currentRound}}</li>
-     <li><a>Your Guess</a></li>
-     <li><a>Social Guess</a></li>
-=======
-     <li>Current Round: {{currentRoundq}}</li>
-     <li><a>Initial Guess</a></li>
-     <li><a>Interactive Guess</a></li>
->>>>>>> fb93869d82ac71226998b4bf536e1a69956fdc8d
-     <li class='active'><a>Round Outcome</a></li>
+     <li id="yourGuess"><a>Initial Guess</a></li>
+     <li id="socialGuess"><a>Interactive Guess</a></li>
+     <li id="outcome"><a>Round Outcome</a></li>
    </ul>
 </div>
 {% endblock %}
@@ -71,17 +65,16 @@
 
 <div class="col-md-6">
   <h3>Guess the correlation</h3>
-  {{round}}
   <img src="/static/plots/{{ round.plot }}" class="img-responsive" />
-  <div class="form">
+  <!-- <div class="form">
     <div>
       Actual correlation: {{ round.answer }}
     </div>
-  </div>
+  </div> -->
   {% include 'components/slider.html' %}
-  <form action="{% url 'interactive:play' %}">
+<!--   <form action="{% url 'interactive:play' %}">
     <input type="submit" value="Next" id="submit" class="btn btn-primary nextButton">
-  </form>
+  </form> -->
 </div>
 
 {% endblock %}

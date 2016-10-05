@@ -27,7 +27,7 @@
 <div class="form">
 
   <div class="col-md-3">
-    <div class="follow" hidden="true">
+    <div class="follow">
       <div><b>You can follow:</b></div>
 
       <div class="user">
@@ -51,7 +51,7 @@
   </div>
 
   <div class="col-md-3">
-    <div class="follow" hidden="true">
+    <div class="follow">
       <div><b>You are following:</b></div>
 
       <table class="table table-bordered">
@@ -95,7 +95,9 @@
 
   <div class="col-md-6">
       <h3>Guess the correlation</h3>
-      <div id="round"></div>
+      <div id="round">
+        <img src={% static 'images/plots/96.png' %} />
+      </div>
       <img class="img-responsive" />
       <div class="form">
       <div>
@@ -114,55 +116,6 @@
 
 {% block extra_javascript %}
 
-<<<<<<< HEAD
-    <script src="{% static "js/jquery-1.12.2.min.js" %}"></script>
-    <script src="{% static "js/reconnecting-websocket.min.js" %}" type="text/javascript"></script>
-
-    <script>
-        $(function () {
-            var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
-            var ws_path = ws_scheme + '://' + window.location.host + "/multiplayer/lobby/";
-
-            console.log("Connecting to " + ws_path);
-            socket = new ReconnectingWebSocket(ws_path);
-
-            // Helpful debugging
-            socket.onopen = function () {
-                console.log("Connected to chat socket");
-            };
-
-            socket.onclose = function () {
-                console.log("Disconnected from chat socket");
-            };
-
-            socket.onmessage = function (msg) {
-
-                var data = JSON.parse(msg.data);
-
-                console.log("JUST got a message " + msg);
-
-                if(data.action == "info"){
-                    document.querySelector('#waiting').innerHTML = data.text;
-                }
-                else if(data.action == "redirect"){
-                    var proto = ws_scheme == "wss" ? "https://" : "http://";
-                    window.location.href = proto + window.location.host + data.url;
-                }
-                else if(data.action == 'initial'){
-                    document.querySelector('#lobby').style.display = 'none';
-                    document.querySelector('#game').style.display = 'block';
-
-
-
-                }
-                else{
-                    console.log(data)
-                }
-            };
-
-        });
-    </script>
-=======
 <script src="{% static "js/jquery-1.12.2.min.js" %}"></script>
 <script src="{% static "js/reconnecting-websocket.min.js" %}" type="text/javascript"></script>
 
@@ -201,18 +154,21 @@
         document.querySelector('#breadcrumbs').style.display = 'block';
         document.querySelector('#yourGuess').className = 'active';
 
-        // document.querySelector('#outcome').className = 'active';
+        // document.querySelector('#yourGuess').className = '';
+        // document.querySelector('#socialGuess').className = 'active';
+        // document.querySelector('.interactive').style.display = 'block';
       }
-      // if interactive guess {
-        document.querySelector('#yourGuess').className = '';
-        document.querySelector('#socialGuess').className = 'active';
-        document.querySelector('.interactive').style.display = 'block';
-      }
-      // if round outcome {
-        document.querySelector('#socialGuess').className = '';
-        document.querySelector('.interactive').style.display = 'none';
-        document.querySelector('.follow').style.display = 'block';
-      }
+      // // if interactive guess {
+      //   document.querySelector('#yourGuess').className = '';
+      //   document.querySelector('#socialGuess').className = 'active';
+      //   document.querySelector('.interactive').style.display = 'block';
+      // }
+      // // if round outcome {
+      //   document.querySelector('#socialGuess').className = '';
+      //   document.querySelector('#outcome').className = 'active';
+      //   document.querySelector('.interactive').style.display = 'none';
+      //   document.querySelector('.follow').style.display = 'block';
+      // }
       else{
           console.log(data)
       }
@@ -220,5 +176,4 @@
 
   });
 </script>
->>>>>>> 338cdb247052518de3c82c1bbff7b0fb8877d270
 {% endblock %}
