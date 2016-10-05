@@ -2,11 +2,11 @@
 {% load staticfiles %}
 
 {% block breadcrumbs %}
-<div hidden="true">
+<div id="breadcrumbs" hidden="true">
    <ul class="nav nav-wizard">
      <li>Current Round: {{currentRound}}</li>
-     <li id="yourGuess"><a>Your Guess</a></li>
-     <li id="socialGuess"><a>Social Guess</a></li>
+     <li id="yourGuess"><a>Initial Guess</a></li>
+     <li id="socialGuess"><a>Interactive Guess</a></li>
      <li id="outcome"><a>Round Outcome</a></li>
    </ul>
 </div>
@@ -27,47 +27,70 @@
 <div class="form">
 
   <div class="col-md-3">
-    <div><b>You can follow:</b></div>
+    <div class="follow" hidden="true">
+      <div><b>You can follow:</b></div>
 
-    <div class="user">
-    <img src={% static 'images/plus.ico' %} class="plusIcon" />
-    <img src={% static 'images/avatars/bird.png' %} class="avatar" /> 100
-    </div>
-    <div class="user">
-    <img src={% static 'images/plus.ico' %} class="plusIcon" />
-    <img src={% static 'images/avatars/cat.png' %} class="avatar" /> 100
-    </div>
-    <div class="user">
-    <img src={% static 'images/plus.ico' %} class="plusIcon" />
-    <img src={% static 'images/avatars/cow.png' %} class="avatar" /> 100
-    </div>
+      <div class="user">
+      <img src={% static 'images/plus.ico' %} class="plusIcon" />
+      <img src={% static 'images/avatars/bird.png' %} class="avatar" /> 100
+      </div>
+      <div class="user">
+      <img src={% static 'images/plus.ico' %} class="plusIcon" />
+      <img src={% static 'images/avatars/cat.png' %} class="avatar" /> 100
+      </div>
+      <div class="user">
+      <img src={% static 'images/plus.ico' %} class="plusIcon" />
+      <img src={% static 'images/avatars/cow.png' %} class="avatar" /> 100
+      </div>
 
-    <div class="user">
-    <img src={% static 'images/plus.ico' %} class="plusIcon" />
-    <img src={% static 'images/avatars/lion.png' %} class="avatar" /> 100
+      <div class="user">
+      <img src={% static 'images/plus.ico' %} class="plusIcon" />
+      <img src={% static 'images/avatars/lion.png' %} class="avatar" /> 100
+      </div>
     </div>
-
   </div>
 
   <div class="col-md-3">
-    <div><b>You are following:</b></div>
+    <div class="follow" hidden="true">
+      <div><b>You are following:</b></div>
 
-    <table class="table table-bordered">
-      <div>{{ following }}</div>
-      <tbody>
-        <tr>
-          <td>
-            <img src={% static 'images/avatars/bee.png' %} class="avatar" /> 100<button type="button" class="btn btn-primary unfollow">Unfollow</button></td>
-        </tr>
-        <tr>
-          <td>
-            <img src={% static 'images/avatars/elephant.png' %} class="avatar" /> 100<button type="button" class="btn btn-primary unfollow">Unfollow</button></td>
-        </tr>
-        <tr>
-          <td><img src={% static 'images/avatars/pig.png' %} class="avatar" /> 100<button type="button" class="btn btn-primary unfollow">Unfollow</button></td>
-        </tr>
-      </tbody>
-    </table>
+      <table class="table table-bordered">
+        <div>{{ following }}</div>
+        <tbody>
+          <tr>
+            <td>
+              <img src={% static 'images/avatars/bee.png' %} class="avatar" /> 100<button type="button" class="btn btn-primary unfollow">Unfollow</button></td>
+          </tr>
+          <tr>
+            <td>
+              <img src={% static 'images/avatars/elephant.png' %} class="avatar" /> 100<button type="button" class="btn btn-primary unfollow">Unfollow</button></td>
+          </tr>
+          <tr>
+            <td><img src={% static 'images/avatars/pig.png' %} class="avatar" /> 100<button type="button" class="btn btn-primary unfollow">Unfollow</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="interactive" hidden="true">
+      <div><b>You are following:</b></div>
+
+      <table class="table table-bordered">
+        <div>{{ following }}</div>
+        <tbody>
+          <tr>
+            <td>
+              <img src={% static 'images/avatars/bee.png' %} class="avatar" /> 100
+          </tr>
+          <tr>
+            <td>
+              <img src={% static 'images/avatars/elephant.png' %} class="avatar" /> 100
+          </tr>
+          <tr>
+            <td><img src={% static 'images/avatars/pig.png' %} class="avatar" /> 100
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <div class="col-md-6">
@@ -117,17 +140,29 @@
       console.log("JUST got a message " + msg);
 
       if(data.action == "info"){
-          document.querySelector('#waiting').innerHTML = data.text;
+        document.querySelector('#waiting').innerHTML = data.text;
       }
       else if(data.action == "redirect"){
-          var proto = ws_scheme == "wss" ? "https://" : "http://";
-          window.location.href = proto + window.location.host + data.url;
+        var proto = ws_scheme == "wss" ? "https://" : "http://";
+        window.location.href = proto + window.location.host + data.url;
       }
       else if(data.action == 'initial'){
-          document.querySelector('#lobby').style.display = 'none';
-          document.querySelector('#game').style.display = 'block';
-          document.querySelector('#breadcrumbs').style.display = 'block';
-          document.querySelector('#yourGuess').className = 'active';
+        document.querySelector('#lobby').style.display = 'none';
+        document.querySelector('#game').style.display = 'block';
+        document.querySelector('#breadcrumbs').style.display = 'block';
+        document.querySelector('#yourGuess').className = 'active';
+
+        // document.querySelector('#outcome').className = 'active';
+      }
+      // if interactive guess {
+        document.querySelector('#yourGuess').className = '';
+        document.querySelector('#socialGuess').className = 'active';
+        document.querySelector('.interactive').style.display = 'block';
+      }
+      // if round outcome {
+        document.querySelector('#socialGuess').className = '';
+        document.querySelector('.interactive').style.display = 'none';
+        document.querySelector('.follow').style.display = 'block';
       }
       else{
           console.log(data)
