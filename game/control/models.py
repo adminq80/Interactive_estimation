@@ -11,5 +11,8 @@ class Control(models.Model):
     end_time = models.DateTimeField(null=True)
     score = models.DecimalField(max_digits=8, decimal_places=4, default=0.00)
 
+    instruction = models.BooleanField(default=False)
+    exist_survey = models.BooleanField(default=False)
+
     def __str__(self):
         return self.user.username

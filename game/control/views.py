@@ -28,6 +28,10 @@ def play(request):
         if u.game_type != 'c':
             return redirect('/')
 
+    game = Control.objects.get(user=u)
+    if not game.instruction:
+        return redirect('control:instruction')
+
     played_rounds = Round.objects.filter(user=u)
     plot_pks = {i.plot.pk for i in played_rounds}
 
@@ -40,7 +44,7 @@ def play(request):
         c.score = Decimal(score)
         c.end_time = timezone.now()
         c.save()
-        return redirect('users:done')
+        return redirect('control:exit_survey')
 
     if request.session.get('PLOT'):  # Or None
         plot = Plot.objects.get(plot=request.session.get('PLOT'))
@@ -53,7 +57,8 @@ def play(request):
 
     return render(request, 'control/play.html', {'round': plot, 'form': form, 'score': score, 'remaining': remaining, 'currentRound': currentRound})
 
-# TO-DO score, plots remaining off by one
+
+# TODO: score, plots remaining off by one
 @login_required(login_url='/')
 def submit_answer(request):
     if request.method == 'POST':
@@ -76,3 +81,25 @@ def submit_answer(request):
             return render(request, 'control/answer.html', {'round': p, 'guess': guess, 'score': score, 'remaining': remaining, 'currentRound': currentRound})
 
     return redirect('control:play')
+
+
+@login_required(login_url='/')
+def instruction(request):
+    u = request.user
+    game = Control.objects.get(user=u)
+    game.instruction = True
+    game.save()
+    # if request.method == 'POST':
+    #     if form.is_valid():
+    #         game.instruction = True
+    #         game.save()
+    #     else:
+    #         pass
+    # else:
+    #     pass
+    return render(request, 'control/instructions.html')
+
+
+@login_required(login_url='/')
+def exit_survey(request):
+    pass
