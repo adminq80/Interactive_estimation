@@ -77,6 +77,7 @@ ul.nav-wizard li:after {
 ul.nav-wizard li.active {
     color: #3a87ad;
     background: #d9edf7;
+    font-weight: bold;
 }
 ul.nav-wizard li.active:after {
     border-left: 16px solid #d9edf7;
@@ -88,20 +89,7 @@ ul.nav-wizard li.active a:focus {
     color: #3a87ad;
     background: #d9edf7;
 }
-ul.nav-wizard .active ~ li {
-    color: #999999;
-    background: #ededed;
-}
-ul.nav-wizard .active ~ li:after {
-    border-left: 16px solid #ededed;
-}
-ul.nav-wizard .active ~ li a,
-ul.nav-wizard .active ~ li a:active,
-ul.nav-wizard .active ~ li a:visited,
-ul.nav-wizard .active ~ li a:focus {
-    color: #999999;
-    background: #ededed;
-}
+
 ul.nav-wizard.nav-wizard-backnav li:hover {
     color: #000033;
     background: #f6fbfd;
@@ -115,18 +103,4 @@ ul.nav-wizard.nav-wizard-backnav li:hover a:visited,
 ul.nav-wizard.nav-wizard-backnav li:hover a:focus {
     color: #000033;
     background: #f6fbfd;
-}
-ul.nav-wizard.nav-wizard-backnav .active ~ li {
-    color: #999999;
-    background: #ededed;
-}
-ul.nav-wizard.nav-wizard-backnav .active ~ li:after {
-    border-left: 16px solid #ededed;
-}
-ul.nav-wizard.nav-wizard-backnav .active ~ li a,
-ul.nav-wizard.nav-wizard-backnav .active ~ li a:active,
-ul.nav-wizard.nav-wizard-backnav .active ~ li a:visited,
-ul.nav-wizard.nav-wizard-backnav .active ~ li a:focus {
-    color: #999999;
-    background: #ededed;
 }
