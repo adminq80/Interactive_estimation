@@ -72,3 +72,23 @@ def send_data(message):
             'text': text,
         }
         )})
+
+
+@channel_session_user
+def data_submit(message):
+    user, game = user_and_game(message)
+    payload = json.loads(message['text'])
+
+    pass
+
+
+def data_broadcast(message):
+    pass
+
+
+def follow_list(message):
+    pass
+
+
+def unfollow(message):
+    pass
