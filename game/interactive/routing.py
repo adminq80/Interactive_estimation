@@ -1,23 +1,27 @@
 from channels import route
-from .consumers import data_submit, exit_game, lobby, send_data
-from .consumers import data_broadcast, follow_list, unfollow, lobby2
+from .consumers import exit_game, lobby, ws_receive
+from .consumers import data_broadcast, follow_list, initial_submit, interactive_submit
 
 
-data_routing = [
-    route('data.initial', data_submit),  # initial guess submission
-    route('data.broadcast', data_broadcast)  # broadcast guess to player
-]
+game_routes = [
+    # route('initial.guess', initial_submit),  # initial guess submission
+    # route('slider.change', data_broadcast),  # broadcast guess to player
+    # route('interactive.guess', interactive_submit),
+    # route('follow.list', follow_list),
+    # todo: creating a route for next round
 
-followers = [
-    route('follow.list', follow_list),
-    route('unfollow', unfollow)
+    route('game.route', initial_submit, action='^initialGuess$'),  # initial guess submission
+    route('game.route', data_broadcast, action='^sliderChange$'),  # broadcast guess to player
+    route('game.route', interactive_submit, action='^interactiveGuess$'),
+    route('game.route', follow_list, action='^follow$'),
+
 ]
 
 
 websocket_routing = [
     route('websocket.connect', lobby),  # , path=r'^/multiplayer/lobby/$'),
     route('websocket.disconnect', exit_game),
-    route('websocket.receive', send_data),
-    # route('websocket.connect', lobby2, path='^/some/$'),
+    route('websocket.receive', ws_receive),
 
-] + data_routing + followers
+    # route('websocket.connect', lobby2, path='^/some/$'),
+] + game_routes

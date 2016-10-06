@@ -138,8 +138,6 @@
     socket.onmessage = function (msg) {
       var data = JSON.parse(msg.data);
 
-      console.log("JUST got a message " + msg);
-
       if(data.action == "info"){
         document.querySelector('#waiting').innerHTML = data.text;
       }
@@ -159,6 +157,9 @@
         // document.querySelector('#yourGuess').className = '';
         // document.querySelector('#socialGuess').className = 'active';
         // document.querySelector('.interactive').style.display = 'block';
+      }
+      else if(data.action == 'ping'){
+          console.log(data.text)
       }
       // // if interactive guess {
       //   document.querySelector('#yourGuess').className = '';

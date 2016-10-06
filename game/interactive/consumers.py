@@ -2,9 +2,11 @@ import json
 import logging
 from random import choice
 
-from django.urls import reverse
+from functools import wraps
 
+from channels import Channel
 from channels.auth import channel_session_user_from_http, channel_session_user
+from django.core.cache import cache
 
 from game.round.models import Plot
 from .models import Interactive, InteractiveRound
@@ -88,12 +90,12 @@ def lobby(message):
     waiting_for = game.constraints.max_users - users_count
     # TODO: add time to the condition
     if waiting_for == 0:
-        users = game.users.exclude(username=user.username)
-        l = [{'username': i.username, 'avatar': i.get_avatar} for i in users]
+        # users = game.users.exclude(username=user.username)
+        # l = [{'username': i.username, 'avatar': i.get_avatar} for i in users]
         round_ = get_round(game)
         game.group_channel.send({'text': json.dumps({
             'action': 'initial',
-            'users': l,
+            # 'users': l,
             'plot': round_.get('plot'),
             'remaining': round_.get('remaining'),
             'current_round': round_.get('current_round'),
@@ -105,6 +107,7 @@ def lobby(message):
     game.broadcast('info', 'There are currently a total of {} out of {} required participants waiting for the game to start.'.
                    format(game.users.count(), game.constraints.max_users - game.users.count()))
 
+
 @channel_session_user
 def exit_game(message):
     user, game = user_and_game(message)
@@ -112,11 +115,28 @@ def exit_game(message):
     game.group_channel.discard(message.reply_channel)
 
 
-@channel_session_user
-def send_data(message):
-    _, game = user_and_game(message)
+def ws_receive(message):
     payload = json.loads(message['text'])
-    print(payload['initialGuess'])
+    action = payload.get('action')
+
+    # channel_name = {
+    #     'initialGuess': 'initial.guess',
+    #     'interactiveGuess': 'interactive.guess',
+    #     'sliderChange': 'slider.change',
+    #     'follow': 'follow.list',
+    # }
+
+    if action:
+        payload['reply_channel'] = message.content['reply_channel']
+        payload['path'] = message.content.get('path')
+        Channel('game.route').send(payload)
+        # print(channel_name.get(action))
+        # Channel(channel_name.get(action)).send(payload)
+    else:
+        # TODO: unrecognized action
+        print("ERRORrrrrrrrrrrrrrrrrrrrrrrrrrrr")
+        logging.error('Unknown action {}'.format(action))
+
     # val = message['initialGuess']
     # print(val)
     # for user in game.users.all():
@@ -127,24 +147,51 @@ def send_data(message):
     #     )})
 
 
-@channel_session_user
-def data_submit(message):
-    user, game = user_and_game(message)
-    payload = json.loads(message['text'])
+def channel_debugger(func):
+    name = func.__name__
 
-    pass
+    @wraps(func)
+    def inner(message, *args, **kwargs):
+        print(name)
+        logging.info(name)
+        message.reply_channel.send({
+            'text': json.dumps({
+                'action': 'ping',
+                'text': name,
+            })
+        })
+        func(message, *args, **kwargs)
+
+    return inner
 
 
+# @channel_session_user
+# def data_submit(message):
+#     user, game = user_and_game(message)
+#     payload = json.loads(message['text'])
+#
+#     pass
+
+
+# @channel_session_user
+@channel_debugger
 def data_broadcast(message):
     pass
 
 
+# @channel_session_user
+@channel_debugger
 def follow_list(message):
     pass
 
 
-def unfollow(message):
+# @channel_session_user
+@channel_debugger
+def initial_submit(message):
     pass
 
-def lobby2(message):
-    message.reply_channel()
+
+# @channel_session_user
+@channel_debugger
+def interactive_submit(message):
+    pass
