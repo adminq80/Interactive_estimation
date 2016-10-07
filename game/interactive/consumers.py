@@ -1,12 +1,12 @@
 import json
 import logging
 from random import choice
+from decimal import Decimal
 
 from functools import wraps
 
 from channels import Channel
 from channels.auth import channel_session_user_from_http, channel_session_user
-from django.core.cache import cache
 
 from game.round.models import Plot
 from .models import Interactive, InteractiveRound
@@ -15,44 +15,28 @@ from .models import Interactive, InteractiveRound
 def get_round(game):
     users = game.users.all()
     played_rounds = InteractiveRound.objects.filter(user=users[0])
+
     plot_pks = {i.plot.pk for i in played_rounds}
     current_round = len(plot_pks)
+
     remaining = Plot.objects.count() - current_round
+
+    if remaining == 0:
+        return None
+
     plots = Plot.objects.exclude(pk__in=plot_pks)
     plot = choice(plots)
+    for user in users.all():
+        i_round = InteractiveRound(user=user, game=game, plot=plot, round_order=current_round, guess=Decimal(-10))
+        i_round.save()
+        if current_round == 0:
+            # random initial game configuration
+            following = users.exclude(username=user.username).order_by('?')[:game.constraints.max_following]  # random
+            i_round.following = following
+            i_round.save()
 
     return {'plot': plot.plot, 'remaining': remaining, 'current_round': current_round}
-    # played_rounds = InteractiveRound.objects.filter(user=u)
-    # plot_pks = {i.plot.pk for i in played_rounds}
-    #
-    # score = calculate_score(played_rounds)
-    # currentRound = len(plot_pks)
-    #
-    # remaining = Plot.objects.count() - currentRound
-    #
-    # if remaining == 0:
-    #     i = Interactive.objects.get(user=u)
-    #     i.end_time = timezone.now()
-    #     i.save()
-    #     return redirect('interactive:exit_survey')
-    #
-    # if request.session.get('PLOT'):
-    #     plot = Plot.objects.get(plot=request.session.get('PLOT'))
-    # else:
-    #     plots = Plot.objects.exclude(pk__in=plot_pks)
-    #     plot = choice(plots)
-    #
-    # request.session['PLOT'] = plot.plot
-    # form = RoundForm()
-    #
-    # return render(request, 'interactive/play.html', {'users': users,
-    #                                                  'state': 'initial',
-    #                                                  'round': plot,
-    #                                                  'form': form,
-    #                                                  'remaining': remaining,
-    #                                                  'currentRound': currentRound
-    #                                                  })
-    #
+
 
 def user_and_game(message):
 
@@ -119,32 +103,13 @@ def ws_receive(message):
     payload = json.loads(message['text'])
     action = payload.get('action')
 
-    # channel_name = {
-    #     'initialGuess': 'initial.guess',
-    #     'interactiveGuess': 'interactive.guess',
-    #     'sliderChange': 'slider.change',
-    #     'follow': 'follow.list',
-    # }
-
     if action:
         payload['reply_channel'] = message.content['reply_channel']
         payload['path'] = message.content.get('path')
         Channel('game.route').send(payload)
-        # print(channel_name.get(action))
-        # Channel(channel_name.get(action)).send(payload)
     else:
         # TODO: unrecognized action
-        print("ERRORrrrrrrrrrrrrrrrrrrrrrrrrrrr")
         logging.error('Unknown action {}'.format(action))
-
-    # val = message['initialGuess']
-    # print(val)
-    # for user in game.users.all():
-    #     game.user_channel(user).send({'text': json.dumps({
-    #         'action': 'info',
-    #         'text': text,
-    #     }
-    #     )})
 
 
 def channel_debugger(func):
@@ -165,33 +130,59 @@ def channel_debugger(func):
     return inner
 
 
-# @channel_session_user
-# def data_submit(message):
-#     user, game = user_and_game(message)
-#     payload = json.loads(message['text'])
-#
-#     pass
-
-
-# @channel_session_user
+@channel_session_user
 @channel_debugger
 def data_broadcast(message):
+    user, game = user_and_game(message)
+    print(user)
+    print(game)
     pass
 
 
-# @channel_session_user
+@channel_session_user
 @channel_debugger
 def follow_list(message):
+    user, game = user_and_game(message)
+    print(user)
+    print(game)
     pass
 
 
-# @channel_session_user
+@channel_session_user
 @channel_debugger
 def initial_submit(message):
-    pass
+    user, game = user_and_game(message)
+    guess = message.get('guess')
+    try:
+        round_ = InteractiveRound.objects.get(user=user, guess=Decimal(-10))
+        round_.guess = Decimal(guess)
+        round_.save()
+    except InteractiveRound.DoesNotExist:
+        message.reply_channel.send({
+            'text': json.dumps({
+                'error': "User not found",
+            })
+        })
+
+    remaining_users = InteractiveRound.objects.filter(game=game, guess=Decimal(-1))
+    if remaining_users is None:
+        # Interactive On
+        game.group_channel.send({
+            'text': json.dumps({
+                'action': 'interactive'
+            })
+        })
+        pass
+    message.reply_channel.send({
+        'text': json.dumps({
+            'guess': guess,
+            'status': 1,
+        })
+    })
 
 
-# @channel_session_user
+@channel_session_user
 @channel_debugger
 def interactive_submit(message):
-    pass
+    user, game = user_and_game(message)
+    # round_ = InteractiveRound.objects.filter()

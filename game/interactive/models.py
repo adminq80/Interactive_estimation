@@ -13,21 +13,24 @@ class Settings(models.Model):
     max_users = models.PositiveSmallIntegerField()
     min_users = models.PositiveSmallIntegerField()
 
-    max_influencers = models.PositiveSmallIntegerField()
-    min_influencers = models.PositiveSmallIntegerField()
+    max_following = models.PositiveSmallIntegerField()
+    min_following = models.PositiveSmallIntegerField()
 
     def __str__(self):
-        return "Settings: users({},{}), influencers({},{})".format(self.min_users, self.max_users,
-                                                                   self.min_influencers, self.max_influencers
-                                                                   )
+        return "Settings: users({},{}), following({},{})".format(self.min_users, self.max_users,
+                                                                 self.min_following, self.max_following
+                                                                 )
 
     class Meta:
         verbose_name_plural = 'Settings'
 
 
 class InteractiveRound(Round):
-    influencers = models.ManyToManyField(settings.AUTH_USER_MODEL)
+    following = models.ManyToManyField(settings.AUTH_USER_MODEL, symmetrical=False, related_name='following')
+    followers = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='followers', null=True)
+
     influenced_guess = models.DecimalField(max_digits=3, decimal_places=2, null=True)
+    game = models.ForeignKey('Interactive', null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.user.username

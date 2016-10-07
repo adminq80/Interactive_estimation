@@ -120,8 +120,8 @@ def start(request):
 #                 raise Exception('User must be either Control or Interactive')
 #     return render(request, 'users/start.html', {'form': form})
 
-
-@login_required(login_url='/')
-def done(request):
-    c = Control.objects.get(user=request.user)
-    return render(request, 'users/done.html', {'score': c.score})
+#
+# @login_required(login_url='/')
+# def done(request):
+#     c = Control.objects.get(user=request.user)
+#     return render(request, 'users/done.html', {'score': c.score})

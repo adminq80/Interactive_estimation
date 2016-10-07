@@ -57,7 +57,7 @@ def lobby(request):
         game_settings.save()
 
     # look for a game that didn't start yet
-    # randomly ordered list of gamess that haven't started yet
+    # randomly ordered list of games that haven't started yet
     games = Interactive.objects.filter(started=False).order_by('?')
 
     if games:
