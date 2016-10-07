@@ -275,6 +275,7 @@ def interactive_submit(message):
                     users.append({
                         'username': i.username,
                         'avatar': i.get_avatar,
+                        'score': i.get_score,
                     })
 
             following = list(d.values())
