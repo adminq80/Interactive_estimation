@@ -1,6 +1,6 @@
 from channels import route
 from .consumers import exit_game, lobby, ws_receive
-from .consumers import data_broadcast, follow_list, initial_submit, interactive_submit
+from .consumers import data_broadcast, follow_list, initial_submit, interactive_submit, round_outcome
 
 
 game_routes = [
@@ -10,10 +10,11 @@ game_routes = [
     # route('follow.list', follow_list),
     # todo: creating a route for next round
 
-    route('game.route', initial_submit, action='^initialGuess$'),  # initial guess submission
-    route('game.route', data_broadcast, action='^sliderChange$'),  # broadcast guess to player
-    route('game.route', interactive_submit, action='^interactiveGuess$'),
+    route('game.route', initial_submit, action='^initial$'),  # initial guess submission
+    route('game.route', data_broadcast, action='^slider$'),  # broadcast guess to player
+    route('game.route', interactive_submit, action='^interactive$'),
     route('game.route', follow_list, action='^follow$'),
+    route('game.route', round_outcome, action='^outcome$'),
 
 ]
 

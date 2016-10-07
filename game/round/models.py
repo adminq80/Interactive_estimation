@@ -21,6 +21,8 @@ class Round(models.Model):
 
     # start time of the round
     # end time of the round
+    start_time = models.DateTimeField(auto_now=True, null=True)
+    end_time = models.DateTimeField(null=True)
 
     def __str__(self):
         return self.user.username

@@ -6,4 +6,4 @@ $(".plusIcon").click(function() {
 
 $(".unfollow").click(function() {
     console.log("UNFOLLOWING");
-})
+});
