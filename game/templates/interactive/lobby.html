@@ -2,114 +2,83 @@
 {% load staticfiles %}
 
 {% block breadcrumbs %}
-    <div id="breadcrumbs" hidden="true">
-        <ul class="nav nav-wizard">
-            <li>Current Round: {{currentRound}}</li>
-            <li id="yourGuess"><a>Initial Guess</a></li>
-            <li id="socialGuess"><a>Interactive Guess</a></li>
-            <li id="outcome"><a>Round Outcome</a></li>
-        </ul>
-    </div>
+<div id="breadcrumbs" hidden="true">
+  <ul class="nav nav-wizard">
+    <li>Current Round: <span id="currentRound"></span></li>
+    <li id="initial"><a>Initial Guess</a></li>
+    <li id="interactive"><a>Interactive Guess</a></li>
+    <li id="outcome"><a>Round Outcome</a></li>
+  </ul>
+</div>
 {% endblock %}
 
 {% block container %}
 
-    <div id="lobby">
-        <div class="row">
-            <div class="col-md-12" id="waiting">Waiting for other players ...</div>
+<div id="lobby">
+  <div class="row">
+      <div class="col-md-12" id="waiting">Waiting for other players...</div>
+  </div>
+  <p>Please wait a few moments while we try to find the needed participants.</p>
+  <p>If we can't find enough participants within {{lobbyTimeout}} minutes, we will end the HIT and pay you for your time.</p>
+  <p>Please make sure your sound is on as a bell will ring to indicate the start of a new game.</p>
+</div>
+
+<div id="game" hidden>
+  <div class="form">
+    <div class="col-md-3">
+      <div class="follow" hidden>
+        <b>You can follow:</b>
+        <div class="followTable">
+          <div class="user">
+            <img src={% static 'images/plus.ico' %} class="plusIcon" />
+            <img src={% static 'images/avatars/bird.png' %} class="avatar" /> 100
+          </div>
         </div>
-        <p>Please wait a few moments while we try to find the needed participants.</p>
-        <p>If we can't find enough participants within {{lobbyTimeout}} minutes, we will end the HIT and pay you for your time.</p>
-        <p>Please make sure your sound is on as a bell will ring to indicate the start of a new game.</p>
+      </div>
     </div>
 
-    <div id="game" hidden>
-        <div class="form">
+    <div class="col-md-3">
+      <div class="follow" hidden>
+        <b>You are following:</b>
+        <table class="table table-bordered" id="following_list">
+          <tbody>
+            <tr>
+              <td><img src={% static 'images/avatars/bee.png' %} class="avatar" /> 100<button type="button" class="btn btn-primary unfollow">Unfollow</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-            <div class="col-md-3">
-                <div><b>You can follow:</b></div>
-                <div class="follow available">
-{#                    <div class="user">#}
-{#                        <img src={% static 'images/plus.ico' %} class="plusIcon" />#}
-{#                        <img src={% static 'images/avatars/bird.png' %} class="avatar" /> 100#}
-{#                    </div>#}
-{#                    <div class="user">#}
-{#                        <img src={% static 'images/plus.ico' %} class="plusIcon" />#}
-{#                        <img src={% static 'images/avatars/cat.png' %} class="avatar" /> 100#}
-{#                    </div>#}
-{#                    <div class="user">#}
-{#                        <img src={% static 'images/plus.ico' %} class="plusIcon" />#}
-{#                        <img src={% static 'images/avatars/cow.png' %} class="avatar" /> 100#}
-{#                    </div>#}
-{##}
-{#                    <div class="user">#}
-{#                        <img src={% static 'images/plus.ico' %} class="plusIcon" />#}
-{#                        <img src={% static 'images/avatars/lion.png' %} class="avatar" /> 100#}
-{#                    </div>#}
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <b>You are following:</b>
-                <div class="follow">
-                    <table class="table table-bordered" id="following_list">
-{#                        <tbody>#}
-{#                        <tr>#}
-{#                            <td>#}
-{#                                <img src={% static 'images/avatars/bee.png' %} class="avatar" /> 100<button type="button" class="btn btn-primary unfollow">Unfollow</button></td>#}
-{#                        </tr>#}
-{#                        <tr>#}
-{#                            <td>#}
-{#                                <img src={% static 'images/avatars/elephant.png' %} class="avatar" /> 100<button type="button" class="btn btn-primary unfollow">Unfollow</button></td>#}
-{#                        </tr>#}
-{#                        <tr>#}
-{#                            <td><img src={% static 'images/avatars/pig.png' %} class="avatar" /> 100<button type="button" class="btn btn-primary unfollow">Unfollow</button></td>#}
-{#                        </tr>#}
-{#                        </tbody>#}
-                    </table>
-                </div>
-
-                <div class="interactive">
-                    <div><b>You are following:</b></div>
-
-                    <table class="table table-bordered" id="following_list">
-{#                        <tbody>#}
-{#                        <tr>#}
-{#                            <td>#}
-{#                                <img src={% static 'images/avatars/bee.png' %} class="avatar" /> 100#}
-{#                        </tr>#}
-{#                        <tr>#}
-{#                            <td>#}
-{#                                <img src={% static 'images/avatars/elephant.png' %} class="avatar" /> 100#}
-{#                        </tr>#}
-{#                        <tr>#}
-{#                            <td><img src={% static 'images/avatars/pig.png' %} class="avatar" /> 100#}
-{#                        </tr>#}
-{#                        </tbody>#}
-                    </table>
-                </div>
-                {% include 'components/timer.html' %}
-
-            </div>
-          
-            <div class="col-md-6">
-                <h3>Guess the correlation</h3>
-                <div>
-                    <img src='#' class="img-responsive"/>
-                </div>
-                <div id="picker">
-                    {% include 'components/slider.html' %}
-                </div>
-            </div>
+      <div id="interactiveGuess" hidden>
+        <div><b>You are following:</b></div>
+        <table class="table table-bordered" id="following_list">
+          <tr>
+            <td><img src={% static 'images/avatars/bee.png' %} class="avatar" /> 100
+            </td>
+          </tr>
+        </table>
+      </div>
+      {% include 'components/timer.html' %}
+    </div>
+  
+    <div class="col-md-6">
+        <h3>Guess the correlation</h3>
+        <div>
+          <img src='#' class="img-responsive"/>
+        </div>
+        <div id="picker">
+          {% include 'components/slider.html' %}
         </div>
     </div>
+  </div>
+</div>
 
 
 {% endblock %}
 
 
 {% block extra_javascript %}
-{#    <script src="{% static "js/jquery-1.12.2.min.js" %}"></script>#}
     <script src="{% static "js/reconnecting-websocket.min.js" %}" type="text/javascript"></script>
 
     <script src="{% static "js/interactive.js" %}"></script>
