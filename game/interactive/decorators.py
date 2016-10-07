@@ -13,11 +13,9 @@ def channel_debugger(func):
         if settings.DEBUG:
             print(name)
             logging.info(name)
+            payload = message.content.get('payload')
             message.reply_channel.send({
-                'text': json.dumps({
-                    'action': message.content.get('action') or 'ping',
-                    'text': name,
-                })
+                'text': json.dumps(payload)
             })
         func(message, *args, **kwargs)
 

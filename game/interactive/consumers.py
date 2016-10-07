@@ -11,6 +11,8 @@ from game.round.models import Plot
 from game.users.models import User
 from .models import Interactive, InteractiveRound
 
+from .decorators import channel_debugger
+
 
 def get_round(game):
     users = game.users.all()
@@ -185,6 +187,7 @@ def follow_list(message):
 
 
 @channel_session_user
+@channel_debugger
 def initial_submit(message):
     user, game = user_and_game(message)
     guess = message.get('guess')
@@ -242,6 +245,7 @@ def initial_submit(message):
 
 
 @channel_session_user
+@channel_debugger
 def interactive_submit(message):
     auth_user, game = user_and_game(message)
     guess = message.get('socialGuess')
@@ -303,5 +307,6 @@ def interactive_submit(message):
 
 
 @channel_session_user
+@channel_debugger
 def round_outcome(message):
     pass
