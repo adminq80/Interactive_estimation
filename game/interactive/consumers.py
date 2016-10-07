@@ -147,7 +147,7 @@ def data_broadcast(message):
 
             game.user_channel(follower.user).send({
                 'text': json.dumps({
-                    'action': 'SliderChange',
+                    'action': 'sliderChange',
                     'username': user.username,
                     'slider': slider,
                 })

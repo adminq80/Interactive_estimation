@@ -36,12 +36,24 @@ $("#slider").slider({
 });
 $('.ui-slider-handle').hide();
 
-function set_breadcrumbs(state, round){
+function set_breadcrumbs(state, round) {
+  var breadcrumbs = $("#breadcrumbs > ul").children();
+  $.each(breadcrumbs, function(i, item) {
+    $(item).removeClass("active");
+  })
   $("#"+state).addClass("active");
   $("#currentRound").html(round);
-  // remove all other active classes
-  // set current roud
-  console.log(state);
+}
+
+function start_game(data) {
+  state = data.action;
+  $("#lobby").hide();
+  $("#breadcrumbs").show();
+  set_breadcrumbs(state, data.current_round);
+  $("#game").show();
+  $("img.img-responsive").attr("src", '/static/plots/' + data.plot);
+  countdown();
+  $("#remaining").html(data.remaining);
 }
 
 $(function () {
@@ -63,7 +75,8 @@ $(function () {
 
   socket.onmessage = function (msg) {
     var data = JSON.parse(msg.data);
-    data.action = 'interactive';
+    console.log(data);
+    data.action = 'outcome';
 
     if(data.error){
       console.log(data.msg);
@@ -78,76 +91,69 @@ $(function () {
       window.location.href = proto + window.location.host + data.url;
     }
     else if(data.action == 'initial'){
-      state = 'initial';
-      $("#lobby").hide();
-      $("#breadcrumbs").show();
-      set_breadcrumbs(state, data.current_round);
-      $("#game").show();
-      $("img.img-responsive").attr("src", '/static/plots/' + data.plot);
-      countdown();
-      $("#remaining").html(data.remaining);
+      start_game(data);
     }
     else if(data.action == 'ping'){
       console.log(data.text)
     }
     else if(data.action == 'interactive'){
-      state = 'interactive';
-      $("#lobby").hide();
-      $("#breadcrumbs").show();
-      set_breadcrumbs(state, data.current_round);
-      $("#game").show();
-      $("img.img-responsive").attr("src", '/static/plots/' + data.plot);
-      countdown();
-      $("#remaining").html(data.remaining);
+      start_game(data);
 
       $("#interactiveGuess").show();
 
-      data.following = [{"user":"Test", "avatar":"cow.png", "score": 1.0}]
-      console.log(data.following);
-
-      // for(var i = 0; i < data.following.length(); i++) {
-      //   var user = data.following[i];
-      //    <td><img src={% static 'images/avatars/'+user.avatar %} class="avatar" /> 100
-      //       </td>
-      // }
-      // $('#picker').style.display = 'block';
-      // $('#lobby').style.display = 'none';
-      // $('#game').style.display = 'block';
-      // $('#breadcrumbs').style.display = 'block';
-      // $('#socialGuess').className = 'active';
-      // $('.interactive').style.display = 'block';
-      // $All('.follow').forEach(function (elem) {
-      //     elem.style.display = 'none';
-      // });
-      // $('img.img-responsive').src = '/static/plots/' + data.plot;
-      // $('#remaining').innerHTML = 'Plots remaining: ' + data.remaining;
-      // console.log(data.current_round);
-      // console.log(data.following)
-      /*
-       *
-       *  'plot': round_data.get('plot'),
-       * 'remaining': round_data.get('remaining'),
-       * 'current_round': round_data.get('current_round'),
-       * # a list of dicts of {usernames and avatars} for the players that the user follows
-       * 'following': following,
-       *
-       * */
-
-      // countdown();
+      data.following = [{"username":"Test", "avatar":"cow.png", "score": 1.0}]
+      $.each(data.following, function(i, user) {
+        var avatar = "/static/images/avatars/"+user.avatar;
+        $("#following_list tbody").append(`
+          <tr>
+            <td id=${user.username}>
+              <img src=${avatar} class='avatar' />
+              <span>${user.score}</span>
+            </td>
+          </tr>
+        `);
+      })
     }
     else if(data.action == 'outcome'){
-        state = 'outcome';
-        reset_breadcrumbs();
-        $('#lobby').style.display = 'none';
-        $('#game').style.display = 'block';
-        $('#breadcrumbs').style.display = 'block';
-        $('#outcome').className = 'active';
-        $('.interactive').style.display = 'block';
-        $('#picker').style.display = 'none';
-        $('.interactive').style.display = 'none';
-        $All('.follow').forEach(function (elem) {
-            elem.style.display = 'block';
-        });
+      start_game(data);
+
+      $(".outcome").show();
+
+      // populate list of people you can follow
+      data.all_players = [{"username":"Test", "avatar":"cow.png", "score": 1.0}];
+      $.each(data.all_players, function(i, user) {
+        var avatar = "/static/images/avatars/"+user.avatar;
+        $("#follow_list").append(`
+          <div class="user" id=${user.username}>
+            <img src="/static/images/plus.ico" class="plusIcon" />
+            <img src=${avatar} class="avatar" /> ${user.score}
+          </div>
+        `);
+      })
+
+      // popular list of people you can unfollow
+      data.following = [{"username":"Test", "avatar":"pig.png", "score": 1.0}];
+      $.each(data.following, function(i, user) {
+        var avatar = "/static/images/avatars/"+user.avatar;
+        $("#unfollow_list tbody").append(`
+          <tr>
+            <td id=${user.username}>
+              <img src=${avatar} class='avatar' />
+              <span>${user.score}</span>
+              <button type="button" class="btn btn-primary unfollow">Unfollow</button>
+            </td>
+          </tr>
+        `);
+      })
+
+      $(".plusIcon").click(function(e) {
+        var username = e.target.parentElement.id;
+      });
+
+      $(".unfollow").click(function(e) {
+        var username = e.target.parentElement.id; 
+      });
+  
 
         /*
          *
@@ -163,25 +169,17 @@ $(function () {
 
         // countdown();
     }
-    else if(data.action == 'SliderChange'){
-        /*
-         *
-         * 'username': user.username,
-         * 'slider': slider,
-         *
-         * */
-        console.log('User: ' + data.username);
-        console.log('slider value: ' + data.slider)
+    else if(data.action == 'sliderChange'){
+      $(`#${data.username} > span`).html(data.slider);
 
     }
     else if(data.action == 'followNotify'){
-        /*
-         *
-         * 'following': follow_users,
-         *
-         * */
-        console.log('Following list: ' + data.following_users)
-
+      /*
+       *
+       * 'following': follow_users,
+       *
+       * */
+      console.log('Following list: ' + data.following_users)
     }
     else{
         console.log(data)
@@ -191,21 +189,24 @@ $(function () {
 
 
 $('#submit').click(function () {
-   if (state == 'initial'){
-       var guess = document.querySelector('#guess').value;
-       socket.send(JSON.stringify({
-           action: 'initial',
-           guess: guess
-       }));
-   }
-   else if(state == 'interactive'){
-        var socialGuess = document.querySelector('#guess').value;
-        socket.send(JSON.stringify({
-            action: 'interactive',
-            socialGuess: socialGuess
-        }))
-   }
-   else{
-       console.log(state)
-   }
+  // show window "Waiting for others to submit..."
+  if (state == 'initial') {
+    console.log("TEST");
+    var guess = document.querySelector('#guess').value;
+    console.log(guess);
+    socket.send(JSON.stringify({
+      action: 'initial',
+      guess: guess
+    }));
+  }
+  else if(state == 'interactive'){
+      var socialGuess = document.querySelector('#guess').value;
+      socket.send(JSON.stringify({
+          action: 'interactive',
+          socialGuess: socialGuess
+      }))
+  }
+  else{
+     console.log(state)
+  }
 });
