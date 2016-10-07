@@ -103,7 +103,7 @@ def lobby(message):
 
     # TODO I think this should go to the lobby template .. only the variables are passed
     game.broadcast('info', 'There are currently a total of {} out of {} required participants waiting for the game to start.'.
-                   format(game.users.count(), game.constraints.max_users - game.users.count()))
+                   format(game.users.count(), game.constraints.max_users))
 
 
 @channel_session_user
@@ -275,6 +275,7 @@ def interactive_submit(message):
                     users.append({
                         'username': i.username,
                         'avatar': i.get_avatar,
+                        'score': i.get_score,
                     })
 
             following = list(d.values())
