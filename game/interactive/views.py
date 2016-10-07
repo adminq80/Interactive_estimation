@@ -123,6 +123,15 @@ def play(request):
                                                      })
 
 
+# @login_required(login_url='/')
+# def instruction(request):
+#     u = request.user
+#     game = Interactive.objects.get(user=u)
+#     game.instruction = True
+#     game.save()
+
+#     return render(request, 'interactive/instructions.html')
+
 @login_required(login_url='/')
 def submit_answer(request):
     pass
