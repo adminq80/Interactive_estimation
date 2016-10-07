@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.db import transaction
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
 from django.utils import timezone
 
 from game.contrib.calculate import calculate_score
@@ -27,6 +28,12 @@ def new_interactive_game(game_settings, user):
     user.avatar = avatar()
     user.save()
     return i
+
+
+def assign(request):
+    if request.method == 'POST':
+        return redirect('interactive:lobby')
+    return render(request, 'pages/home.html')
 
 
 # Create your views here.

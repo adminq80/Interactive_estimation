@@ -15,6 +15,12 @@ from .forms import RoundForm
 from .models import Control
 
 
+def assign(request):
+    if request.method == 'POST':
+        return redirect('control:play')
+    return render(request, 'pages/home.html')
+
+
 # Create your views here.
 def play(request):
 
