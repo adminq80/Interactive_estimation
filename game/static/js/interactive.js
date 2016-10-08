@@ -75,8 +75,7 @@ $(function () {
 
   socket.onmessage = function (msg) {
     var data = JSON.parse(msg.data);
-    console.log(data);
-    data.action = 'outcome';
+    data.action = 'outcome'; //testing
 
     if(data.error){
       console.log(data.msg);
@@ -192,12 +191,14 @@ $('#submit').click(function () {
   // show window "Waiting for others to submit..."
   if (state == 'initial') {
     console.log("TEST");
-    var guess = document.querySelector('#guess').value;
+    var guess = $('#guess');
     console.log(guess);
     socket.send(JSON.stringify({
       action: 'initial',
-      guess: guess
+      guess: guess,
+      payload: {action: "interactive"}
     }));
+    // socket.send(JSON.stringify({action:"initial", payload:{plot:"0.png", action:"interactive"}}));
   }
   else if(state == 'interactive'){
       var socialGuess = document.querySelector('#guess').value;
