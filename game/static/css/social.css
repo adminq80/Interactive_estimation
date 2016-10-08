@@ -30,3 +30,7 @@
 .user {
   margin-top: 10px;
 }
+
+#unfollow_list td {
+  height: 120px;
+}

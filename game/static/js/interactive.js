@@ -1,4 +1,4 @@
-
+//timer
 function countdown(counterState) {
   var counter = $('#counter');
   var seconds = 30;
@@ -18,6 +18,28 @@ function countdown(counterState) {
   tick();
 }
 
+function new_follow_list(name, avatar, score) {
+  $("#follow_list").append(`
+          <div class="user" id=${name}>
+            <img src="/static/images/plus.ico" class="plusIcon" />
+            <img src=${avatar} class="avatar" /> <span class="userScore">${score}</span>
+          </div>
+        `);
+}
+
+function new_unfollow_list(name, avatar, score) {
+  var avatar = "/static/images/avatars/"+avatar;
+  return (`
+        <tr>
+          <td id=${name}>
+            <img src=${avatar} class='avatar' />
+            <span>${score}</span>
+            <button type="button" class="btn btn-primary unfollow">Unfollow</button>
+          </td>
+        </tr>
+      `);
+}
+//slider
 $("#slider").slider({
   min: 0,
   max: 1,
@@ -36,7 +58,9 @@ $("#slider").slider({
 });
 $('.ui-slider-handle').hide();
 
+//breadcrumbs
 function set_breadcrumbs(state, round) {
+  $("#breadcrumbs").show();
   var breadcrumbs = $("#breadcrumbs > ul").children();
   $.each(breadcrumbs, function(i, item) {
     $(item).removeClass("active");
@@ -48,7 +72,6 @@ function set_breadcrumbs(state, round) {
 function start_game(data) {
   state = data.action;
   $("#lobby").hide();
-  $("#breadcrumbs").show();
   set_breadcrumbs(state, data.current_round);
   $("#game").show();
   $("img.img-responsive").attr("src", '/static/plots/' + data.plot);
@@ -75,7 +98,7 @@ $(function () {
 
   socket.onmessage = function (msg) {
     var data = JSON.parse(msg.data);
-    // data.action = 'outcome'; //testing
+    data.action = 'outcome'; //testing
 
     if(data.error){
       console.log(data.msg);
@@ -116,41 +139,40 @@ $(function () {
     else if(data.action == 'outcome'){
       start_game(data);
 
+      $("#following_list").hide();
       $(".outcome").show();
 
       // populate list of people you can follow
-      data.all_players = [{"username":"Test", "avatar":"cow.png", "score": 1.0}];
+      data.all_players = [{"username":"cow", "avatar":"cow.png", "score": 1.0}];
       $.each(data.all_players, function(i, user) {
         var avatar = "/static/images/avatars/"+user.avatar;
-        $("#follow_list").append(`
-          <div class="user" id=${user.username}>
-            <img src="/static/images/plus.ico" class="plusIcon" />
-            <img src=${avatar} class="avatar" /> ${user.score}
-          </div>
-        `);
+        new_follow_list(user.username, avatar, user.score);
       })
 
       // popular list of people you can unfollow
-      data.following = [{"username":"Test", "avatar":"pig.png", "score": 1.0}];
+      data.following = [{"username":"pig", "avatar":"pig.png", "score": 1.0}, {"username":"bee", "avatar":"bee.png", "score": 2.0}];
       $.each(data.following, function(i, user) {
-        var avatar = "/static/images/avatars/"+user.avatar;
-        $("#unfollow_list tbody").append(`
-          <tr>
-            <td id=${user.username}>
-              <img src=${avatar} class='avatar' />
-              <span>${user.score}</span>
-              <button type="button" class="btn btn-primary unfollow">Unfollow</button>
-            </td>
-          </tr>
-        `);
+        $("#unfollow_list tbody").append(new_unfollow_list(user.username, user.avatar, user.score))
       })
 
-      $(".plusIcon").click(function(e) {
+      $(document).on("click", ".plusIcon", function(e) {
+        console.log(e.target.parentElement);
         var username = e.target.parentElement.id;
+        var avatar = $(`#${username}>.avatar`).attr('src');
+        var score = $(`#${username}>.userScore`).html();
+        console.log(username);
+        console.log(avatar);
+        console.log(score);
       });
 
-      $(".unfollow").click(function(e) {
-        var username = e.target.parentElement.id; 
+      $(document).on("click", ".unfollow", function(e) {
+        var username = e.target.parentElement.id;
+        var avatar = $(`#${username}>.avatar`).attr('src');
+        var score = $(`#${username}>span`).html();
+        $(`#${username}`).html("");
+        new_follow_list(username, avatar, score);
+
+        // SOCKET
       });
   
 
@@ -177,7 +199,7 @@ $(function () {
       console.log('Following list: ' + data.following_users)
     }
     else{
-        console.log(data)
+      console.log(data)
     }
   };
 });
@@ -186,24 +208,22 @@ $(function () {
 $('#submit').click(function () {
   // show window "Waiting for others to submit..."
   if (state == 'initial') {
-    console.log("TEST");
-    var guess = $('#guess');
-    console.log(guess);
+    var guess = $('#guess').val();
     socket.send(JSON.stringify({
       action: 'initial',
       guess: guess,
       payload: {action: "interactive"}
     }));
-    // socket.send(JSON.stringify({action:"initial", payload:{plot:"0.png", action:"interactive"}}));
   }
   else if(state == 'interactive'){
-      var socialGuess = document.querySelector('#guess').value;
-      socket.send(JSON.stringify({
-          action: 'interactive',
-          socialGuess: socialGuess
-      }))
+    var guess = $('#guess').val();
+    socket.send(JSON.stringify({
+      action: 'interactive',
+      socialGuess: guess,
+      payload: {action: "outcome"}
+    }));
   }
-  else{
+  else {
      console.log(state)
   }
 });
