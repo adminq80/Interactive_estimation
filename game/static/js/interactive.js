@@ -68,6 +68,7 @@ function set_breadcrumbs(state, round) {
 
 function start_game(data) {
   state = data.action;
+  $("#myModal").modal('hide');
   $("#lobby").hide();
   set_breadcrumbs(state, data.current_round);
   $("#game").show();
@@ -95,7 +96,7 @@ $(function () {
 
   socket.onmessage = function (msg) {
     var data = JSON.parse(msg.data);
-    data.action = 'outcome'; //testing
+    // data.action = 'outcome'; //testing
 
     if(data.error){
       console.log(data.msg);
@@ -232,6 +233,8 @@ $(function () {
 
 $('#submit').click(function () {
   // show window "Waiting for others to submit..."
+  $("#myModal").modal('show');
+
   if (state == 'initial') {
     var guess = $('#guess').val();
     socket.send(JSON.stringify({
