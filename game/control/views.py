@@ -18,7 +18,7 @@ from .models import Control
 def assign(request):
     if request.method == 'POST':
         return redirect('control:play')
-    return render(request, 'pages/home.html')
+    return render(request, 'pages/home2.html')
 
 
 # Create your views here.

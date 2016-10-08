@@ -33,7 +33,7 @@ def new_interactive_game(game_settings, user):
 def assign(request):
     if request.method == 'POST':
         return redirect('interactive:lobby')
-    return render(request, 'pages/home.html')
+    return render(request, 'pages/home2.html')
 
 
 # Create your views here.

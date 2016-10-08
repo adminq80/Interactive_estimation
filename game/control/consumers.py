@@ -20,6 +20,7 @@ def home(message):
 def ws_add(message):
     Group("chat").add(message.reply_channel)
 
+
 # Connected to websocket.disconnect
 def ws_disconnect(message):
     Group("chat").discard(message.reply_channel)
