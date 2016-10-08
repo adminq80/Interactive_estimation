@@ -1,7 +1,7 @@
 from django.conf.urls import url
 
 
-from .views import submit_answer, play
+from .views import assign, submit_answer, play
 from .views import instruction, exit_survey
 
 
@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^submit/$', submit_answer, name='submit'),
     url(r'^instruction/$', instruction, name='instruction'),
     url(r'^exit/$', exit_survey, name='exit_survey'),
+    url(r'^$', assign),
 ]
