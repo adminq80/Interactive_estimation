@@ -28,7 +28,6 @@ function new_follow_list(name, avatar, score) {
 }
 
 function new_unfollow_list(name, avatar, score) {
-  var avatar = "/static/images/avatars/"+avatar;
   return (`
         <tr>
           <td id=${name}>
@@ -152,24 +151,24 @@ $(function () {
       // popular list of people you can unfollow
       data.following = [{"username":"pig", "avatar":"pig.png", "score": 1.0}, {"username":"bee", "avatar":"bee.png", "score": 2.0}];
       $.each(data.following, function(i, user) {
-        $("#unfollow_list tbody").append(new_unfollow_list(user.username, user.avatar, user.score))
+        var avatar = "/static/images/avatars/"+user.avatar;
+        $("#unfollow_list tbody").append(new_unfollow_list(user.username, avatar, user.score));
       })
 
       $(document).on("click", ".plusIcon", function(e) {
-        console.log(e.target.parentElement);
         var username = e.target.parentElement.id;
-        var avatar = $(`#${username}>.avatar`).attr('src');
-        var score = $(`#${username}>.userScore`).html();
-        console.log(username);
-        console.log(avatar);
-        console.log(score);
+        var avatar = $(`div#${username}>.avatar`).attr('src');
+        var score = $(`div#${username}>.userScore`).html();
+        $(`div#${username}`).html("");
+        $("#unfollow_list tbody").append(new_unfollow_list(username, avatar, score));
+      
       });
 
       $(document).on("click", ".unfollow", function(e) {
         var username = e.target.parentElement.id;
-        var avatar = $(`#${username}>.avatar`).attr('src');
-        var score = $(`#${username}>span`).html();
-        $(`#${username}`).html("");
+        var avatar = $(`td#${username}>.avatar`).attr('src');
+        var score = $(`td#${username}>span`).html();
+        $(`td#${username}`).html("");
         new_follow_list(username, avatar, score);
 
         // SOCKET
