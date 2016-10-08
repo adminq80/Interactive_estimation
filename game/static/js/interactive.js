@@ -146,11 +146,16 @@ $(function () {
         new_follow_list(user.username, avatar, user.score);
       })
 
-      // popular list of people you can unfollow
+      // populate list of people you can unfollow
+      // add empty divs if following less than the max number of followers
       data.following = [{"username":"pig", "avatar":"pig.png", "score": 1.0}, {"username":"bee", "avatar":"bee.png", "score": 2.0}];
       $.each(data.following, function(i, user) {
         var avatar = "/static/images/avatars/"+user.avatar;
         $("#unfollow_list tbody").append("<tr>"+new_unfollow_list(user.username, avatar, user.score)+"</tr>");
+      })
+
+      var following = data.following.map(function(user) {
+        return user.username;
       })
 
       $(document).on("click", ".plusIcon", function(e) {
@@ -159,6 +164,11 @@ $(function () {
         var score = $(`div#${username}>.userScore`).html();
         
         var newFollowing = new_unfollow_list(username, avatar, score);
+
+        socket.send(JSON.stringify({
+          action: 'followNotify',
+          following: following + [username]
+        }));
 
         var rows = $("#unfollow_list tbody").children();
         for(var i = 0; i < rows.length; i++) {
@@ -171,14 +181,23 @@ $(function () {
         }
       });
 
+
       $(document).on("click", ".unfollow", function(e) {
         var username = e.target.parentElement.id;
         var avatar = $(`td#${username}>.avatar`).attr('src');
         var score = $(`td#${username}>span`).html();
+
+        var toRemove = following.indexOf(username);
+        following.splice(toRemove, 1)
+
+        socket.send(JSON.stringify({
+          action: 'followNotify',
+          following: following
+        }));
+
         $(`td#${username}`).html("");
         new_follow_list(username, avatar, score);
 
-        // SOCKET
       });
   
 
