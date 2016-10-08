@@ -1,21 +1,21 @@
 
-function countdown() {
+function countdown(counterState) {
+  var counter = $('#counter');
   var seconds = 30;
-  var counter = $("#counter")[0];
 
   function tick() {
-    seconds--;
-    counter.innerHTML = "0:" + (seconds < 10 ? "0" : "") + String(seconds);
-    if( seconds > 0 ) {
+    if(counterState == state) {
+      seconds--;
+      counter[0].innerHTML = "0:" + (seconds < 10 ? "0" : "") + String(seconds);
+      if( seconds > 0 ) {
         setTimeout(tick, 1000);
-    } else {
-      var submit = $("#submit")[0];
-      submit.click();
+      } else {
+        var submit = $("#submit")[0];
+        submit.click();
+      }
     }
   }
-  if(counter) {
-    tick();
-  }
+  tick();
 }
 
 $("#slider").slider({
@@ -52,7 +52,7 @@ function start_game(data) {
   set_breadcrumbs(state, data.current_round);
   $("#game").show();
   $("img.img-responsive").attr("src", '/static/plots/' + data.plot);
-  countdown();
+  countdown(state);
   $("#remaining").html(data.remaining);
 }
 
@@ -75,7 +75,7 @@ $(function () {
 
   socket.onmessage = function (msg) {
     var data = JSON.parse(msg.data);
-    data.action = 'outcome'; //testing
+    // data.action = 'outcome'; //testing
 
     if(data.error){
       console.log(data.msg);
@@ -164,13 +164,9 @@ $(function () {
          * 'all_players': users,
          *
          * */
-
-
-        // countdown();
     }
     else if(data.action == 'sliderChange'){
       $(`#${data.username} > span`).html(data.slider);
-
     }
     else if(data.action == 'followNotify'){
       /*
