@@ -20,21 +20,21 @@ function countdown(counterState) {
 
 function new_follow_list(name, avatar, score) {
   $("#follow_list").append(`
-          <div class="user" id=${name}>
-            <img src="/static/images/plus.ico" class="plusIcon" />
-            <img src=${avatar} class="avatar" /> <span class="userScore">${score}</span>
-          </div>
-        `);
+    <div class="user" id=${name}>
+      <img src="/static/images/plus.ico" class="plusIcon" />
+      <img src=${avatar} class="avatar" /> <span class="userScore">${score}</span>
+    </div>
+  `);
 }
 
 function new_unfollow_list(name, avatar, score) {
   return (`
-          <td id=${name}>
-            <img src=${avatar} class='avatar' />
-            <span>${score}</span>
-            <button type="button" class="btn btn-primary unfollow">Unfollow</button>
-          </td>
-      `);
+    <td id=${name}>
+      <img src=${avatar} class='avatar' />
+      <span>${score}</span>
+      <button type="button" class="btn btn-primary unfollow">Unfollow</button>
+    </td>
+  `);
 }
 //slider
 $("#slider").slider({
@@ -96,7 +96,6 @@ $(function () {
 
   socket.onmessage = function (msg) {
     var data = JSON.parse(msg.data);
-    // data.action = 'outcome'; //testing
 
     if(data.error){
       console.log(data.msg);
@@ -112,6 +111,13 @@ $(function () {
     }
     else if(data.action == 'initial'){
       start_game(data);
+
+      if(data.current_round == 0) {
+        // plays bell at start of game
+        var audio = new Audio('/static/bell.mp3');
+        audio.play();
+      }
+
     }
     else if(data.action == 'ping'){
       console.log(data.text)
@@ -148,7 +154,7 @@ $(function () {
       })
 
       // populate list of people you can unfollow
-      // add empty divs if following less than the max number of followers
+      // add empty table rows if following less than the max number of followers
       data.following = [{"username":"pig", "avatar":"pig.png", "score": 1.0}, {"username":"bee", "avatar":"bee.png", "score": 2.0}];
       $.each(data.following, function(i, user) {
         var avatar = "/static/images/avatars/"+user.avatar;
@@ -232,7 +238,6 @@ $(function () {
 
 
 $('#submit').click(function () {
-  // show window "Waiting for others to submit..."
   $("#myModal").modal('show');
 
   if (state == 'initial') {
