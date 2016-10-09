@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>{% block title %}Game{% endblock title %}</title>
+    <title>{% block title %}Guess the correlation{% endblock title %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -27,7 +27,7 @@
             <a href="/">
               <img id="logo" src={% static 'images/logo.png' %} />
             </a>
-            &nbsp;Guess the Correlation Game
+{#            &nbsp;Guess the Correlation Game#}
             {% if user.is_authenticated %}
               <form class="logout" action='{% url "account_logout" %}' method="post">
                 {% csrf_token %}
