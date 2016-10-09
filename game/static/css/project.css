@@ -89,6 +89,13 @@ html, body {
   width: 100%;
 }
 
+.example {
+  width: 30%;
+}
+
+.sample {
+  width: 200px;
+}
 #myModal {
   position: absolute;
   left: 50%;
