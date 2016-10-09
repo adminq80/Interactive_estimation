@@ -143,7 +143,7 @@ $(function () {
     else if(data.action == 'outcome'){
       start_game(data);
 
-      $("#following_list").hide();
+      $("#interactiveGuess").hide();
       $(".outcome").show();
 
       // populate list of people you can follow

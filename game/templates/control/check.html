@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load staticfiles i18n %}
+
+{% block container %}
+<h2>Comprehension Check</h2>
+<form class="form" action="/solo/play/" method="post">
+{% csrf_token %}
+  <div class="form-group">
+    <label>Your goal in the game is to</label>
+    <div>
+      <input class="radio" type="radio"> Estimate the correlation of two variables
+    </div>
+    <div>
+      <input class="radio" type="radio"> Calculate the correlation of two variables
+    </div>
+  </div>
+  <div class="form-group">
+    In general, correlation can be between <input> and <input>
+  </div>
+  <div class="form-group">
+    <label>In this game, all correlations will be </label>
+    <div>
+      <input class="radio" type="radio"> Negative or positive
+    </div>
+    <div>
+      <input class="radio" type="radio"> Only positive
+    </div>
+  </div>
+  <div class="form-group">
+    <label>Have you participated in this study before?</label>
+    <div>
+      <input class="radio" type="radio"> Yes
+    </div>
+    <div>
+      <input class="radio" type="radio"> No
+    </div>
+  </div>
+<button type="submit" value="Submit" class="btn btn-primary nextButton">Next</button>
+</form> 
+</div>
+{% endblock %}
