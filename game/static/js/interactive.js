@@ -1,4 +1,4 @@
-
+//timer
 function countdown(counterState) {
   var counter = $('#counter');
   var seconds = 30;
@@ -18,6 +18,25 @@ function countdown(counterState) {
   tick();
 }
 
+function new_follow_list(name, avatar, score) {
+  $("#follow_list").append(`
+    <div class="user" id=${name}>
+      <img src="/static/images/plus.ico" class="plusIcon" />
+      <img src=${avatar} class="avatar" /> <span class="userScore">${score}</span>
+    </div>
+  `);
+}
+
+function new_unfollow_list(name, avatar, score) {
+  return (`
+    <td id=${name}>
+      <img src=${avatar} class='avatar' />
+      <span>${score}</span>
+      <button type="button" class="btn btn-primary unfollow">Unfollow</button>
+    </td>
+  `);
+}
+//slider
 $("#slider").slider({
   min: 0,
   max: 1,
@@ -36,7 +55,9 @@ $("#slider").slider({
 });
 $('.ui-slider-handle').hide();
 
+//breadcrumbs
 function set_breadcrumbs(state, round) {
+  $("#breadcrumbs").show();
   var breadcrumbs = $("#breadcrumbs > ul").children();
   $.each(breadcrumbs, function(i, item) {
     $(item).removeClass("active");
@@ -47,8 +68,8 @@ function set_breadcrumbs(state, round) {
 
 function start_game(data) {
   state = data.action;
+  $("#myModal").modal('hide');
   $("#lobby").hide();
-  $("#breadcrumbs").show();
   set_breadcrumbs(state, data.current_round);
   $("#game").show();
   $("img.img-responsive").attr("src", '/static/plots/' + data.plot);
@@ -75,7 +96,6 @@ $(function () {
 
   socket.onmessage = function (msg) {
     var data = JSON.parse(msg.data);
-    // data.action = 'outcome'; //testing
 
     if(data.error){
       console.log(data.msg);
@@ -91,6 +111,13 @@ $(function () {
     }
     else if(data.action == 'initial'){
       start_game(data);
+
+      if(data.current_round == 0) {
+        // plays bell at start of game
+        var audio = new Audio('/static/bell.mp3');
+        audio.play();
+      }
+
     }
     else if(data.action == 'ping'){
       console.log(data.text)
@@ -116,41 +143,68 @@ $(function () {
     else if(data.action == 'outcome'){
       start_game(data);
 
+      $("#following_list").hide();
       $(".outcome").show();
 
       // populate list of people you can follow
-      data.all_players = [{"username":"Test", "avatar":"cow.png", "score": 1.0}];
+      data.all_players = [{"username":"cow", "avatar":"cow.png", "score": 1.0}];
       $.each(data.all_players, function(i, user) {
         var avatar = "/static/images/avatars/"+user.avatar;
-        $("#follow_list").append(`
-          <div class="user" id=${user.username}>
-            <img src="/static/images/plus.ico" class="plusIcon" />
-            <img src=${avatar} class="avatar" /> ${user.score}
-          </div>
-        `);
+        new_follow_list(user.username, avatar, user.score);
       })
 
-      // popular list of people you can unfollow
-      data.following = [{"username":"Test", "avatar":"pig.png", "score": 1.0}];
+      // populate list of people you can unfollow
+      // add empty table rows if following less than the max number of followers
+      data.following = [{"username":"pig", "avatar":"pig.png", "score": 1.0}, {"username":"bee", "avatar":"bee.png", "score": 2.0}];
       $.each(data.following, function(i, user) {
         var avatar = "/static/images/avatars/"+user.avatar;
-        $("#unfollow_list tbody").append(`
-          <tr>
-            <td id=${user.username}>
-              <img src=${avatar} class='avatar' />
-              <span>${user.score}</span>
-              <button type="button" class="btn btn-primary unfollow">Unfollow</button>
-            </td>
-          </tr>
-        `);
+        $("#unfollow_list tbody").append("<tr>"+new_unfollow_list(user.username, avatar, user.score)+"</tr>");
       })
 
-      $(".plusIcon").click(function(e) {
+      var following = data.following.map(function(user) {
+        return user.username;
+      })
+
+      $(document).on("click", ".plusIcon", function(e) {
         var username = e.target.parentElement.id;
+        var avatar = $(`div#${username}>.avatar`).attr('src');
+        var score = $(`div#${username}>.userScore`).html();
+        
+        var newFollowing = new_unfollow_list(username, avatar, score);
+
+        socket.send(JSON.stringify({
+          action: 'followNotify',
+          following: following + [username]
+        }));
+
+        var rows = $("#unfollow_list tbody").children();
+        for(var i = 0; i < rows.length; i++) {
+          var row = rows[i];
+          if ($(row).children().html() == "") {
+            $(row).html(newFollowing);
+            $(`div#${username}`).html("");
+            break;
+          }
+        }
       });
 
-      $(".unfollow").click(function(e) {
-        var username = e.target.parentElement.id; 
+
+      $(document).on("click", ".unfollow", function(e) {
+        var username = e.target.parentElement.id;
+        var avatar = $(`td#${username}>.avatar`).attr('src');
+        var score = $(`td#${username}>span`).html();
+
+        var toRemove = following.indexOf(username);
+        following.splice(toRemove, 1)
+
+        socket.send(JSON.stringify({
+          action: 'followNotify',
+          following: following
+        }));
+
+        $(`td#${username}`).html("");
+        new_follow_list(username, avatar, score);
+
       });
   
 
@@ -177,33 +231,32 @@ $(function () {
       console.log('Following list: ' + data.following_users)
     }
     else{
-        console.log(data)
+      console.log(data)
     }
   };
 });
 
 
 $('#submit').click(function () {
-  // show window "Waiting for others to submit..."
+  $("#myModal").modal('show');
+
   if (state == 'initial') {
-    console.log("TEST");
-    var guess = $('#guess');
-    console.log(guess);
+    var guess = $('#guess').val();
     socket.send(JSON.stringify({
       action: 'initial',
       guess: guess,
       payload: {action: "interactive"}
     }));
-    // socket.send(JSON.stringify({action:"initial", payload:{plot:"0.png", action:"interactive"}}));
   }
   else if(state == 'interactive'){
-      var socialGuess = document.querySelector('#guess').value;
-      socket.send(JSON.stringify({
-          action: 'interactive',
-          socialGuess: socialGuess
-      }))
+    var guess = $('#guess').val();
+    socket.send(JSON.stringify({
+      action: 'interactive',
+      socialGuess: guess,
+      payload: {action: "outcome"}
+    }));
   }
-  else{
+  else {
      console.log(state)
   }
 });
