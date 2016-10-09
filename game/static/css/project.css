@@ -103,3 +103,11 @@ html, body {
   transform: translate(-50%, -50%);
   -webkit-transform: translate(-50%, -50%);
 }
+
+#age {
+  width: 100px;
+}
+
+.gender {
+  margin-left: 20px;
+}
