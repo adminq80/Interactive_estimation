@@ -72,6 +72,7 @@ function start_game(data) {
   $("#lobby").hide();
   set_breadcrumbs(state, data.current_round);
   $("#game").show();
+
   $("img.img-responsive").attr("src", '/static/plots/' + data.plot);
   countdown(state);
   $("#remaining").html(data.remaining);
@@ -111,6 +112,7 @@ $(function () {
     }
     else if(data.action == 'initial'){
       start_game(data);
+      $(".guess").show();
 
       if(data.current_round == 0) {
         // plays bell at start of game
@@ -124,6 +126,7 @@ $(function () {
     }
     else if(data.action == 'interactive'){
       start_game(data);
+      $(".guess").show();
 
       $("#interactiveGuess").show();
 
@@ -144,6 +147,7 @@ $(function () {
       start_game(data);
 
       $("#interactiveGuess").hide();
+      $(".guess").hide();
       $(".outcome").show();
 
       // populate list of people you can follow
