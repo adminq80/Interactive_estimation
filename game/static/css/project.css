@@ -89,10 +89,25 @@ html, body {
   width: 100%;
 }
 
+.example {
+  width: 30%;
+}
+
+.sample {
+  width: 200px;
+}
 #myModal {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
   -webkit-transform: translate(-50%, -50%);
+}
+
+#age {
+  width: 100px;
+}
+
+.gender {
+  margin-left: 20px;
 }

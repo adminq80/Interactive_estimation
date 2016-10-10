@@ -105,6 +105,10 @@ def instruction(request):
     #     pass
     return render(request, 'control/instructions.html')
 
+@login_required(login_url='/')
+def check(request):
+    return render(request, 'control/check.html')
+
 
 @login_required(login_url='/')
 def exit_survey(request):

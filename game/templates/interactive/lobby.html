@@ -26,14 +26,29 @@
 <div id="game" hidden>
   <div class="form">
   
-    <div class="col-md-6">
-        <h3>Guess the correlation</h3>
-        <div>
-          <img src='#' class="img-responsive"/>
-        </div>
-        <div id="picker">
-          {% include 'components/slider.html' %}
-        </div>
+    <div class="col-md-6 guess" hidden>
+      <h3>Guess the correlation</h3>
+      <div>
+        <img src='#' class="img-responsive"/>
+      </div>
+      <div id="picker">
+        {% include 'components/slider.html' %}
+      </div>
+    </div>
+
+    <div class="col-md-6 outcome" hidden>
+      <h3>Your results</h3>
+      <div>
+        <img src='#' class="img-responsive"/>
+      </div>
+      <div>
+        Your guess: <span id="yourGuess"></span>
+      </div>
+
+      <div>
+        Actual correlation: <span id="roundAnswer"></span>
+      </div>
+      <input type="submit" value="Next" id="submit" class="btn btn-primary nextButton">
     </div>
 
 

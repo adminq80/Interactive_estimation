@@ -1,27 +1,21 @@
 {% extends 'base.html' %}
 
 {% block container %}
-<div class="container survey">
-  <h2>Exit Survey</h2>
-  <p>Thank you for participating. Your final score is {{score}}.</p>
+<div class="survey">
+<h2>Exit Survey</h2>
+ <p>Thank you for participating. Your final score is {{score}}.</p>
   <p>You do not have to provide any information you feel uncomfortable with.</p>
   <form class="form-inline">
     <div class="form-group">
       <p>1. Please provide your age and gender below.</p>
-      <div class="row">
-        <div class="col-xs-5">
-          <label for="age">Age <label>
-          <input class="form-control" id="age">
-        </div>
-        <div class="col-xs-6">
-          <label>Gender</label>
-          <label class="form-check-inline">
-            <input class="form-check-input" type="radio" name="male" id="male" value="male"> Male
-          </label>
-          <label class="form-check-inline">
-            <input class="form-check-input" type="radio" name="female" id="female" value="female"> Female
-          </label>
-        </div>
+      <span class="age">Age <input class="form-control" id="age"></span>
+      <span class="gender">
+      Gender
+        &nbsp;
+        <input class="form-check-input" type="radio" name="male" id="male" value="male"> Male
+        &nbsp;
+        <input class="form-check-input" type="radio" name="female" id="female" value="female"> Female
+      </span>
     </div>
     <div class="form-group">
       <br>
