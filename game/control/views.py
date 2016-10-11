@@ -86,7 +86,7 @@ def submit_answer(request):
 
             remaining = Plot.objects.count() - len(plot_pks)
             return render(request, 'control/answer.html', {'round': p, 'guess': guess, 'score': request.user.get_score,
-                                                           'remaining': remaining, 'currentRound': len(plot_pks) - 1})
+                                                           'remaining': remaining, 'currentRound': len(plot_pks)})
 
     return redirect('control:play')
 
