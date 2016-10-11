@@ -95,6 +95,12 @@ def submit_answer(request):
 
 @login_required(login_url='/')
 def instruction(request):
+    if request.user.is_anonymous:
+        u, password = random_user('c', length=130)
+        Control.objects.create(user=u)
+        u = authenticate(username=u.username, password=password)
+        login(request, u)
+
     if request.method == 'POST':
         u = request.user
         game = Control.objects.get(user=u)
@@ -110,7 +116,10 @@ def check(request):
     u = request.user
 
     try:
-        check_count = Control.objects.update(user=u, instruction=True, check=F('check') + 1)
+        game = Control.objects.get(user=u, instruction=True)
+        game.check += 1
+        game.save()
+        check_count = game.check
     except Control.DoesNotExist:
         return redirect('control:instruction')
 
