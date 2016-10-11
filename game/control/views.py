@@ -2,6 +2,7 @@ from random import choice
 from decimal import Decimal
 
 from django.contrib.auth import authenticate, login
+from django.db.models import F
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
@@ -11,7 +12,7 @@ from game.contrib.random_user import random_user
 
 from game.round.models import Round, Plot
 
-from .forms import RoundForm
+from .forms import RoundForm, CheckForm
 from .models import Control
 
 
@@ -35,21 +36,19 @@ def play(request):
             return redirect('/')
 
     game = Control.objects.get(user=u)
-    if not game.instruction:
-        return redirect('control:instruction')
+
+    if not game.check_done:
+        if not game.instruction:
+            return redirect('control:instruction')
+        if game.check >= 4:
+            return redirect('control:exit')
 
     played_rounds = Round.objects.filter(user=u)
     plot_pks = {i.plot.pk for i in played_rounds}
 
-    score = calculate_score(played_rounds)
-    currentRound = len(plot_pks)
-    remaining = Plot.objects.count() - currentRound
+    remaining = Plot.objects.count() - len(plot_pks)
 
     if remaining == 0:
-        c = Control.objects.get(user=u)
-        c.score = Decimal(score)
-        c.end_time = timezone.now()
-        c.save()
         return redirect('control:exit_survey')
 
     if request.session.get('PLOT'):  # Or None
@@ -61,7 +60,12 @@ def play(request):
     request.session['PLOT'] = plot.plot
     form = RoundForm()
 
-    return render(request, 'control/play.html', {'round': plot, 'form': form, 'score': score, 'remaining': remaining, 'currentRound': currentRound})
+    return render(request, 'control/play.html', {'round': plot,
+                                                 'form': form,
+                                                 'remaining': remaining,
+                                                 'currentRound': len(plot_pks),
+
+                                                 })
 
 
 # TODO: score, plots remaining off by one
@@ -91,25 +95,39 @@ def submit_answer(request):
 
 @login_required(login_url='/')
 def instruction(request):
-    u = request.user
-    game = Control.objects.get(user=u)
-    game.instruction = True
-    game.save()
-    # if request.method == 'POST':
-    #     if form.is_valid():
-    #         game.instruction = True
-    #         game.save()
-    #     else:
-    #         pass
-    # else:
-    #     pass
+    if request.method == 'POST':
+        u = request.user
+        game = Control.objects.get(user=u)
+        game.instruction = True
+        game.save()
+        return redirect('control:check')
     return render(request, 'control/instructions.html')
+
 
 @login_required(login_url='/')
 def check(request):
-    return render(request, 'control/check.html')
+    form = CheckForm(request.POST or None)
+    u = request.user
+
+    try:
+        check_count = Control.objects.update(user=u, instruction=True, check=F('check') + 1)
+    except Control.DoesNotExist:
+        return redirect('control:instruction')
+
+    if check_count >= 4:
+        return redirect('control:exit')
+    if request.method == 'POST':
+        if form.is_valid():
+            Control.objects.update(user=u, instruction=True, check=check_count, check_done=True)
+            return redirect('control:play')
+    return render(request, 'control/check.html', {'form': form})
 
 
 @login_required(login_url='/')
 def exit_survey(request):
+    game = Control.objects.get(user=request.user)
+    if game.end_time is None:
+        game.end_time = timezone.now()
+        game.save()
+
     return render(request, 'control/survey.html')
