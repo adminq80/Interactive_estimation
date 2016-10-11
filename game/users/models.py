@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, absolute_import
 
+from decimal import Decimal
 from django.contrib.auth.models import AbstractUser
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -43,5 +44,6 @@ class User(AbstractUser):
         else:
             raise NotImplemented('Not Implemented')
 
-        played_rounds = cls.objects.filter(user=self)
+        played_rounds = cls.objects.filter(user=self, guess__gte=Decimal(0.0))
+        print(played_rounds)
         return calculate_score(played_rounds)
