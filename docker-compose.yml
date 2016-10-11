@@ -10,8 +10,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - postgres_backup:/backups
-    env_file: 
-      - .env
+    env_file: .env
 
   django:
     build:
@@ -22,8 +21,7 @@ services:
       - postgres
       - redis
     command: /daphne.sh
-    env_file: 
-      - .env
+    env_file: .env
 
   nginx:
     build: ./compose/nginx
