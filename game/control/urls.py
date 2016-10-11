@@ -10,6 +10,6 @@ urlpatterns = [
     url(r'^submit/$', submit_answer, name='submit'),
     url(r'^instruction/$', instruction, name='instruction'),
     url(r'^check/$', check, name='check'),
-    url(r'^exit/$', exit_survey, name='exit_survey'),
+    url(r'^exit/$', exit_survey, name='exit'),
     url(r'^$', assign),
 ]

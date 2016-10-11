@@ -49,7 +49,7 @@ def play(request):
     remaining = Plot.objects.count() - len(plot_pks)
 
     if remaining == 0:
-        return redirect('control:exit_survey')
+        return redirect('control:exit')
 
     if request.session.get('PLOT'):  # Or None
         plot = Plot.objects.get(plot=request.session.get('PLOT'))
@@ -114,21 +114,24 @@ def instruction(request):
 def check(request):
     form = CheckForm(request.POST or None)
     u = request.user
-
-    try:
-        game = Control.objects.get(user=u, instruction=True)
-        game.check += 1
-        game.save()
-        check_count = game.check
-    except Control.DoesNotExist:
-        return redirect('control:instruction')
+    game = Control.objects.get(user=u, instruction=True)
+    check_count = game.check
 
     if check_count >= 4:
         return redirect('control:exit')
+
     if request.method == 'POST':
         if form.is_valid():
             Control.objects.update(user=u, instruction=True, check=check_count, check_done=True)
             return redirect('control:play')
+        else:
+            try:
+                game = Control.objects.get(user=u, instruction=True)
+                game.check += 1
+                game.save()
+            except Control.DoesNotExist:
+                return redirect('control:instruction')
+
     return render(request, 'control/check.html', {'form': form})
 
 
