@@ -63,8 +63,7 @@ def play(request):
     return render(request, 'control/play.html', {'round': plot,
                                                  'form': form,
                                                  'remaining': remaining,
-                                                 'currentRound': len(plot_pks),
-
+                                                 'currentRound': len(plot_pks) + 1,
                                                  })
 
 
@@ -84,11 +83,10 @@ def submit_answer(request):
             request.session.pop('PLOT')
 
             plot_pks = {i.plot.pk for i in played_rounds}
-            
-            score = calculate_score(played_rounds)
-            currentRound = len(plot_pks)
-            remaining = Plot.objects.count() - currentRound
-            return render(request, 'control/answer.html', {'round': p, 'guess': guess, 'score': score, 'remaining': remaining, 'currentRound': currentRound})
+
+            remaining = Plot.objects.count() - len(plot_pks)
+            return render(request, 'control/answer.html', {'round': p, 'guess': guess, 'score': request.user.get_score,
+                                                           'remaining': remaining, 'currentRound': len(plot_pks) - 1})
 
     return redirect('control:play')
 
