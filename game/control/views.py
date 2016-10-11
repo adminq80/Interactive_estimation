@@ -122,7 +122,9 @@ def check(request):
 
     if request.method == 'POST':
         if form.is_valid():
-            Control.objects.update(user=u, instruction=True, check=check_count, check_done=True)
+            game = Control.objects.get(user=u, instruction=True, check=check_count)
+            game.check_done = True
+            game.save()
             return redirect('control:play')
         else:
             try:
