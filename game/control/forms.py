@@ -36,7 +36,7 @@ class CheckForm(forms.Form):
 
         if q1 == '1' and q2 == -1 and q3 == 1 and q4 == '2' and q5 == '1':
             return cleaned_data
-        raise forms.ValidationError('One or more answer/s is/are wrong')
+        raise forms.ValidationError('Some answers are wrong')
 
 
 class ExitSurvey(forms.ModelForm):
