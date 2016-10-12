@@ -175,7 +175,6 @@ $(function () {
         var score = $(`div#${username}>.userScore`).html();
         
         var newFollowing = new_unfollow_list(username, avatar, score);
-        debugger;
         socket.send(JSON.stringify({
           action: 'followNotify',
           following: following + [username]
