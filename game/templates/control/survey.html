@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block container %}
+<div class="survey">
+<h2>Exit Survey</h2>
+ <p>Thank you for participating. Your final score is {{score}}.</p>
+  <p>You do not have to provide any information you feel uncomfortable with.</p>
+  <form class="form-inline" action="." method="post">
+    {% csrf_token %}
+      <div class="form-group">
+          {% if form.errors %}
+            {{ form.errors }}
+          {% endif %}
+      <p>Please provide your age, gender below and feedback.</p>
+      <span class="age">Age <input class="form-control" id="age" name="age"></span>
+      <span class="gender">
+      Gender
+        &nbsp;
+        <input class="form-check-input" type="radio" name="gender" id="male" value="m"> Male
+        &nbsp;
+        <input class="form-check-input" type="radio" name="gender" id="female" value="f"> Female
+      </span>
+    </div>
+    <div class="form-group">
+      <br>
+      <p>
+      2. Please enter any feedback, including problems you encountered.
+      </p>
+      <div class="col-xs-12">
+        <textarea class="form-control" name="feedback"></textarea>
+      </div>
+    </div>
+        <button class="btn btn-primary nextButton" type="submit">Submit HIT</button>
+  </form>
+</div>
+{% endblock %}

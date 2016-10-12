@@ -1,0 +1,36 @@
+.table {
+  width: 80%;
+  padding: 10px;
+}
+
+.table td {
+  border-color: #000;
+}
+
+.avatar {
+  margin-left: 5px;
+  margin-right: 10px;
+  width: 40px;
+}
+
+.plusIcon {
+  width: 25px;
+  height: 25px;
+}
+
+.plusIcon:hover {
+  cursor: pointer;
+}
+
+.unfollow {
+  margin-top: 10px;
+  width: 100%;
+}
+
+.user {
+  margin-top: 10px;
+}
+
+#unfollow_list td {
+  height: 120px;
+}

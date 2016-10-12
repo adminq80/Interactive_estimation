@@ -33,6 +33,9 @@ DJANGO_APPS = (
 
     # Admin
     'django.contrib.admin',
+
+    # Channels
+    'channels',
 )
 THIRD_PARTY_APPS = (
     'crispy_forms',  # Form layouts
@@ -46,8 +49,9 @@ LOCAL_APPS = (
     # custom users app
     'game.users.apps.UsersConfig',
     # Your stuff: custom apps go here
-    # 'game.player',
-    'game.board',
+    'game.round',
+    'game.interactive',
+    'game.control',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -238,3 +242,14 @@ ADMIN_URL = r'^admin/'
 
 
 # Your common stuff: Below this line define 3rd party library settings
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "asgi_redis.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [env('REDIS_URL')],
+        },
+        "ROUTING": "config.routing.channel_routing",
+    },
+}
+

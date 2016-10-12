@@ -22,9 +22,12 @@ urlpatterns = [
 
     # Your stuff: custom urls includes go here
     # url(r'start/', include('game.player.urls')),
-    url(r'^board/', include('game.board.urls', namespace='board')),
+    # url(r'^board/', include('game.board.urls', namespace='board')),
 
     url(r'^done/$', TemplateView.as_view(template_name='pages/done.html')),
+
+    url(r'^solo/', include('game.control.urls', namespace='control')),
+    url(r'^multiplay/', include('game.interactive.urls', namespace='interactive')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

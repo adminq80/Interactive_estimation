@@ -4,14 +4,22 @@ from __future__ import absolute_import, unicode_literals
 from random import choice
 
 from django.core.urlresolvers import reverse
+from django.db import IntegrityError
+from django.db import transaction
+from django.http import Http404
 from django.views.generic import DetailView, ListView, RedirectView, UpdateView
 
 from django.shortcuts import redirect, render
 from django.contrib.auth import login, authenticate
 
+from django.contrib.auth.decorators import login_required
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.core.mail import send_mass_mail
+
+from game.interactive.models import Interactive
+from game.control.models import Control
 
 from .models import User
 from .forms import UserForm
@@ -57,28 +65,16 @@ class UserListView(LoginRequiredMixin, ListView):
 
 
 def start(request):
-    form = UserForm(request.POST or None)
-    if request.method == 'POST':
-        if form.is_valid():
-            email = form.cleaned_data['email']
-            u, created = User.objects.get_or_create(username=email, game_type=choice(['i', 'c']))
-            passwd = None
-            if created:
-                # new user
-                passwd = User.objects.make_random_password()
-                u.set_password(passwd)
-                u.save()
 
-                datatuple = (
-                    ('Interactive estimation Game', 'Your username is {} and your password is {}'.format(
-                        u.username, passwd), 'admin@game.acubed.me', [u.username]),
-                    ('Interactive estimation Game', 'Your username is {} and your password is {}'.format(
-                        u.username, passwd), 'admin@game.acubed.me', ['adminq80@gmail.com'])
-                )
-                send_mass_mail(datatuple=datatuple)
+    c = choice(['i', 'c'])
 
-            u = authenticate(username=email, password=passwd)
-            if u is not None:
-                login(request, u)
-            return render(request, 'users/redirect.html')  # (reverse('board:match'))
-    return render(request, 'users/start.html', {'form': form})
+    if request.user.is_authenticated:
+        print("User is authenticated")
+        c = request.user.game_type
+
+    if c == 'i':
+        return redirect('interactive:lobby')
+    elif c == 'c':
+        return redirect('control:play')
+    else:
+        raise Http404('{} not implemented'.format(c))

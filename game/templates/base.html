@@ -4,69 +4,57 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>{% block title %}Game{% endblock title %}</title>
+    <title>{% block title %}Guess the correlation{% endblock title %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
 
     {% block css %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/css/bootstrap.min.css" integrity="sha384-MIwDKRSSImVFAZCVLtU0LMDdON6KVCrZHyVQQj6e8wIEJkW4tvwqXrbMIya1vriY" crossorigin="anonymous">
 
     <link href="{% static 'css/project.css' %}" rel="stylesheet">
-    
-    {% endblock %}
+    <link href="{% static 'css/social.css' %}" rel="stylesheet">
+    <link href="{% static 'css/breadcrumbs.css' %}" rel="stylesheet">
 
+    {% endblock %}
   </head>
 
   <body>
-
     <div class="m-b-1">
-      <nav class="navbar">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="/"><img id="logo" src="../../static/images/logo.gif" /></a>
+      <nav class="navbar navbar-dark navbar-static-top bg-faded">
+        <div class="container">
+          <span>
+            <a href="/">
+              <img id="logo" src={% static 'images/logo.png' %} />
+            </a>
+{#            &nbsp;Guess the Correlation Game#}
+            {% if user.is_authenticated %}
+              <form class="logout" action='{% url "account_logout" %}' method="post">
+                {% csrf_token %}
+                <button class="btn btn-danger quit" type="submit">End Game</button>
+              </form>
+              {% endif %}
+          </span>
 
-          <!-- Collect the nav links, forms, and other content for toggling -->
-          <div class="collapse navbar-toggleable-xs" id="bs-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-             <li class="nav-item">
-                <a class="nav-link" href="{% url 'about' %}">Consent Form</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'home' %}">Instructions</a>
-              </li>
-            </ul>
-          </div>
         </div>
       </nav>
     </div>
 
-    <div class="container">
+    <div class="container wrapper">
       <div class="row">
-        <div class="col-md-3">
-        {% block leftCol %}
+        {% block breadcrumbs %}
         {% endblock %}
-        </div>
+      </div>
+      {% block container %}
 
-        <div class="col-md-6">
-        <h3>Guess the correlation of the line.</h3>
-        <br>
-        {% block center %}
-        {% endblock %}
-        </div>
-
-        <div class="col-md-1"></div>
-        <div class="col-md-1">
-        {% block rightCol %}
-        {% endblock %}
-        </div>
-        <div class="col-md-1"></div>
-    </div> <!-- /container -->
-
+      {% endblock %}
+      <div class="push"></div>
+    </div>
+    <div class="footer">
+      <div class="container">
+        Made by <a href="http://hd.media.mit.edu/">Human Dynamics</a> at <a href="https://www.media.mit.edu"/>MIT Media Lab</a>
+      </div>
+    </div>
 
     <!-- Le javascript
     ================================================== -->
@@ -74,16 +62,18 @@
     {% block javascript %}
       <!-- Required by Bootstrap v4 Alpha 3 -->
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js" integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY" crossorigin="anonymous"></script>
+      <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+      <link href='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css' rel='stylesheet' type='text/css'>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.2.0/js/tether.min.js" integrity="sha384-Plbmg8JY28KFelvJVai01l8WyZzrYWG825m+cZ0eDDS1f7d/js6ikvy1+X+guPIB" crossorigin="anonymous"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/js/bootstrap.min.js" integrity="sha384-ux8v3A6CPtOTqOzMKiuo3d/DomGaaClxFYdCu2HPMBEkf6x2xiDyJ7gkXU0MWwaD" crossorigin="anonymous"></script>
 
       <!-- Your stuff: Third-party javascript libraries go here -->
 
       <!-- place project specific Javascript in this file -->
-      
-      <script src="{% static 'js/project.js' %}"></script>
-      
+{#        <script src="{% static 'js/game.js' %}"></script>#}
+{#        <script src="{% static 'js/social.js' %}"></script>#}
 
     {% endblock javascript %}
+  {% block extra_javascript %}{% endblock %}
   </body>
 </html>

@@ -1,0 +1,24 @@
+{% load staticfiles i18n %}
+
+{% block css %}
+<link href="{% static 'css/slider.css' %}" rel="stylesheet">
+{% endblock %}
+
+<div class="row">
+  <label>Your guess:&nbsp;</label><span id="correlation"></span>
+</div>
+<div class="row">
+  <label>Pick a value on the line.</label>
+</div>
+<div class='row'>
+  <div id="slider"></div>
+  <span id="min">0</span>
+  <span class="quarter">0.25</span>
+  <span class="quarter">0.5</span>
+  <span class="quarter">0.75</span>
+  <span id="max">1</span>
+  <input name="guess" id="guess" value="-1" hidden />
+</div>
+<div class="row">
+  <input class='btn btn-primary nextButton' type="submit" id="submit" value="Submit">
+</div>
