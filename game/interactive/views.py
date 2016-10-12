@@ -74,8 +74,8 @@ def lobby(request):
             if game.users.count() < game.constraints.max_users:
                 used_avatars = {i.avatar for i in game.users.all()}
                 u.avatar = avatar(used_avatars)
-                u.save()
                 game.users.add(u)
+                u.save()
                 game.save()
                 break
 

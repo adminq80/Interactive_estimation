@@ -6,15 +6,18 @@ from decimal import Decimal
 from channels import Channel
 from channels.auth import channel_session_user_from_http, channel_session_user
 from django.core.cache import cache
+from django.shortcuts import redirect
 
 from game.round.models import Plot
 from game.users.models import User
 from .models import Interactive, InteractiveRound
 
 
-def get_round(game):
+def get_round(game, user=None):
     users = game.users.all()
-    played_rounds = InteractiveRound.objects.filter(user=users[0])
+    if not user:
+        user = users[0]
+    played_rounds = InteractiveRound.objects.filter(user=user)
 
     plot_pks = {i.plot.pk for i in played_rounds}
     current_round = len(plot_pks)
@@ -62,8 +65,8 @@ def lobby(message):
     user, game = user_and_game(message)
     if not user.is_authenticated or game is None:
         # redirect to login
+        return redirect('/')
 
-        pass
     logging.info('user {} just entered {}'.format(user.username, game.group_channel))
 
     game.group_channel.add(message.reply_channel)
@@ -87,9 +90,7 @@ def lobby(message):
         if data:
             # game already started
             round_ = json.loads(data)
-            print('ROUND')
-            print(round_)
-            print('='*20)
+            game = Interactive.objects.get(id=round_.get('game'))
         else:
             game.started = True
             game.save()
@@ -114,14 +115,13 @@ def lobby(message):
 def exit_game(message):
     user, game = user_and_game(message)
     logging.info('user {} just exited'.format(user.username))
-    if game.started:
+    if not game.started:
         game.users.remove(user)
         game.broadcast('info',
                        'There are currently a total of {} out of {} required '
                        'participants waiting for the game to start.'.
                        format(game.users.count(), game.constraints.max_users))
     game.group_channel.discard(message.reply_channel)
-
 
 
 def ws_receive(message):
@@ -173,8 +173,8 @@ def follow_list(message):
     # a list of all the usernames to follow
     if game.constraints.max_following >= len(follow_users) > game.constraints.min_following:
         round_data = json.loads(cache.get(user.username))
-        round_ = InteractiveRound.objects.get(user=user, game=game, influenced_guess=Decimal(-3),
-                                              round_order=round_data.get('current_round'))
+        round_ = InteractiveRound.objects.get(user=user, game=game, round_order=round_data.get('current_round'))
+
         round_.following.clear()
         for username in follow_users:
             u = User.objects.get(username=username)
@@ -185,6 +185,7 @@ def follow_list(message):
             'text': json.dumps({
                 'action': 'followNotify',
                 'following': follow_users,
+                'all_players': 1,
             })
         })
     else:
@@ -311,7 +312,7 @@ def round_outcome(message):
                                                   outcome=False).count()
 
     if waiting_for == 0:
-        round_ = get_round(game)
+        round_ = get_round(game, user)
         game.group_channel.send({'text': json.dumps({
             'action': 'initial',
             'plot': round_.get('plot'),
