@@ -26,3 +26,6 @@ class Round(models.Model):
 
     def __str__(self):
         return self.user.username
+
+    class Meta:
+        unique_together = (('user', 'round_order',),)
