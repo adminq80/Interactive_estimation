@@ -113,6 +113,7 @@ $(function () {
     else if(data.action == 'initial'){
       start_game(data);
       $(".guess").show();
+      $(".outcome").hide();
 
       if(data.current_round == 0) {
         // plays bell at start of game
