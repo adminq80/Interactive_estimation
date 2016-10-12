@@ -152,7 +152,7 @@ $(function () {
       $(".outcome").show();
 
       // populate list of people you can follow
-      // data.all_players = [{"username":"cow", "avatar":"cow.png", "score": 1.0}];
+      $("#follow_list").html("");
       $.each(data.all_players, function(i, user) {
         var avatar = '/static/' + user.avatar;
         new_follow_list(user.username, avatar, user.score);
@@ -160,7 +160,7 @@ $(function () {
 
       // populate list of people you can unfollow
       // add empty table rows if following less than the max number of followers
-      // data.following = [{"username":"pig", "avatar":"pig.png", "score": 1.0}, {"username":"bee", "avatar":"bee.png", "score": 2.0}];
+      $("#unfollow_list tbody").html("");
       $.each(data.following, function(i, user) {
         var avatar = "/static/"+user.avatar;
         $("#unfollow_list tbody").append("<tr>"+new_unfollow_list(user.username, avatar, user.score)+"</tr>");
@@ -177,7 +177,7 @@ $(function () {
         
         var newFollowing = new_unfollow_list(username, avatar, score);
         socket.send(JSON.stringify({
-          action: 'followNotify',
+          action: 'follow',
           following: following + [username]
         }));
 
@@ -202,7 +202,7 @@ $(function () {
         following.splice(toRemove, 1)
 
         socket.send(JSON.stringify({
-          action: 'followNotify',
+          action: 'follow',
           following: following
         }));
 
@@ -213,7 +213,6 @@ $(function () {
 
     }
     else if(data.action == 'sliderChange'){
-      console.log(data.slider);
       $(`#${data.username} > span`).html(data.slider);
     }
     else if(data.action == 'followNotify'){

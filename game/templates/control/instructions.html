@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %}
 {% load staticfiles i18n %}
 
@@ -27,52 +28,8 @@
   </form>
   </div>
 </div>
-
-
-<div id="instructionsCheck">
-<h2>Comprehension Check</h2>
-  <form class="form" action="." method="post">
-    {% csrf_token %}
-
-    {% for error in form.non_field_errors %}
-      <ul>
-        <li><b>{{ error }}</b></li>
-      </ul>
-    {% endfor %}
-    <div class="form-group">
-      {{ form.q1.label }}
-      {% for option in form.q1 %}
-      <div> 
-        {{ option }}
-      </div>
-      {% endfor %}
-    </div>
-    <div class="form-group">
-      {{ form.q2.label }} {{ form.q2 }} {{ form.q3.label }} {{ form.q3 }}
-    </div>
-    <div class="form-group">
-      {{ form.q4.label }}
-      {% for option in form.q4 %}
-      <div> 
-        {{ option }}
-      </div>
-      {% endfor %}
-    </div>
-    <div class="form-group">
-      {{ form.q5.label }}
-      {% for option in form.q5 %}
-      <div> 
-        {{ option }}
-      </div>
-      {% endfor %}
-    </div>
-
-  <button type="submit" value="Submit" class="btn btn-primary nextButton">Next</button>
-  </form>
-    <a class="btn btn-primary" href="{% url 'control:instruction' %}">Previous</a>
-</div>
 {% endblock %}
 
 {% block extra_javascript %}
-    <script src="{% static 'js/game.js' %}"></script>
+  <script src="{% static 'js/game.js' %}"></script>
 {% endblock %}

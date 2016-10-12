@@ -180,6 +180,7 @@ def follow_list(message):
             u = User.objects.get(username=username)
             round_.following.add(u)
         round_.save()
+        print(follow_users)
         message.replay_channel.send({
             'text': json.dumps({
                 'action': 'followNotify',
