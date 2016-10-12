@@ -1,19 +1,16 @@
 from random import choice
-from decimal import Decimal
 
 from django.contrib.auth import authenticate, login
-from django.db.models import F
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
-from game.contrib.calculate import calculate_score
 from game.contrib.random_user import random_user
 
 from game.round.models import Round, Plot
 
-from .forms import RoundForm, CheckForm
-from .models import Control
+from .forms import RoundForm, CheckForm, ExitSurvey
+from .models import Control, Survey
 
 
 def assign(request):
@@ -138,8 +135,16 @@ def check(request):
 @login_required(login_url='/')
 def exit_survey(request):
     game = Control.objects.get(user=request.user)
+    form = ExitSurvey(request.POST or None)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.user = request.user
+            instance.game = game
+            instance.save()
+
     if game.end_time is None:
         game.end_time = timezone.now()
         game.save()
-
-    return render(request, 'control/survey.html')
+    return render(request, 'control/survey.html', {'form': form, 'score': request.user.get_score})

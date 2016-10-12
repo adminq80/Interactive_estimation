@@ -18,3 +18,16 @@ class Control(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+class Survey(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    game = models.OneToOneField(Control)
+    age = models.PositiveSmallIntegerField(null=True)
+    gender = models.CharField(max_length=10, choices=(('m', 'Male'),
+                                                      ('f', 'Female'),
+                                                      ), blank=True, null=True)
+    feedback = models.TextField(null=True)
+
+    def __str__(self):
+        return self.user.username
