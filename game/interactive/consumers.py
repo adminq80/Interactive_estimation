@@ -11,8 +11,6 @@ from game.round.models import Plot
 from game.users.models import User
 from .models import Interactive, InteractiveRound
 
-from .decorators import channel_debugger
-
 
 def get_round(game):
     users = game.users.all()
@@ -30,9 +28,10 @@ def get_round(game):
     plot = choice(plots)
     for user in users.all():
         cache.set(user.username, json.dumps({
+            'game': game.id,
             'current_round': current_round,
             'plot': plot.plot,
-            'remaining': remaining
+            'remaining': remaining,
         }))
         i_round = InteractiveRound(user=user, game=game, plot=plot, round_order=current_round, guess=Decimal(-3),
                                    influenced_guess=Decimal(-3))
@@ -40,14 +39,14 @@ def get_round(game):
         if current_round == 0:
             # random initial game configuration
             following = users.exclude(username=user.username).order_by('?')[:game.constraints.max_following]  # random
-            i_round.following = following
+            for f in following.all():
+                i_round.following.add(f)
             i_round.save()
 
     return {'plot': plot.plot, 'remaining': remaining, 'current_round': current_round}
 
 
 def user_and_game(message):
-
     user = message.user
     if user.is_authenticated:
         game = Interactive.objects.get(users=user)
@@ -92,6 +91,8 @@ def lobby(message):
             print(round_)
             print('='*20)
         else:
+            game.started = True
+            game.save()
             round_ = get_round(game)
         game.group_channel.send({'text': json.dumps({
             'action': 'initial',
@@ -104,15 +105,20 @@ def lobby(message):
         return
 
     # TODO I think this should go to the lobby template .. only the variables are passed
-    game.broadcast('info', 'There are currently a total of {} out of {} required participants waiting for the game to start.'.
+    game.broadcast('info',
+                   'There are currently a total of {} out of {} required participants waiting for the game to start.'.
                    format(game.users.count(), game.constraints.max_users))
 
 
 @channel_session_user
 def exit_game(message):
     user, game = user_and_game(message)
-    # logging.info('user {} just exited'.format(user.username))
+    logging.info('user {} just exited'.format(user.username))
+    game.users.remove(user)
     game.group_channel.discard(message.reply_channel)
+    game.broadcast('info',
+                   'There are currently a total of {} out of {} required participants waiting for the game to start.'.
+                   format(game.users.count(), game.constraints.max_users))
 
 
 def ws_receive(message):
@@ -187,43 +193,28 @@ def follow_list(message):
 
 
 @channel_session_user
-@channel_debugger
 def initial_submit(message):
     user, game = user_and_game(message)
     guess = message.get('guess')
-    if guess is None:
-        data = cache.get(user.username)
-        if data:
-            # game already started
-            round_ = json.loads(data)
-            game.group_channel.send({'text': json.dumps({
-                'action': 'initial',
-                'plot': round_.get('plot'),
-                'remaining': round_.get('remaining'),
-                'current_round': round_.get('current_round'),
+    try:
+        round_data = json.loads(cache.get(user.username))
+        current_round = InteractiveRound.objects.get(user=user, round_order=round_data.get('current_round'))
+        current_round.guess = Decimal(guess)
+        current_round.save()
+        message.reply_channel.send({
+            'text': json.dumps({
+                'guess': guess,
+                'status': 1,
             })
+        })
+    except InteractiveRound.DoesNotExist:
+        message.reply_channel.send({
+            'text': json.dumps({
+                'error': True,
+                'msg': "User not found",
             })
+        })
         return
-    else:
-        try:
-            round_data = json.loads(cache.get(user.username))
-            current_round = InteractiveRound.objects.get(user=user, round_order=round_data.get('current_round'))
-            current_round.guess = Decimal(guess)
-            current_round.save()
-            message.reply_channel.send({
-                'text': json.dumps({
-                    'guess': guess,
-                    'status': 1,
-                })
-            })
-        except InteractiveRound.DoesNotExist:
-            message.reply_channel.send({
-                'text': json.dumps({
-                    'error': True,
-                    'msg': "User not found",
-                })
-            })
-            return
 
     remaining_users = InteractiveRound.objects.filter(game=game, guess=Decimal(-3),
                                                       round_order=round_data.get('current_round'))
@@ -245,7 +236,6 @@ def initial_submit(message):
 
 
 @channel_session_user
-@channel_debugger
 def interactive_submit(message):
     auth_user, game = user_and_game(message)
     guess = message.get('socialGuess')
@@ -297,7 +287,6 @@ def interactive_submit(message):
         # we assign users to the next game
         get_round(game)
         return
-
     message.reply_channel.send({
         'text': json.dumps({
             'guess': guess,
@@ -307,6 +296,22 @@ def interactive_submit(message):
 
 
 @channel_session_user
-@channel_debugger
 def round_outcome(message):
-    pass
+    user, game = user_and_game(message)
+    round_data = json.loads(cache.get(user.username))
+    round_ = InteractiveRound.objects.get(user=user, game=game, round_order=round_data.get('current_round'))
+    round_.outcome = True
+    round_.save()
+    waiting_for = InteractiveRound.objects.filter(game=game, round_order=round_data.get('current_round'),
+                                                  outcome=False).count()
+
+    if waiting_for == 0:
+        round_ = get_round(game)
+        game.group_channel.send({'text': json.dumps({
+            'action': 'initial',
+            'plot': round_.get('plot'),
+            'remaining': round_.get('remaining'),
+            'current_round': round_.get('current_round'),
+        })
+        })
+        return

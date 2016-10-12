@@ -31,6 +31,7 @@ class InteractiveRound(Round):
 
     influenced_guess = models.DecimalField(max_digits=3, decimal_places=2, null=True)
     game = models.ForeignKey('Interactive', null=True, on_delete=models.CASCADE)
+    outcome = models.BooleanField(default=True)
 
     def __str__(self):
         return self.user.username

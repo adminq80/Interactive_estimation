@@ -130,9 +130,9 @@ $(function () {
 
       $("#interactiveGuess").show();
 
-      data.following = [{"username":"Test", "avatar":"cow.png", "score": 1.0}]
+      // data.following = [{"username":"Test", "avatar":"cow.png", "score": 1.0}]
       $.each(data.following, function(i, user) {
-        var avatar = "/static/images/avatars/"+user.avatar;
+        var avatar = "/static/"+user.avatar;
         $("#following_list tbody").append(`
           <tr>
             <td id=${user.username}>
@@ -151,23 +151,23 @@ $(function () {
       $(".outcome").show();
 
       // populate list of people you can follow
-      data.all_players = [{"username":"cow", "avatar":"cow.png", "score": 1.0}];
+      // data.all_players = [{"username":"cow", "avatar":"cow.png", "score": 1.0}];
       $.each(data.all_players, function(i, user) {
-        var avatar = "/static/images/avatars/"+user.avatar;
+        var avatar = '/static/' + user.avatar;
         new_follow_list(user.username, avatar, user.score);
-      })
+      });
 
       // populate list of people you can unfollow
       // add empty table rows if following less than the max number of followers
-      data.following = [{"username":"pig", "avatar":"pig.png", "score": 1.0}, {"username":"bee", "avatar":"bee.png", "score": 2.0}];
+      // data.following = [{"username":"pig", "avatar":"pig.png", "score": 1.0}, {"username":"bee", "avatar":"bee.png", "score": 2.0}];
       $.each(data.following, function(i, user) {
-        var avatar = "/static/images/avatars/"+user.avatar;
+        var avatar = "/static/"+user.avatar;
         $("#unfollow_list tbody").append("<tr>"+new_unfollow_list(user.username, avatar, user.score)+"</tr>");
-      })
+      });
 
       var following = data.following.map(function(user) {
         return user.username;
-      })
+      });
 
       $(document).on("click", ".plusIcon", function(e) {
         var username = e.target.parentElement.id;
@@ -210,20 +210,10 @@ $(function () {
         new_follow_list(username, avatar, score);
 
       });
-  
 
-        /*
-         *
-         * 'plot': round_data.get('plot'),
-         * 'remaining': round_data.get('remaining'),
-         * 'current_round': round_data.get('current_round'),
-         * # a list of dicts of {username, avatar, score} for the players that the user follows
-         * 'following': following,
-         * 'all_players': users,
-         *
-         * */
     }
     else if(data.action == 'sliderChange'){
+      console.log(data.slider);
       $(`#${data.username} > span`).html(data.slider);
     }
     else if(data.action == 'followNotify'){
@@ -244,20 +234,27 @@ $(function () {
 $('#submit').click(function () {
   $("#myModal").modal('show');
 
+  console.log('Button at state = ' + state);
+
   if (state == 'initial') {
     var guess = $('#guess').val();
     socket.send(JSON.stringify({
       action: 'initial',
-      guess: guess,
-      payload: {action: "interactive"}
+      guess: guess
+      // payload: {action: "interactive"}
     }));
   }
   else if(state == 'interactive'){
     var guess = $('#guess').val();
     socket.send(JSON.stringify({
       action: 'interactive',
-      socialGuess: guess,
-      payload: {action: "outcome"}
+      socialGuess: guess
+      // payload: {action: "outcome"}
+    }));
+  }
+  else if(state == 'outcome'){
+    socket.send(JSON.stringify({
+      action: 'outcome'
     }));
   }
   else {
