@@ -114,11 +114,14 @@ def lobby(message):
 def exit_game(message):
     user, game = user_and_game(message)
     logging.info('user {} just exited'.format(user.username))
-    game.users.remove(user)
+    if game.started:
+        game.users.remove(user)
+        game.broadcast('info',
+                       'There are currently a total of {} out of {} required '
+                       'participants waiting for the game to start.'.
+                       format(game.users.count(), game.constraints.max_users))
     game.group_channel.discard(message.reply_channel)
-    game.broadcast('info',
-                   'There are currently a total of {} out of {} required participants waiting for the game to start.'.
-                   format(game.users.count(), game.constraints.max_users))
+
 
 
 def ws_receive(message):
@@ -282,6 +285,7 @@ def interactive_submit(message):
                     # a list of dicts of {usernames and avatars} for the players that the user follows
                     'following': following,
                     'all_players': users,
+                    'max_following': game.constraints.max_following,
                 })
             })
         # we assign users to the next game
