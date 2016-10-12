@@ -15,12 +15,8 @@
     <![endif]-->
 
     {% block css %}
-    <!-- Latest compiled and minified Bootstrap 4 Alpha 3 CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/css/bootstrap.min.css" integrity="sha384-MIwDKRSSImVFAZCVLtU0LMDdON6KVCrZHyVQQj6e8wIEJkW4tvwqXrbMIya1vriY" crossorigin="anonymous">
 
-    <!-- Your stuff: Third-party CSS libraries go here -->
-    
-    <!-- This file stores project-specific CSS -->
     <link href="{% static 'css/project.css' %}" rel="stylesheet">
     
     {% endblock %}
@@ -30,63 +26,47 @@
   <body>
 
     <div class="m-b-1">
-      <nav class="navbar navbar-dark navbar-static-top bg-inverse">
-        <div class="container">
-          <a class="navbar-brand" href="/">Game</a>
-          <button type="button" class="navbar-toggler hidden-sm-up pull-xs-right" data-toggle="collapse" data-target="#bs-navbar-collapse-1">
-            &#9776;
-          </button>
+      <nav class="navbar">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/"><img id="logo" src="../../static/images/logo.gif" /></a>
 
           <!-- Collect the nav links, forms, and other content for toggling -->
           <div class="collapse navbar-toggleable-xs" id="bs-navbar-collapse-1">
             <ul class="nav navbar-nav">
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'home' %}">Home</a>
+             <li class="nav-item">
+                <a class="nav-link" href="{% url 'about' %}">Consent Form</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'about' %}">About</a>
+                <a class="nav-link" href="{% url 'home' %}">Instructions</a>
               </li>
             </ul>
-						
-						{%comment%}
-            <ul class="nav navbar-nav pull-xs-right">
-              {% if request.user.is_authenticated %}
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'users:detail' request.user.username  %}">{% trans "My Profile" %}</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'account_logout' %}">{% trans "Sign out" %}</a>
-                </li>
-              {% else %}
-                <li class="nav-item">
-                  <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>
-                </li>
-                <li class="nav-item">
-                  <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">{% trans "Sign In" %}</a>
-                </li>
-              {% endif %}
-            </ul>
-            {%endcomment%}
           </div>
         </div>
       </nav>
     </div>
 
     <div class="container">
+      <div class="row">
+        <div class="col-md-3">
+        {% block leftCol %}
+        {% endblock %}
+        </div>
 
-      {% if messages %}
-          {% for message in messages %}
-              <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}</div>
-          {% endfor %}
-      {% endif %}
+        <div class="col-md-6">
+        <h3>Guess the correlation of the line.</h3>
+        <br>
+        {% block center %}
+        {% endblock %}
+        </div>
 
-      {% block content %}
-        <p>Use this document as a way to quick start any new project.</p>
-      {% endblock content %}
-
+        <div class="col-md-1"></div>
+        <div class="col-md-1">
+        {% block rightCol %}
+        {% endblock %}
+        </div>
+        <div class="col-md-1"></div>
     </div> <!-- /container -->
 
-    {% block modal %}{% endblock modal %}
 
     <!-- Le javascript
     ================================================== -->
