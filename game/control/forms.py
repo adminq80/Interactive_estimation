@@ -43,3 +43,8 @@ class ExitSurvey(forms.ModelForm):
     class Meta:
         model = Survey
         fields = ['gender', 'age', 'feedback']
+
+    def __init__(self, *args, **kwargs):
+        super(ExitSurvey, self).__init__(*args, **kwargs)
+        for f in ['gender', 'age', 'feedback']:
+            self.fields[f].required = False

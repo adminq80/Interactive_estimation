@@ -180,7 +180,7 @@ def follow_list(message):
         message.replay_channel.send({
             'text': json.dumps({
                 'action': 'followNotify',
-                'following': follow_users,
+                'following': set(follow_users),
             })
         })
     else:
@@ -229,7 +229,7 @@ def initial_submit(message):
                     'remaining': round_data.get('remaining'),
                     'current_round': round_data.get('current_round'),
                     # a list of dicts of {usernames and avatars} for the players that the user follows
-                    'following': following,
+                    'following': set(following),
                 })
             })
     return
@@ -272,7 +272,7 @@ def interactive_submit(message):
                         'score': i.get_score,
                     })
 
-            following = list(d.values())
+            following = set(d.values())
             game.user_channel(user).send({
                 'text': json.dumps({
                     'action': 'outcome',
@@ -281,7 +281,7 @@ def interactive_submit(message):
                     'current_round': round_data.get('current_round'),
                     # a list of dicts of {usernames and avatars} for the players that the user follows
                     'following': following,
-                    'all_players': users,
+                    'all_players': set(users),
                 })
             })
         # we assign users to the next game
