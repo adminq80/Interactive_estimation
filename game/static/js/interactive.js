@@ -11,7 +11,7 @@ function countdown(counterState) {
         setTimeout(tick, 1000);
       } else {
         var submit = $("#submit")[0];
-        submit.click();
+        // submit.click();
       }
     }
   }
@@ -201,11 +201,13 @@ $(function () {
         var username = e.target.parentElement.id;
         var avatar = $(`div#${username}>.avatar`).attr('src');
         var score = $(`div#${username}>.userScore`).html();
-        console.log(following + [username]);
-        var newFollowing = new_unfollow_list(username, avatar, score);
+
+        var followingCopy = following.splice();
+        followingCopy.push(username);
+
         socket.send(JSON.stringify({
           action: 'follow',
-          following: following + [username]
+          following: followingCopy
         }));
       });
 
@@ -216,11 +218,11 @@ $(function () {
         var score = $(`td#${username}>span`).html();
 
         var toRemove = following.indexOf(username);
-        following.splice(toRemove, 1);
-        console.log(following);
+        var followingCopy = following.splice();
+        followingCopy.splice(toRemove, 1);
         socket.send(JSON.stringify({
           action: 'follow',
-          following: following
+          following: followingCopy
         }));
 
       });
@@ -230,6 +232,7 @@ $(function () {
       $(`#${data.username} > span`).html(data.slider);
     }
     else if(data.action == 'followNotify'){
+      following = data.following;
       start_interactive(data);
     }
     else{
