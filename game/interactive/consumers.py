@@ -168,15 +168,19 @@ def data_broadcast(message):
         round_data = json.loads(cache.get(user.username))
         rounds = InteractiveRound.objects.filter(following=user, round_order=round_data.get('current_round'))
         # check the game and state and make sure we are on interactive mode
+        print('1'*20)
+        print('ROUNDS')
+        print(rounds.all())
+        print('1'*20)
 
-        for follower in rounds.all():
+        for user_round in rounds.all():
             # r = InteractiveRound.objects.filter(user=follower,
             #                                     round_outcome=round_data.get('current_round'),
             #                                     guess__gt=Decimal(-3),  # user would submit a -1 for no answer
             #                                     influenced_guess__gt=Decimal(-3), # sum
             #                                     )
-
-            Group(game.user_channel(follower.user)).send({
+            print('Going to send data to {}'.format(user_round.user.username))
+            Group(game.user_channel(user_round.user)).send({
                 'text': json.dumps({
                     'action': 'sliderChange',
                     'username': user.username,
@@ -418,6 +422,11 @@ def round_outcome(message):
     round_.save()
     waiting_for = InteractiveRound.objects.filter(game=game, round_order=round_data.get('current_round')-1,
                                                   outcome=False).count()
+
+    print('#'*20)
+    print('waiting for')
+    print(waiting_for)
+    print('#'*20)
 
     if waiting_for == 0:
         game.group_channel.send({'text': json.dumps({
