@@ -247,6 +247,7 @@ def initial_submit(message):
     if remaining_users.count() == 0:
         # Interactive On
         for user in game.users.all():
+            current_round = InteractiveRound.objects.get(user=user, round_order=round_data.get('current_round'))
             following = [{'username': u.username, 'avatar': u.get_avatar} for u in current_round.following.all()]
             Group(game.user_channel(user)).send({
                 'text': json.dumps({
