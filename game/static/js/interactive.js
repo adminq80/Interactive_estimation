@@ -53,7 +53,6 @@ $("#slider").slider({
     }));
   }
 });
-$('.ui-slider-handle').hide();
 
 //breadcrumbs
 function set_breadcrumbs(state, round) {
@@ -66,6 +65,12 @@ function set_breadcrumbs(state, round) {
   $("#currentRound").html(round);
 }
 
+function resetSlider() {
+  $('.ui-slider-handle').hide();
+  $('#guess').val(-1);
+  $('#correlation')[0].innerHTML = '';
+}
+
 function start_game(data) {
   state = data.action;
   $("#myModal").modal('hide');
@@ -76,13 +81,12 @@ function start_game(data) {
   $("img.img-responsive").attr("src", '/static/plots/' + data.plot);
   countdown(state);
   $("#remaining").html(data.remaining);
+
+  resetSlider();
+
 }
 
-function resetSlider() {
-  $('.ui-slider-handle').hide();
-  $('#guess').val(-1);
-  $('#correlation')[0].innerHTML = '';
-}
+
 
 $(function () {
 
@@ -118,6 +122,7 @@ $(function () {
     }
     else if(data.action == 'initial'){
       start_game(data);
+
       $(".guess").show();
       $(".outcome").hide();
 
@@ -132,17 +137,15 @@ $(function () {
       console.log(data.text)
     }
     else if(data.action == 'interactive'){
-      resetSlider();
 
       start_game(data);
       $(".guess").show();
 
       $("#interactiveGuess").show();
-      console.log(data);
 
       // data.following = [{"username":"Test", "avatar":"cow.png", "score": 1.0}]
-      $("#follow_list tbody").html("");
-        $.each(data.following, function(i, user) {
+      $("#following_list tbody").html("");
+      $.each(data.following, function(i, user) {
         var avatar = "/static/"+user.avatar;
         $("#following_list tbody").append(`
           <tr>
@@ -156,6 +159,7 @@ $(function () {
     }
     else if(data.action == 'outcome'){
       start_game(data);
+      console.log(data);
       // data.max_following
       $("#interactiveGuess").hide();
       $(".guess").hide();
@@ -195,7 +199,6 @@ $(function () {
           following: following + [username]
         }));
 
-        console.log(following);
         var rows = $("#unfollow_list tbody").children();
         for(var i = 0; i < rows.length; i++) {
           var row = rows[i];
@@ -238,6 +241,7 @@ $(function () {
        * */
 
        // all_users
+       console.log(data);
       console.log('Following list: ' + data.following_users)
     }
     else{
@@ -249,7 +253,6 @@ $(function () {
 $('#submit').click(function () {
   $("#myModal").modal('show');
 
-  console.log('Button at state = ' + state);
 
   if (state == 'initial') {
     var guess = $('#guess').val();
