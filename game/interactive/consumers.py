@@ -195,44 +195,88 @@ def data_broadcast(message):
 def follow_list(message):
     user, game = user_and_game(message)
     follow_users = message.get('following')
+    print('*'*20)
     print(follow_users)
+    print('*'*20)
     # a list of all the usernames to follow
-    if game.constraints.max_following >= len(follow_users):
+    if len(follow_users) <= game.constraints.max_following:
         round_data = json.loads(cache.get(user.username))
-        current_round = InteractiveRound.objects.get(user=user, game=game, round_order=round_data.get('current_round'))
+        next_round = InteractiveRound.objects.get(user=user, round_order=round_data.get('current_round'))
 
-        current_round.following.clear()
-        current_round.save()
-        for username in follow_users:
-            u = User.objects.get(username=username)
-            if u != user:
-                current_round.following.add(u)
-                current_round.save()
-        print(follow_users)
-        new_list = {}
-        for u in current_round.following.all():
-            new_list[u.username] = ({'username': u.username, 'avatar': u.get_avatar, 'score': u.get_score})
+        print('Next Round Following list before clearing {}'.format(next_round.following.count()))
+        next_round.following.clear()
+        next_round.save()
+        print('Next Round following list {}'.format(next_round.following.count()))
 
-        # g.users.filter(~Q(username__in=i.following.values('username')))
-        rest_of_users = []
-        for u in current_round.game.users.filter(~Q(username__in=current_round.following.values('username'))).\
-                exclude(username=user.username):
-            rest_of_users.append({'username': u.username, 'avatar': u.get_avatar, 'score': u.get_score})
+        u_can_follow = []
+        just_followed = []
+        for u in game.users.all():
+            d = {
+                    'username': u.username,
+                    'avatar': u.get_avatar,
+                    'score': u.get_score,
+                }
+            if u.username == user.username:
+                continue
+            elif u.username in follow_users:
+                next_round.following.add(u)
+                just_followed.append(d)
+            else:
+                u_can_follow.append(d)
 
-        message.reply_channel.send({
-            'text': json.dumps({
-                'action': 'followNotify',
-                'following': list(new_list.values()),
-                'all_players': rest_of_users,
-            })
-        })
+        next_round.save()
+        print('After loop following list {}'.format(next_round.following.count()))
+
+        message.reply_channel.send({'text':json.dumps({
+            'action': 'followNotify',
+            'just_followed': just_followed,
+            'u_can_follow': u_can_follow,
+        })})
     else:
-        message.reply_channel.send({
-            'text': json.dumps({
-                'error': True,
-                'msg': 'didn\'t meet game constraints',
-            })
-        })
+
+        message.reply_channel.send({'text': json.dumps({
+            'error': True,
+            'msg': 'didn\'t meet game constraints max is {} and list is {}'.format(game.constraints.max_following,
+                                                                                   len(follow_users)),
+            })})
+
+
+        # if game.constraints.max_following >= len(follow_users):
+        #     round_data = json.loads(cache.get(user.username))
+        #     current_round = InteractiveRound.objects.get(user=user, game=game, round_order=round_data.get('current_round'))
+        #
+        #     current_round.following.clear()
+        #     current_round.save()
+        #     for username in follow_users:
+        #         u = User.objects.get(username=username)
+        #         if u != user:
+        #             current_round.following.add(u)
+        #             current_round.save()
+        #     print(follow_users)
+        #     new_list = {}
+        #     for u in current_round.following.all():
+        #         new_list[u.username] = ({'username': u.username, 'avatar': u.get_avatar, 'score': u.get_score})
+        #
+        #     # g.users.filter(~Q(username__in=i.following.values('username')))
+        #     rest_of_users = []
+        #     for u in current_round.game.users.filter(~Q(username__in=current_round.following.values('username'))).\
+        #             exclude(username=user.username):
+        #         rest_of_users.append({'username': u.username, 'avatar': u.get_avatar, 'score': u.get_score})
+        #
+        #     message.reply_channel.send({
+        #         'text': json.dumps({
+        #             'action': 'followNotify',
+        #             'following': list(new_list.values()),
+        #             'all_players': rest_of_users,
+        #         })
+        #     })
+        # else:
+        #     message.reply_channel.send({
+        #         'text': json.dumps({
+        #             'error': True,
+        #             'msg': 'didn\'t meet game constraints',
+        #         })
+        #     })
 
 
 @channel_session_user
