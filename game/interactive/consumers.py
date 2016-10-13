@@ -387,7 +387,7 @@ def interactive_submit(message):
                     'following': currently_following,
                     'all_players': rest_of_users,
                     'max_following': game.constraints.max_following,
-                    'correct_answer': current_round.plot.answer,
+                    'correct_answer': float(current_round.plot.answer),
                 })
             })
         # we assign users to the next game
