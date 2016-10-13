@@ -146,6 +146,9 @@ $(function () {
       // data.following = [{"username":"Test", "avatar":"cow.png", "score": 1.0}]
       $("#following_list tbody").html("");
       $.each(data.following, function(i, user) {
+        if (user.guess < 0) {
+          user.guess = '';
+        }
         var avatar = "/static/"+user.avatar;
         $("#following_list tbody").append(`
           <tr>
