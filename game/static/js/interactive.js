@@ -22,7 +22,7 @@ function new_follow_list(name, avatar, score) {
   $("#follow_list").append(`
     <div class="user" id=${name}>
       <img src="/static/images/plus.ico" class="plusIcon" />
-      <img src=${avatar} class="avatar" /> <span class="userScore">${score}</span>
+      <img src=${avatar} class="avatar" /> <span class="userScore">score: ${score}</span>
     </div>
   `);
 }
@@ -30,7 +30,7 @@ function new_follow_list(name, avatar, score) {
 function new_unfollow_list(name, avatar, score) {
   return (`
     <img src=${avatar} class='avatar' />
-    <span>${score}</span>
+    <span>score: ${score}</span>
     <button type="button" id=${name} class="btn btn-primary unfollow">Unfollow</button>
   `);
 }
@@ -170,7 +170,7 @@ $(function () {
           <tr>
             <td id=${user.username}>
               <img src=${avatar} class='avatar' />
-              <span>${user.guess}</span>
+              <span>guess: ${user.guess}</span>
             </td>
           </tr>
         `);
@@ -189,8 +189,8 @@ $(function () {
       $("#interactiveGuess").hide();
       $(".guess").hide();
       $(".outcome").show();
-      $("#yourGuess").html(`${data.guess}`);
-      $("#roundAnswer").html(`${data.correct_answer}`);
+      $("#yourGuess").html(data.guess);
+      $("#roundAnswer").html(data.correct_answer);
 
       start_interactive(data);
 
