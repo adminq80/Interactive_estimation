@@ -61,7 +61,17 @@ class Interactive(models.Model):
         self.group_channel.send({'text': packet})
 
     def user_channel(self, user):
-        if user.is_authenticated:
-            return Group('user-{}-{}'.format(self.id, user.username))
-        else:
-            return None
+        return 'user-{}-{}'.format(self.id, user.id)
+
+
+class Survey(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='interactive_survey')
+    game = models.OneToOneField(Interactive)
+    age = models.PositiveSmallIntegerField(null=True)
+    gender = models.CharField(max_length=10, choices=(('m', 'Male'),
+                                                      ('f', 'Female'),
+                                                      ), blank=True, null=True)
+    feedback = models.TextField(null=True)
+
+    def __str__(self):
+        return self.user.username

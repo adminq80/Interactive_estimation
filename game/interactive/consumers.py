@@ -4,9 +4,11 @@ from random import choice
 from decimal import Decimal
 
 from channels import Channel
+from channels import Group
 from channels.auth import channel_session_user_from_http, channel_session_user
 from django.core.cache import cache
 from django.shortcuts import redirect
+from django.urls import reverse
 
 from game.round.models import Plot
 from game.users.models import User
@@ -17,13 +19,13 @@ def get_round(game, user=None):
     users = game.users.all()
     if not user:
         user = users[0]
-    played_rounds = InteractiveRound.objects.filter(user=user)
+    played_rounds = InteractiveRound.objects.filter(user=user, game=game)
 
     plot_pks = {i.plot.pk for i in played_rounds}
     current_round = len(plot_pks)
 
     remaining = Plot.objects.count() - current_round
-
+    print('current_round ======================== {}'.format(current_round))
     if remaining == 0:
         return None
 
@@ -38,11 +40,20 @@ def get_round(game, user=None):
         }))
         i_round = InteractiveRound(user=user, game=game, plot=plot, round_order=current_round, guess=Decimal(-3),
                                    influenced_guess=Decimal(-3))
-        i_round.save()
+        try:
+            i_round.save()
+        except InteractiveRound.IntegrityError:
+            round = InteractiveRound.objects.get(user=user, game=game, plot=plot, round_order=current_round,
+                                                 guess=Decimal(-3), influenced_guess=Decimal(-3))
+            return {'plot': round.plot.plot, 'current_round': round.round_order, 'remaining': remaining}
+
         if current_round == 0:
             # random initial game configuration
             following = users.exclude(username=user.username).order_by('?')[:game.constraints.max_following]  # random
+            print(user)
+            print(following)
             for f in following.all():
+                print('Going to follow {}'.format(f.username))
                 i_round.following.add(f)
             i_round.save()
 
@@ -73,12 +84,13 @@ def lobby(message):
 
     logging.info("Channel NAME is {}".format(message.reply_channel.name))
 
-    channel = game.user_channel(user)
-    if channel:
-        channel.add(message.reply_channel)
-    else:
-        logging.error("Couldn't create a user channel")
-        raise Exception("Couldn't create user channel")
+    # channel = game.user_channel(user)
+    # if channel:
+    #     Grop(channel).add(message.reply_channel)
+    # else:
+    #     logging.error("Couldn't create a user channel")
+    #     raise Exception("Couldn't create user channel")
+    Group(game.user_channel(user)).add(message.reply_channel)
 
     users_count = game.users.count()
     waiting_for = game.constraints.max_users - users_count
@@ -90,7 +102,11 @@ def lobby(message):
         if data:
             # game already started
             round_ = json.loads(data)
-            game = Interactive.objects.get(id=round_.get('game'))
+            if round_:
+                game = Interactive.objects.get(id=round_.get('game'))
+                print(game)
+            else:
+                raise NotImplementedError
         else:
             game.started = True
             game.save()
@@ -122,6 +138,7 @@ def exit_game(message):
                        'participants waiting for the game to start.'.
                        format(game.users.count(), game.constraints.max_users))
     game.group_channel.discard(message.reply_channel)
+    Group(game.user_channel(user)).discard(message.reply_channel)
 
 
 def ws_receive(message):
@@ -154,13 +171,16 @@ def data_broadcast(message):
             #                                     influenced_guess__gt=Decimal(-3), # sum
             #                                     )
 
-            game.user_channel(follower.user).send({
+            Group(game.user_channel(follower.user)).send({
                 'text': json.dumps({
                     'action': 'sliderChange',
                     'username': user.username,
                     'slider': slider,
                 })
             })
+            # game.user_channel(follower.user).send({
+            #
+            # })
 
     else:
         logging.error('Got invalid value for slider')
@@ -169,19 +189,20 @@ def data_broadcast(message):
 @channel_session_user
 def follow_list(message):
     user, game = user_and_game(message)
-    follow_users = message.get('follow')
+    follow_users = message.get('following')
     # a list of all the usernames to follow
     if game.constraints.max_following >= len(follow_users) > game.constraints.min_following:
         round_data = json.loads(cache.get(user.username))
         round_ = InteractiveRound.objects.get(user=user, game=game, round_order=round_data.get('current_round'))
 
         round_.following.clear()
+        round_.save()
         for username in follow_users:
             u = User.objects.get(username=username)
             round_.following.add(u)
         round_.save()
         print(follow_users)
-        message.replay_channel.send({
+        message.reply_channel.send({
             'text': json.dumps({
                 'action': 'followNotify',
                 'following': follow_users,
@@ -189,7 +210,7 @@ def follow_list(message):
             })
         })
     else:
-        message.replay_channel.send({
+        message.reply_channel.send({
             'text': json.dumps({
                 'error': True,
                 'msg': 'didn\'t meet game constraints',
@@ -227,7 +248,7 @@ def initial_submit(message):
         # Interactive On
         for user in game.users.all():
             following = [{'username': u.username, 'avatar': u.get_avatar} for u in current_round.following.all()]
-            game.user_channel(user).send({
+            Group(game.user_channel(user)).send({
                 'text': json.dumps({
                     'action': 'interactive',
                     'plot': round_data.get('plot'),
@@ -278,7 +299,7 @@ def interactive_submit(message):
                     })
 
             following = list(d.values())
-            game.user_channel(user).send({
+            Group(game.user_channel(user)).send({
                 'text': json.dumps({
                     'action': 'outcome',
                     'plot': round_data.get('plot'),
@@ -291,7 +312,6 @@ def interactive_submit(message):
                 })
             })
         # we assign users to the next game
-        get_round(game)
         return
     message.reply_channel.send({
         'text': json.dumps({
@@ -305,6 +325,9 @@ def interactive_submit(message):
 def round_outcome(message):
     user, game = user_and_game(message)
     round_data = json.loads(cache.get(user.username))
+    if round_data is None:
+        print('round_data is None')
+        return
     round_ = InteractiveRound.objects.get(user=user, game=game, round_order=round_data.get('current_round'))
     round_.outcome = True
     round_.save()
@@ -313,6 +336,12 @@ def round_outcome(message):
 
     if waiting_for == 0:
         round_ = get_round(game, user)
+        if round_ is None:
+            game.group_channel.send({'text': json.dumps({
+                'action': 'redirect',
+                'url': reverse('interactive:exit'),
+            })})
+            return
         game.group_channel.send({'text': json.dumps({
             'action': 'initial',
             'plot': round_.get('plot'),

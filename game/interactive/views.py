@@ -10,7 +10,7 @@ from django.utils import timezone
 
 from game.contrib.calculate import calculate_score
 from game.contrib.random_user import random_user
-from game.interactive.forms import RoundForm
+from game.interactive.forms import RoundForm, ExitSurvey
 from game.round.models import Plot
 from .models import Settings, Interactive, InteractiveRound
 
@@ -74,8 +74,8 @@ def lobby(request):
             if game.users.count() < game.constraints.max_users:
                 used_avatars = {i.avatar for i in game.users.all()}
                 u.avatar = avatar(used_avatars)
-                game.users.add(u)
                 u.save()
+                game.users.add(u)
                 game.save()
                 break
 
@@ -147,3 +147,21 @@ def submit_answer(request):
 @login_required(login_url='/')
 def view_answers(request):
     pass
+
+
+@login_required(login_url='/')
+def exit_survey(request):
+    game = Interactive.objects.get(user=request.user)
+    form = ExitSurvey(request.POST or None)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.user = request.user
+            instance.game = game
+            instance.save()
+
+    if game.end_time is None:
+        game.end_time = timezone.now()
+        game.save()
+    return render(request, 'control/survey.html', {'form': form, 'score': request.user.get_score})
