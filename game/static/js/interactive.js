@@ -78,6 +78,12 @@ function start_game(data) {
   $("#remaining").html(data.remaining);
 }
 
+function resetSlider() {
+  $('.ui-slider-handle').hide();
+  $('#guess').val(-1);
+  $('#correlation')[0].innerHTML = '';
+}
+
 $(function () {
 
   var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
@@ -126,10 +132,13 @@ $(function () {
       console.log(data.text)
     }
     else if(data.action == 'interactive'){
+      resetSlider();
+
       start_game(data);
       $(".guess").show();
 
       $("#interactiveGuess").show();
+      console.log(data);
 
       // data.following = [{"username":"Test", "avatar":"cow.png", "score": 1.0}]
       $.each(data.following, function(i, user) {
@@ -146,7 +155,7 @@ $(function () {
     }
     else if(data.action == 'outcome'){
       start_game(data);
-
+      // data.max_following
       $("#interactiveGuess").hide();
       $(".guess").hide();
       $(".outcome").show();
@@ -181,6 +190,7 @@ $(function () {
           following: following + [username]
         }));
 
+        console.log(following);
         var rows = $("#unfollow_list tbody").children();
         for(var i = 0; i < rows.length; i++) {
           var row = rows[i];
@@ -221,6 +231,8 @@ $(function () {
        * 'following': follow_users,
        *
        * */
+
+       // all_users
       console.log('Following list: ' + data.following_users)
     }
     else{
@@ -228,7 +240,6 @@ $(function () {
     }
   };
 });
-
 
 $('#submit').click(function () {
   $("#myModal").modal('show');
@@ -240,7 +251,6 @@ $('#submit').click(function () {
     socket.send(JSON.stringify({
       action: 'initial',
       guess: guess
-      // payload: {action: "interactive"}
     }));
   }
   else if(state == 'interactive'){
@@ -248,7 +258,6 @@ $('#submit').click(function () {
     socket.send(JSON.stringify({
       action: 'interactive',
       socialGuess: guess
-      // payload: {action: "outcome"}
     }));
   }
   else if(state == 'outcome'){

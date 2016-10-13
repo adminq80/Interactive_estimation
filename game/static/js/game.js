@@ -34,3 +34,5 @@ $("#slider").slider({
 });
 
 $('.ui-slider-handle').hide();
+
+
