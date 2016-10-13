@@ -22,7 +22,7 @@ function new_follow_list(name, avatar, score) {
   $("#follow_list").append(`
     <div class="user" id=${name}>
       <img src="/static/images/plus.ico" class="plusIcon" />
-      <img src=${avatar} class="avatar" /> <span class="userScore">${score}</span>
+      <img src=${avatar} class="avatar" /> <span class="userScore">score: ${score}</span>
     </div>
   `);
 }
@@ -169,7 +169,7 @@ $(function () {
           <tr>
             <td id=${user.username}>
               <img src=${avatar} class='avatar' />
-              <span>${user.guess}</span>
+              <span>guess: ${user.guess}</span>
             </td>
           </tr>
         `);
