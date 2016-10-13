@@ -210,8 +210,8 @@ def follow_list(message):
 
         # g.users.filter(~Q(username__in=i.following.values('username')))
         rest_of_users = []
-        for u in round_.game.users.exclude(~Q(round_.following.values('username'))).exclude(username=
-                                                                                            round_.user.username):
+        for u in round_.game.users.exclude(~Q(username__in=round_.following.values('username'))).\
+                exclude(username=round_.user.username):
             rest_of_users.append({'username': u.username, 'avatar': u.get_avatar, 'score': u.get_score})
 
         message.reply_channel.send({
