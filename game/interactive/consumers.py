@@ -229,8 +229,8 @@ def follow_list(message):
 
         message.reply_channel.send({'text':json.dumps({
             'action': 'followNotify',
-            'just_followed': just_followed,
-            'u_can_follow': u_can_follow,
+            'following': just_followed,
+            'all_players': u_can_follow,
         })})
     else:
 
