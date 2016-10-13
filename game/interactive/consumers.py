@@ -195,33 +195,34 @@ def data_broadcast(message):
 def follow_list(message):
     user, game = user_and_game(message)
     follow_users = message.get('following')
+    print(follow_users)
     # a list of all the usernames to follow
-    if game.constraints.max_following >= len(follow_users) > game.constraints.min_following:
+    if game.constraints.max_following >= len(follow_users):
         round_data = json.loads(cache.get(user.username))
-        round_ = InteractiveRound.objects.get(user=user, game=game, round_order=round_data.get('current_round'))
+        current_round = InteractiveRound.objects.get(user=user, game=game, round_order=round_data.get('current_round'))
 
-        round_.following.clear()
-        round_.save()
+        current_round.following.clear()
+        current_round.save()
         for username in follow_users:
             u = User.objects.get(username=username)
             if u != user:
-                round_.following.add(u)
-                round_.save()
+                current_round.following.add(u)
+                current_round.save()
         print(follow_users)
-        new_list = []
-        for u in round_.following.all():
-            new_list.append({'username': u.username, 'avatar': u.get_avatar, 'score': u.get_score})
+        new_list = {}
+        for u in current_round.following.all():
+            new_list[u.username] = ({'username': u.username, 'avatar': u.get_avatar, 'score': u.get_score})
 
         # g.users.filter(~Q(username__in=i.following.values('username')))
         rest_of_users = []
-        for u in round_.game.users.filter(~Q(username__in=round_.following.values('username'))).\
-                exclude(username=round_.user.username):
+        for u in current_round.game.users.filter(~Q(username__in=current_round.following.values('username'))).\
+                exclude(username=user.username):
             rest_of_users.append({'username': u.username, 'avatar': u.get_avatar, 'score': u.get_score})
 
         message.reply_channel.send({
             'text': json.dumps({
                 'action': 'followNotify',
-                'following': new_list,
+                'following': list(new_list.values()),
                 'all_players': rest_of_users,
             })
         })
@@ -337,6 +338,8 @@ def interactive_submit(message):
                     'remaining': round_data.get('remaining'),
                     'current_round': round_data.get('current_round'),
                     # a list of dicts of {usernames and avatars} for the players that the user follows
+                    'guess': float(current_round.influenced_guess),
+                    'score': user.get_score,
                     'following': currently_following,
                     'all_players': rest_of_users,
                     'max_following': game.constraints.max_following,
