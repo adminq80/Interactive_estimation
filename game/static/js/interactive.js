@@ -30,7 +30,7 @@ function new_follow_list(name, avatar, score) {
 function new_unfollow_list(name, avatar, score) {
   return (`
     <img src=${avatar} class='avatar' />
-    <span>${score}</span>
+    <span>score: ${score}</span>
     <button type="button" id=${name} class="btn btn-primary unfollow">Unfollow</button>
   `);
 }
