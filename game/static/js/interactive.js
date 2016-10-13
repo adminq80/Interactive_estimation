@@ -11,7 +11,7 @@ function countdown(counterState) {
         setTimeout(tick, 1000);
       } else {
         var submit = $("#submit")[0];
-        // submit.click();
+        submit.click();
       }
     }
   }
@@ -93,6 +93,7 @@ function start_interactive(data) {
     new_follow_list(user.username, avatar, user.score);
   });
 
+  $("#unfollow_list tbody td").html("");
   // populate list of people you can unfollow
   $.each(data.following, function(i, user) {
     var avatar = "/static/"+user.avatar;
@@ -200,22 +201,12 @@ $(function () {
         var username = e.target.parentElement.id;
         var avatar = $(`div#${username}>.avatar`).attr('src');
         var score = $(`div#${username}>.userScore`).html();
-        
+        console.log(following + [username]);
         var newFollowing = new_unfollow_list(username, avatar, score);
         socket.send(JSON.stringify({
           action: 'follow',
           following: following + [username]
         }));
-
-        // var rows = $("#unfollow_list tbody").children();
-        // for(var i = 0; i < rows.length; i++) {
-        //   var row = rows[i];
-        //   if ($(row).children().html() == "") {
-        //     $(row).html(newFollowing);
-        //     $(`div#${username}`).html("");
-        //     break;
-        //   }
-        // }
       });
 
 
@@ -226,14 +217,11 @@ $(function () {
 
         var toRemove = following.indexOf(username);
         following.splice(toRemove, 1);
-
+        console.log(following);
         socket.send(JSON.stringify({
           action: 'follow',
           following: following
         }));
-
-        // $(`td#${username}`).html("");
-        // new_follow_list(username, avatar, score);
 
       });
 
@@ -242,11 +230,7 @@ $(function () {
       $(`#${data.username} > span`).html(data.slider);
     }
     else if(data.action == 'followNotify'){
-      console.log('Following list: ' + data.following);
-      console.log('All players: ' + data.all_players);
-
-       // all_users
-       start_interactive(data);
+      start_interactive(data);
     }
     else{
       console.log(data)
