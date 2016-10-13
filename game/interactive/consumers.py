@@ -7,6 +7,7 @@ from channels import Channel
 from channels import Group
 from channels.auth import channel_session_user_from_http, channel_session_user
 from django.core.cache import cache
+from django.db.models import Q
 from django.shortcuts import redirect
 from django.urls import reverse
 
@@ -199,14 +200,25 @@ def follow_list(message):
         round_.save()
         for username in follow_users:
             u = User.objects.get(username=username)
-            round_.following.add(u)
-        round_.save()
+            if u != user:
+                round_.following.add(u)
+                round_.save()
         print(follow_users)
+        new_list = []
+        for u in round_.following.all():
+            new_list.append({'username': u.username, 'avatar': u.get_avatar, 'score': u.get_score})
+
+        # g.users.filter(~Q(username__in=i.following.values('username')))
+        rest_of_users = []
+        for u in round_.game.users.exclude(~Q(round_.following.values('username'))).exclude(username=
+                                                                                            round_.user.username):
+            rest_of_users.append({'username': u.username, 'avatar': u.get_avatar, 'score': u.get_score})
+
         message.reply_channel.send({
             'text': json.dumps({
                 'action': 'followNotify',
-                'following': follow_users,
-                'all_players': 1,
+                'following': new_list,
+                'all_players': rest_of_users,
             })
         })
     else:
@@ -313,6 +325,12 @@ def interactive_submit(message):
                 })
             })
         # we assign users to the next game
+        round_ = get_round(game)
+        if round_ is None:
+            game.group_channel.send({'text': json.dumps({
+                'action': 'redirect',
+                'url': reverse('interactive:exit'),
+            })})
         return
     message.reply_channel.send({
         'text': json.dumps({
@@ -329,25 +347,18 @@ def round_outcome(message):
     if round_data is None:
         print('round_data is None')
         return
-    round_ = InteractiveRound.objects.get(user=user, game=game, round_order=round_data.get('current_round'))
+    round_ = InteractiveRound.objects.get(user=user, game=game, round_order=round_data.get('current_round')-1)
     round_.outcome = True
     round_.save()
-    waiting_for = InteractiveRound.objects.filter(game=game, round_order=round_data.get('current_round'),
+    waiting_for = InteractiveRound.objects.filter(game=game, round_order=round_data.get('current_round')-1,
                                                   outcome=False).count()
 
     if waiting_for == 0:
-        round_ = get_round(game, user)
-        if round_ is None:
-            game.group_channel.send({'text': json.dumps({
-                'action': 'redirect',
-                'url': reverse('interactive:exit'),
-            })})
-            return
         game.group_channel.send({'text': json.dumps({
             'action': 'initial',
-            'plot': round_.get('plot'),
-            'remaining': round_.get('remaining'),
-            'current_round': round_.get('current_round'),
+            'plot': round_data.get('plot'),
+            'remaining': round_data.get('remaining'),
+            'current_round': round_data.get('current_round'),
         })
         })
-        return
+    return
