@@ -138,6 +138,7 @@ def exit_game(message):
     logging.info('user {} just exited'.format(user.username))
     if not game.started:
         game.users.remove(user)
+        game.save()
         game.broadcast('info',
                        'There are currently a total of {} out of {} required '
                        'participants waiting for the game to start.'.
