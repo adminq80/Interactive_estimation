@@ -316,6 +316,7 @@ def initial_submit(message):
                 'text': json.dumps({
                     'action': 'interactive',
                     'plot': round_data.get('plot'),
+                    'score': user.get_score,
                     'remaining': round_data.get('remaining'),
                     'current_round': round_data.get('current_round'),
                     # a list of dicts of {usernames and avatars} for the players that the user follows

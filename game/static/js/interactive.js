@@ -152,11 +152,12 @@ $(function () {
       console.log(data.text)
     }
     else if(data.action == 'interactive'){
-
+      console.log(data);
       start_game(data);
       $(".guess").show();
 
       $("#interactiveGuess").show();
+      $(".box#score").html(`${data.score}`);
 
       // data.following = [{"username":"Test", "avatar":"cow.png", "score": 1.0}]
       $("#following_list tbody").html("");
@@ -176,7 +177,8 @@ $(function () {
       })
     }
     else if(data.action == 'outcome'){
-
+      console.log(data);
+      $(".box#score").html(`${data.score}`);
       $("#unfollow_list tbody").html("");
 
       for(var i = 0; i < data.max_following; i++) {
