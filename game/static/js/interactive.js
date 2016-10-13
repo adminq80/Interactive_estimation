@@ -132,13 +132,14 @@ $(function () {
       $("#interactiveGuess").show();
 
       // data.following = [{"username":"Test", "avatar":"cow.png", "score": 1.0}]
-      $.each(data.following, function(i, user) {
+      $("#follow_list tbody").html("");
+        $.each(data.following, function(i, user) {
         var avatar = "/static/"+user.avatar;
         $("#following_list tbody").append(`
           <tr>
             <td id=${user.username}>
               <img src=${avatar} class='avatar' />
-              <span>${user.score}</span>
+              <span>${user.guess}</span>
             </td>
           </tr>
         `);
@@ -153,6 +154,8 @@ $(function () {
 
       // populate list of people you can follow
       $("#follow_list").html("");
+        // console.log(data.all_players);
+        //all_players
       $.each(data.all_players, function(i, user) {
         var avatar = '/static/' + user.avatar;
         new_follow_list(user.username, avatar, user.score);
@@ -161,6 +164,8 @@ $(function () {
       // populate list of people you can unfollow
       // add empty table rows if following less than the max number of followers
       $("#unfollow_list tbody").html("");
+        // console.log(data.following);
+        //following
       $.each(data.following, function(i, user) {
         var avatar = "/static/"+user.avatar;
         $("#unfollow_list tbody").append("<tr>"+new_unfollow_list(user.username, avatar, user.score)+"</tr>");

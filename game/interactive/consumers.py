@@ -39,9 +39,9 @@ def get_round(game, user=None):
             'plot': plot.plot,
             'remaining': remaining,
         }))
-        i_round = InteractiveRound(user=user, game=game, plot=plot, round_order=current_round, guess=Decimal(-3),
-                                   influenced_guess=Decimal(-3))
         try:
+            i_round = InteractiveRound(user=user, game=game, plot=plot, round_order=current_round, guess=Decimal(-3),
+                                       influenced_guess=Decimal(-3))
             i_round.save()
         except InteractiveRound.IntegrityError:
             round = InteractiveRound.objects.get(user=user, game=game, plot=plot, round_order=current_round,
@@ -52,9 +52,13 @@ def get_round(game, user=None):
             # random initial game configuration
             following = users.exclude(username=user.username).order_by('?')[:game.constraints.max_following]  # random
             print(user)
-            print(following)
             for f in following.all():
                 print('Going to follow {}'.format(f.username))
+                i_round.following.add(f)
+            i_round.save()
+        else:
+            previous_round = InteractiveRound.objects.get(user=user, game=game, round_order=current_round-1)
+            for f in previous_round.following.all():
                 i_round.following.add(f)
             i_round.save()
 
@@ -210,7 +214,7 @@ def follow_list(message):
 
         # g.users.filter(~Q(username__in=i.following.values('username')))
         rest_of_users = []
-        for u in round_.game.users.exclude(~Q(username__in=round_.following.values('username'))).\
+        for u in round_.game.users.filter(~Q(username__in=round_.following.values('username'))).\
                 exclude(username=round_.user.username):
             rest_of_users.append({'username': u.username, 'avatar': u.get_avatar, 'score': u.get_score})
 
@@ -260,7 +264,9 @@ def initial_submit(message):
         # Interactive On
         for user in game.users.all():
             current_round = InteractiveRound.objects.get(user=user, round_order=round_data.get('current_round'))
-            following = [{'username': u.username, 'avatar': u.get_avatar} for u in current_round.following.all()]
+            following = [{'username': u.username, 'avatar': u.get_avatar, 'guess':
+                float(InteractiveRound.objects.get(user=u, round_order=round_data.get('current_round')).guess)}
+                         for u in current_round.following.all()]
             Group(game.user_channel(user)).send({
                 'text': json.dumps({
                     'action': 'interactive',
@@ -296,22 +302,34 @@ def interactive_submit(message):
                                                       round_order=round_data.get('current_round'))
     if remaining_users.count() == 0:
         # Outcome On
-
         for user in game.users.all():
-            d = {u.username: {'username': u.username, 'avatar': u.get_avatar, 'score': u.get_score}
-                 for u in current_round.following.all()}
-            users = []
-            for i in game.users.all().exclude(username=user.username):
-                try:
-                    d[i]
-                except KeyError:
-                    users.append({
-                        'username': i.username,
-                        'avatar': i.get_avatar,
-                        'score': i.get_score,
-                    })
+            current_round = InteractiveRound.objects.get(user=user, round_order=round_data.get('current_round'))
+            rest_of_users = []
+            print('=' * 20)
+            for u in current_round.game.users.filter(~Q(username__in=current_round.following.values('username')))\
+                    .exclude(username=user.username):
+                print(u)
+                rest_of_users.append({'username': u.username, 'avatar': u.get_avatar, 'score': u.get_score})
+            print('=' * 20)
+            currently_following = []
+            for u in current_round.following.all():
+                currently_following.append({'username': u.username, 'avatar': u.get_avatar, 'score': u.get_score})
 
-            following = list(d.values())
+        # for user in game.users.all():
+        #     d = {u.username: {'username': u.username, 'avatar': u.get_avatar, 'score': u.get_score}
+        #          for u in current_round.following.all()}
+        #     users = []
+        #     for i in game.users.all().exclude(username=user.username):
+        #         try:
+        #             d[i]
+        #         except KeyError:
+        #             users.append({
+        #                 'username': i.username,
+        #                 'avatar': i.get_avatar,
+        #                 'score': i.get_score,
+        #             })
+        #
+        #     following = list(d.values())
             Group(game.user_channel(user)).send({
                 'text': json.dumps({
                     'action': 'outcome',
@@ -319,8 +337,8 @@ def interactive_submit(message):
                     'remaining': round_data.get('remaining'),
                     'current_round': round_data.get('current_round'),
                     # a list of dicts of {usernames and avatars} for the players that the user follows
-                    'following': following,
-                    'all_players': users,
+                    'following': currently_following,
+                    'all_players': rest_of_users,
                     'max_following': game.constraints.max_following,
                 })
             })
