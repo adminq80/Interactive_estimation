@@ -27,13 +27,11 @@ function new_follow_list(name, avatar, score) {
   `);
 }
 
-function new_unfollow_list(name, avatar, score) {
+function new_unfollow_list(avatar, score) {
   return (`
-    <td id=${name}>
-      <img src=${avatar} class='avatar' />
-      <span>${score}</span>
-      <button type="button" class="btn btn-primary unfollow">Unfollow</button>
-    </td>
+    <img src=${avatar} class='avatar' />
+    <span>${score}</span>
+    <button type="button" class="btn btn-primary unfollow">Unfollow</button>
   `);
 }
 //slider
@@ -86,6 +84,25 @@ function start_game(data) {
 
 }
 
+function start_interactive(data) {
+
+  // populate list of people you can follow
+  $("#follow_list").html("");
+  $.each(data.all_players, function(i, user) {
+    var avatar = '/static/' + user.avatar;
+    new_follow_list(user.username, avatar, user.score);
+  });
+
+  $("#unfollow_list tbody td").html("");
+  // populate list of people you can unfollow
+  $.each(data.following, function(i, user) {
+    var avatar = "/static/"+user.avatar;
+    var row = $($("#unfollow_list tbody td")[i]);
+    row.attr('id', user.username);
+    row.html(new_unfollow_list(avatar, user.score));
+  });
+
+}
 
 
 $(function () {
@@ -146,6 +163,9 @@ $(function () {
       // data.following = [{"username":"Test", "avatar":"cow.png", "score": 1.0}]
       $("#following_list tbody").html("");
       $.each(data.following, function(i, user) {
+        if (user.guess < 0) {
+          user.guess = '';
+        }
         var avatar = "/static/"+user.avatar;
         $("#following_list tbody").append(`
           <tr>
@@ -158,31 +178,20 @@ $(function () {
       })
     }
     else if(data.action == 'outcome'){
+
+      $("#unfollow_list tbody").html("");
+
+      for(var i = 0; i < data.max_following; i++) {
+        $("#unfollow_list tbody").append("<tr><td></td></tr>");
+      }
+
       start_game(data);
       console.log(data);
-      // data.max_following
       $("#interactiveGuess").hide();
       $(".guess").hide();
       $(".outcome").show();
 
-      // populate list of people you can follow
-      $("#follow_list").html("");
-        // console.log(data.all_players);
-        //all_players
-      $.each(data.all_players, function(i, user) {
-        var avatar = '/static/' + user.avatar;
-        new_follow_list(user.username, avatar, user.score);
-      });
-
-      // populate list of people you can unfollow
-      // add empty table rows if following less than the max number of followers
-      $("#unfollow_list tbody").html("");
-        // console.log(data.following);
-        //following
-      $.each(data.following, function(i, user) {
-        var avatar = "/static/"+user.avatar;
-        $("#unfollow_list tbody").append("<tr>"+new_unfollow_list(user.username, avatar, user.score)+"</tr>");
-      });
+      start_interactive(data);
 
       var following = data.following.map(function(user) {
         return user.username;
@@ -192,22 +201,12 @@ $(function () {
         var username = e.target.parentElement.id;
         var avatar = $(`div#${username}>.avatar`).attr('src');
         var score = $(`div#${username}>.userScore`).html();
-        
+        console.log(following + [username]);
         var newFollowing = new_unfollow_list(username, avatar, score);
         socket.send(JSON.stringify({
           action: 'follow',
           following: following + [username]
         }));
-
-        var rows = $("#unfollow_list tbody").children();
-        for(var i = 0; i < rows.length; i++) {
-          var row = rows[i];
-          if ($(row).children().html() == "") {
-            $(row).html(newFollowing);
-            $(`div#${username}`).html("");
-            break;
-          }
-        }
       });
 
 
@@ -218,14 +217,11 @@ $(function () {
 
         var toRemove = following.indexOf(username);
         following.splice(toRemove, 1);
-
+        console.log(following);
         socket.send(JSON.stringify({
           action: 'follow',
           following: following
         }));
-
-        $(`td#${username}`).html("");
-        new_follow_list(username, avatar, score);
 
       });
 
@@ -234,14 +230,7 @@ $(function () {
       $(`#${data.username} > span`).html(data.slider);
     }
     else if(data.action == 'followNotify'){
-      console.log('Following list: ' + data.following);
-      console.log('All players: ' + data.all_players);
-      /*
-       *
-       * 'following': ,
-       * 'all_players': ,
-       *
-       * */
+      start_interactive(data);
     }
     else{
       console.log(data)
@@ -249,7 +238,7 @@ $(function () {
   };
 });
 
-$('#submit').click(function () {
+$('input#submit').click(function () {
   $("#myModal").modal('show');
 
 
