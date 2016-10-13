@@ -214,7 +214,7 @@ $(function () {
         var score = $(`td#${username}>span`).html();
 
         var toRemove = following.indexOf(username);
-        following.splice(toRemove, 1)
+        following.splice(toRemove, 1);
 
         socket.send(JSON.stringify({
           action: 'follow',
@@ -231,14 +231,8 @@ $(function () {
       $(`#${data.username} > span`).html(data.slider);
     }
     else if(data.action == 'followNotify'){
-      /*
-       *
-       * 'following': follow_users,
-       *
-       * */
-
-       // all_users
-      console.log('Following list: ' + data.following_users)
+      console.log('Following list: ' + data.following);
+      console.log('All players: ' + data.all_players);
     }
     else{
       console.log(data)
