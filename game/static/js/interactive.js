@@ -11,7 +11,7 @@ function countdown(counterState) {
         setTimeout(tick, 1000);
       } else {
         var submit = $("#submit")[0];
-        // submit.click();
+        submit.click();
       }
     }
   }
