@@ -27,11 +27,11 @@ function new_follow_list(name, avatar, score) {
   `);
 }
 
-function new_unfollow_list(avatar, score) {
+function new_unfollow_list(name, avatar, score) {
   return (`
     <img src=${avatar} class='avatar' />
     <span>${score}</span>
-    <button type="button" class="btn btn-primary unfollow">Unfollow</button>
+    <button type="button" id=${name} class="btn btn-primary unfollow">Unfollow</button>
   `);
 }
 //slider
@@ -80,8 +80,6 @@ function start_game(data) {
   countdown(state);
   $("#remaining").html(data.remaining);
 
-  resetSlider();
-
 }
 
 function start_interactive(data) {
@@ -98,8 +96,7 @@ function start_interactive(data) {
   $.each(data.following, function(i, user) {
     var avatar = "/static/"+user.avatar;
     var row = $($("#unfollow_list tbody td")[i]);
-    row.attr('id', user.username);
-    row.html(new_unfollow_list(avatar, user.score));
+    row.html(new_unfollow_list(user.username, avatar, user.score));
   });
 
 }
@@ -139,6 +136,7 @@ $(function () {
     }
     else if(data.action == 'initial'){
       start_game(data);
+      resetSlider();
 
       $(".guess").show();
       $(".outcome").hide();
@@ -186,14 +184,15 @@ $(function () {
       }
 
       start_game(data);
-      console.log(data);
       $("#interactiveGuess").hide();
       $(".guess").hide();
       $(".outcome").show();
+      $("#yourGuess").html(${data.guess});
+      $("#roundAnswer").html(${data.correct_answer});
 
       start_interactive(data);
 
-      var following = data.following.map(function(user) {
+      following = data.following.map(function(user) {
         return user.username;
       });
 
@@ -202,7 +201,7 @@ $(function () {
         var avatar = $(`div#${username}>.avatar`).attr('src');
         var score = $(`div#${username}>.userScore`).html();
 
-        var followingCopy = following.splice();
+        var followingCopy = following.slice();
         followingCopy.push(username);
 
         socket.send(JSON.stringify({
@@ -213,12 +212,10 @@ $(function () {
 
 
       $(document).on("click", ".unfollow", function(e) {
-        var username = e.target.parentElement.id;
-        var avatar = $(`td#${username}>.avatar`).attr('src');
-        var score = $(`td#${username}>span`).html();
 
+        var username = e.target.id;
         var toRemove = following.indexOf(username);
-        var followingCopy = following.splice();
+        var followingCopy = following.slice();
         followingCopy.splice(toRemove, 1);
         socket.send(JSON.stringify({
           action: 'follow',
@@ -232,7 +229,9 @@ $(function () {
       $(`#${data.username} > span`).html(data.slider);
     }
     else if(data.action == 'followNotify'){
-      following = data.following;
+      following = data.following.map(function(user) {
+        return user.username;
+      });
       start_interactive(data);
     }
     else{
