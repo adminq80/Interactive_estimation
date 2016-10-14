@@ -5,9 +5,9 @@ from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.db import transaction
 from django.contrib.auth.decorators import login_required
-from django.urls import reverse
 from django.utils import timezone
 
+from game.users.models import User
 from game.contrib.calculate import calculate_score
 from game.contrib.random_user import random_user
 from game.interactive.forms import RoundForm, ExitSurvey
@@ -154,13 +154,15 @@ def view_answers(request):
 
 @login_required(login_url='/')
 def exit_survey(request):
-    game = Interactive.objects.get(user=request.user)
+    u = User.objects.get(username=request.user.username)
+    game = Interactive.objects.get(users=u)
     form = ExitSurvey(request.POST or None)
 
     if request.method == 'POST':
         if form.is_valid():
             instance = form.save(commit=False)
-            instance.user = request.user
+            instance.username = u.username
+            # instance.user.add(request.user)
             instance.game = game
             instance.save()
 

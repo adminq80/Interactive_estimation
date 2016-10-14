@@ -36,6 +36,22 @@ class InteractiveRound(Round):
     def __str__(self):
         return self.user.username
 
+    def round_data(self):
+        data = super(InteractiveRound, self).round_data()
+        data['game_id'] = self.game.id
+        data['condition'] = 'interactive'
+        data['revised_guess'] = self.influenced_guess
+        data['game_size'] = self.game.constraints.max_users
+        data['following_capacity'] = self.game.constraints.max_following
+        data['following'] = []
+        for u in self.following.all():
+            current_round = InteractiveRound.objects.get(user=u, round_order=data['round_id'])
+            data['following'].append({'username': u.username,
+                                      'independent_guess': current_round.guess,
+                                      'revised_guess': current_round.influenced_guess,
+                                      })
+        return data
+
 
 class Interactive(models.Model):
     users = models.ManyToManyField(settings.AUTH_USER_MODEL)
@@ -65,7 +81,8 @@ class Interactive(models.Model):
 
 
 class Survey(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='interactive_survey')
+    # user = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='influenced_users')
+    username = models.CharField(max_length=255)
     game = models.OneToOneField(Interactive)
     age = models.PositiveSmallIntegerField(null=True)
     gender = models.CharField(max_length=10, choices=(('m', 'Male'),
