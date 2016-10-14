@@ -14,14 +14,13 @@ def calculate_score(rounds):
     """
     score = 0.0
     for r in rounds:
-        guess = r.guess
+        if hasattr(r, 'influenced_guess'):
+            guess = r.influenced_guess
+        else:
+            guess = r.guess
+
         answer = r.plot.answer
         error = math.fabs(answer - guess)
-        #if calc == 0.0:
-        #    score += 100
-        #else:
-        #    if guess > 0:
-        #        score += 1/math.sqrt(calc**2)
         score += (1.0-error)**2
             
     return round(score, 2)
