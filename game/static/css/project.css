@@ -104,6 +104,15 @@ html, body {
   -webkit-transform: translate(-50%, -50%);
 }
 
+.toolTip {
+  z-index: 2;
+}
+
+.loading {
+  width: 50px;
+  margin: auto;
+  display: block;
+}
 <<<<<<< HEAD
 blockquote.instr {
     font-size: 16px;

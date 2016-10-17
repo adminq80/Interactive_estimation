@@ -21,7 +21,9 @@ function countdown(counterState) {
 function new_follow_list(name, avatar, score) {
   $("#follow_list").append(`
     <div class="user" id=${name}>
-      <img src="/static/images/plus.ico" class="plusIcon" />
+      <a href="#" data-toggle="tooltip" data-placement="right" class="toolTip" title="Unfollow a user first">
+        <img src="/static/images/plus.ico" class="plusIcon" />
+      </a>
       <img src=${avatar} class="avatar" /> <span class="userScore">Score: ${score}</span>
     </div>
   `);
@@ -135,6 +137,7 @@ $(function () {
       window.location.href = proto + window.location.host + data.url;
     }
     else if(data.action == 'initial'){
+      console.log(data);
       start_game(data);
       resetSlider();
 
@@ -142,7 +145,10 @@ $(function () {
       $(".outcome").hide();
 
       if(data.current_round == 0) {
-        // plays bell at start of game
+        $('.avatar').attr("src", '/static/images/avatars/' + data.avatar);
+        $(document).ready(function() {
+          $('.my_user').show();
+        })
         var audio = new Audio('/static/bell.mp3');
         audio.play();
       }
@@ -198,14 +204,18 @@ $(function () {
         return user.username;
       });
 
+      if(following.length == data.max_following) {
+        $('[data-toggle="tooltip"]').tooltip();
+      }
+
       $(document).on("click", ".plusIcon", function(e) {
-        var username = e.target.parentElement.id;
+        var username = e.target.parentElement.parentElement.id;
         var avatar = $(`div#${username}>.avatar`).attr('src');
         var score = $(`div#${username}>.userScore`).html();
 
         var followingCopy = following.slice();
         followingCopy.push(username);
-
+        $('[data-toggle="tooltip"]').tooltip('hide');
         socket.send(JSON.stringify({
           action: 'follow',
           following: followingCopy
