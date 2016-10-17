@@ -20,13 +20,20 @@
   After you have entered your guess, press "submit" and you will be taken to the next round. Once you have finished all 20 rounds, the game is complete and you will be taken to an exit survey.
   </p>
 
-  <div class="example">
-  <img src="/static/images/example-plot.png" class="img-responsive sample"/>
+ 
   <form class="form" action="." method="post">
   {% csrf_token %}
+
+  <div class="example">
+  <img src="/static/images/example-plot.png" class="img-responsive sample"/>
   {% include 'components/slider.html' %}
-  </form>
   </div>
+
+  <div class="row">
+ 
+  <input class='btn btn-primary nextButton' type="submit" id="submit" value="Next">
+  </div>
+  </form>
 </div>
 {% endblock %}
 

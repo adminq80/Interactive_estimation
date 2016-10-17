@@ -145,10 +145,6 @@ $(function () {
       $(".outcome").hide();
 
       if(data.current_round == 0) {
-        $('.avatar').attr("src", '/static/images/avatars/' + data.avatar);
-        $(document).ready(function() {
-          $('.my_user').show();
-        })
         var audio = new Audio('/static/bell.mp3');
         audio.play();
       }
