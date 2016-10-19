@@ -191,7 +191,9 @@ $(function () {
       $("#interactiveGuess").hide();
       $(".guess").hide();
       $(".outcome").show();
-      $("#yourGuess").html(data.guess);
+      if(data.guess != -1) {
+        $("#yourGuess").html(data.guess);
+      }
       $("#roundAnswer").html(data.correct_answer);
 
       start_interactive(data);

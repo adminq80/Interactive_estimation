@@ -246,44 +246,6 @@ def follow_list(message):
             })})
 
 
-        # if game.constraints.max_following >= len(follow_users):
-        #     round_data = json.loads(cache.get(user.username))
-        #     current_round = InteractiveRound.objects.get(user=user, game=game, round_order=round_data.get('current_round'))
-        #
-        #     current_round.following.clear()
-        #     current_round.save()
-        #     for username in follow_users:
-        #         u = User.objects.get(username=username)
-        #         if u != user:
-        #             current_round.following.add(u)
-        #             current_round.save()
-        #     print(follow_users)
-        #     new_list = {}
-        #     for u in current_round.following.all():
-        #         new_list[u.username] = ({'username': u.username, 'avatar': u.get_avatar, 'score': u.get_score})
-        #
-        #     # g.users.filter(~Q(username__in=i.following.values('username')))
-        #     rest_of_users = []
-        #     for u in current_round.game.users.filter(~Q(username__in=current_round.following.values('username'))).\
-        #             exclude(username=user.username):
-        #         rest_of_users.append({'username': u.username, 'avatar': u.get_avatar, 'score': u.get_score})
-        #
-        #     message.reply_channel.send({
-        #         'text': json.dumps({
-        #             'action': 'followNotify',
-        #             'following': list(new_list.values()),
-        #             'all_players': rest_of_users,
-        #         })
-        #     })
-        # else:
-        #     message.reply_channel.send({
-        #         'text': json.dumps({
-        #             'error': True,
-        #             'msg': 'didn\'t meet game constraints',
-        #         })
-        #     })
-
-
 @channel_session_user
 def initial_submit(message):
     user, game = user_and_game(message)
@@ -366,21 +328,6 @@ def interactive_submit(message):
             for u in current_round.following.all():
                 currently_following.append({'username': u.username, 'avatar': u.get_avatar, 'score': u.get_score})
 
-        # for user in game.users.all():
-        #     d = {u.username: {'username': u.username, 'avatar': u.get_avatar, 'score': u.get_score}
-        #          for u in current_round.following.all()}
-        #     users = []
-        #     for i in game.users.all().exclude(username=user.username):
-        #         try:
-        #             d[i]
-        #         except KeyError:
-        #             users.append({
-        #                 'username': i.username,
-        #                 'avatar': i.get_avatar,
-        #                 'score': i.get_score,
-        #             })
-        #
-        #     following = list(d.values())
             Group(game.user_channel(user)).send({
                 'text': json.dumps({
                     'action': 'outcome',
