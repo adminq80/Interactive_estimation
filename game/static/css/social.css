@@ -13,10 +13,6 @@
   width: 40px;
 }
 
-.coin {
-  width: 40px;
-}
-
 .plusIcon {
   width: 25px;
   height: 25px;
@@ -37,4 +33,8 @@
 
 #unfollow_list td {
   height: 120px;
+}
+
+#coin {
+  height: 30px;
 }
