@@ -24,7 +24,7 @@ function new_follow_list(name, avatar, score) {
       <a href="#" data-toggle="tooltip" data-placement="right" class="toolTip" title="Unfollow a user first">
         <img src="/static/images/plus.ico" class="plusIcon" />
       </a>
-      <img src=${avatar} class="avatar" /> <span class="userScore">score: ${score}</span><img src="/static/images/coin.png" />
+      <img src=${avatar} class="avatar" /> <span class="userScore">score: ${score}</span><img id="coin" src="/static/images/coin.png" />
     </div>
   `);
 }
@@ -32,7 +32,7 @@ function new_follow_list(name, avatar, score) {
 function new_unfollow_list(name, avatar, score) {
   return (`
     <img src=${avatar} class='avatar' />
-    <span>Score: ${score}</span><img src="/static/images/coin.png" />
+    <span>Score: ${score}</span><img id="coin" src="/static/images/coin.png" />
     <button type="button" id=${name} class="btn btn-primary unfollow">Unfollow</button>
   `);
 }
