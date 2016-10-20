@@ -15,7 +15,7 @@ function countdown(counterState) {
       }
     }
   }
-  // tick();
+  tick();
 }
 
 function new_follow_list(name, avatar, score) {
@@ -24,7 +24,7 @@ function new_follow_list(name, avatar, score) {
       <a href="#" data-toggle="tooltip" data-placement="right" class="toolTip" title="Unfollow a user first">
         <img src="/static/images/plus.ico" class="plusIcon" />
       </a>
-      <img src=${avatar} class="avatar" /> <span class="userScore">Score: ${score}</span>
+      <img src=${avatar} class="avatar" /> <span class="userScore">score: ${score}</span><img src="/static/images/coin.png" />
     </div>
   `);
 }
@@ -54,15 +54,6 @@ $("#slider").slider({
   }
 });
 
-$('.slider').slider({ 
-  min: 0,
-  max: 1,
-  step: 0.01,
-  disabled: true 
-});
-
-$(".slider").slider('value',0.5);
-
 //breadcrumbs
 function set_breadcrumbs(state, round) {
   $("#breadcrumbs").show();
@@ -90,6 +81,9 @@ function start_game(data) {
   $("img.img-responsive").attr("src", '/static/plots/' + data.plot);
   countdown(state);
   $("#remaining").html(data.remaining);
+
+  var audio = new Audio('/static/round-sound.mp3');
+  audio.play();
 
 }
 
@@ -188,7 +182,6 @@ $(function () {
             <td id=${user.username}>
               <img src=${avatar} class='avatar' />
               <span>guess: ${user.guess}</span>
-              <div class="slider" id=${user.username}></div>
             </td>
           </tr>
         `);
@@ -267,7 +260,6 @@ $(function () {
 
 $('input#submit').click(function () {
   $("#myModal").modal('show');
-
 
   if (state == 'initial') {
     var guess = $('#guess').val();
