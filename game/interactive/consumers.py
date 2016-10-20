@@ -3,20 +3,26 @@ import logging
 from random import choice
 from decimal import Decimal
 
-from channels import Channel
-from channels import Group
-from channels.auth import channel_session_user_from_http, channel_session_user
+from twisted.internet import reactor
+
 from django.core.cache import cache
+from django.db import transaction
 from django.db.models import Q
 from django.shortcuts import redirect
 from django.urls import reverse
 
+from channels import Channel
+from channels import Group
+from channels.auth import channel_session_user_from_http, channel_session_user
+
 from game.round.models import Plot
-from game.users.models import User
-from .models import Interactive, InteractiveRound
+
+from .utils import avatar
+from .models import Interactive, InteractiveRound, Settings
 
 
 def get_round(game, user=None):
+    # reactor.callLater(seconds, func, *args)
     users = game.users.all()
     if not user:
         user = users[0]
@@ -75,61 +81,92 @@ def user_and_game(message):
     return user, game
 
 
+def send_user_avatar(game, user):
+    Group(game.user_channel(user)).send({
+        'text':
+            json.dumps({
+                'action': 'avatar',
+                'url': '/static/{}'.format(user.get_avatar),
+            })
+    })
+
+
+def send_game_status(game):
+    game.broadcast('info', 'There are currently a total of {} out of {} required '
+                           'participants waiting for the game to start.'.
+                   format(game.users.count(), game.constraints.max_users))
+
+
 @channel_session_user_from_http
 def lobby(message):
+    user = message.user
 
-    user, game = user_and_game(message)
-    if not user.is_authenticated or game is None:
-        # redirect to login
+    if not user.is_authenticated:
         return redirect('/')
 
-    logging.info('user {} just entered {}'.format(user.username, game.group_channel))
+    try:
+        game_settings = Settings.objects.order_by('?')[0]
+    except Settings.DoesNotExist:
+        game_settings, _ = Settings.objects.get_or_create(max_users=5, min_users=0, max_following=2, min_following=0)
+
+    try:
+        with transaction.atomic():
+            game = Interactive.objects.get(users=user)
+    except Interactive.DoesNotExist:
+        game = None
+
+    if game:
+        # user has already been assigned to a game
+        # todo: connect him to the game
+        game.group_channel.add(message.reply_channel)
+        Group(game.user_channel(user)).add(message.reply_channel)
+        send_user_avatar(game, user)
+        send_game_status(game)
+        return
+
+    games = Interactive.objects.filter(started=False).order_by('?')
+
+    if games:
+        for game in games:
+            if game.users.count() < game.constraints.max_users:
+                used_avatars = {i.avatar for i in game.users.all()}
+                user.avatar = avatar(used_avatars)
+                user.save()
+                game.users.add(user)
+                game.save()
+                break
+    else:
+        game = Interactive(constraints=game_settings)
+        game.save()
+        game.users.add(user)
+        game.save()
+        user.avatar = avatar()
+        user.save()
 
     game.group_channel.add(message.reply_channel)
-
-    logging.info("Channel NAME is {}".format(message.reply_channel.name))
-
-    # channel = game.user_channel(user)
-    # if channel:
-    #     Grop(channel).add(message.reply_channel)
-    # else:
-    #     logging.error("Couldn't create a user channel")
-    #     raise Exception("Couldn't create user channel")
     Group(game.user_channel(user)).add(message.reply_channel)
+
+    send_user_avatar(game, user)
 
     users_count = game.users.count()
     waiting_for = game.constraints.max_users - users_count
+
     # TODO: add time to the condition
     if waiting_for == 0:
-        # users = game.users.exclude(username=user.username)
-        # l = [{'username': i.username, 'avatar': i.get_avatar} for i in users]
-        data = cache.get(user.username)
-        if data:
-            # game already started
-            round_ = json.loads(data)
-            if round_:
-                game = Interactive.objects.get(id=round_.get('game'))
-                print(game)
-            else:
-                raise NotImplementedError
-        else:
-            game.started = True
-            game.save()
-            round_ = get_round(game)
+        game.started = True
+        game.save()
+        round_ = get_round(game)
         game.group_channel.send({'text': json.dumps({
             'action': 'initial',
-            # 'users': l,
             'plot': round_.get('plot'),
             'remaining': round_.get('remaining'),
             'current_round': round_.get('current_round'),
         })
         })
-        return
-
-    # TODO I think this should go to the lobby template .. only the variables are passed
-    game.broadcast('info',
-                   'There are currently a total of {} out of {} required participants waiting for the game to start.'.
-                   format(game.users.count(), game.constraints.max_users))
+    else:
+        # TODO I think this should go to the lobby template .. only the variables are passed
+        send_game_status(game)
+    return
 
 
 @channel_session_user
@@ -139,12 +176,9 @@ def exit_game(message):
     if not game.started:
         game.users.remove(user)
         game.save()
-        game.broadcast('info',
-                       'There are currently a total of {} out of {} required '
-                       'participants waiting for the game to start.'.
-                       format(game.users.count(), game.constraints.max_users))
     game.group_channel.discard(message.reply_channel)
     Group(game.user_channel(user)).discard(message.reply_channel)
+    send_game_status(game)
 
 
 def ws_receive(message):

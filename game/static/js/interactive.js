@@ -118,8 +118,13 @@ $(function () {
   var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
   var ws_path = ws_scheme + '://' + window.location.host + "/multiplayer/lobby/";
 
-  console.log("Connecting to " + ws_path);
+  // console.log("Connecting to " + ws_path);
   socket = new ReconnectingWebSocket(ws_path);
+
+  if (!socket){
+    console.log('Socket is null');
+    alert("Your browser doesn't support Websocket");
+  }
 
   // Helpful debugging
   socket.onopen = function () {
@@ -145,8 +150,10 @@ $(function () {
       var proto = ws_scheme == "wss" ? "https://" : "http://";
       window.location.href = proto + window.location.host + data.url;
     }
+    else if(data.action == 'avatar'){
+      $('#user-avatar').attr('src', data.url);
+    }
     else if(data.action == 'initial'){
-      console.log(data);
       start_game(data);
       resetSlider();
 
@@ -163,7 +170,6 @@ $(function () {
       console.log(data.text)
     }
     else if(data.action == 'interactive'){
-      console.log(data);
       start_game(data);
       $(".guess").show();
 
@@ -189,7 +195,6 @@ $(function () {
       })
     }
     else if(data.action == 'outcome'){
-      console.log(data);
       $(".box#score").html(`${data.score}`);
       $("#unfollow_list tbody").html("");
 

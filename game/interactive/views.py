@@ -15,14 +15,6 @@ from game.round.models import Plot
 from .models import Settings, Interactive, InteractiveRound
 
 
-def avatar(exclude=set()):
-    avatars = {'bee.png', 'bird.png', 'cat.png', 'cow.png', 'elephant.png', 'lion.png', 'pig.png', 'cute_cat.png',
-               'cute_panda.png', 'cute_giraffe.png', 'cute_owl.png', 'cute_cat_color.png', 'smart_dog.png',
-               'smart_fox.png', 'smart_monkey.png', 'smart_deer.png'
-               }
-    return choice(list(avatars.symmetric_difference(exclude)))
-
-
 def new_interactive_game(game_settings, user):
     i = Interactive(constraints=game_settings)
     i.save()
@@ -41,7 +33,6 @@ def assign(request):
 
 # Create your views here.
 def lobby(request):
-
     if request.user.is_anonymous:
         u, password = random_user('i')
         u = authenticate(username=u.username, password=password)
@@ -50,45 +41,6 @@ def lobby(request):
         u = request.user
         if u.game_type != 'i':
             return redirect('/')
-
-    try:
-        with transaction.atomic():
-            Interactive.objects.get(users=u)
-        return render(request, 'interactive/lobby.html')
-    except Interactive.DoesNotExist:
-        pass
-
-    try:
-        game_settings = Settings.objects.order_by('?')[0]  # pick game settings at random
-
-    except Exception as e:
-        logging.error('Lobby function: {}'.format(e))
-        game_settings = Settings(max_users=5, min_users=0, max_influencers=3, min_influencers=0)
-        game_settings.save()
-
-    # look for a game that didn't start yet
-    # randomly ordered list of games that haven't started yet
-    games = Interactive.objects.filter(started=False).order_by('?')
-
-    if games:
-        # finding a game for a player
-        for game in games:
-
-            if game.users.count() < game.constraints.max_users:
-                used_avatars = {i.avatar for i in game.users.all()}
-                u.avatar = avatar(used_avatars)
-                u.save()
-                game.users.add(u)
-                game.save()
-                break
-
-        else:  # else for the FOR loop
-            # TODO: log this or raise
-            # This is temp work around
-            new_interactive_game(game_settings, u)
-
-    else:
-        new_interactive_game(game_settings, u)
 
     return render(request, 'interactive/lobby.html')
 
