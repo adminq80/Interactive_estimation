@@ -15,7 +15,7 @@ function countdown(counterState) {
       }
     }
   }
-  tick();
+  // tick();
 }
 
 function new_follow_list(name, avatar, score) {
@@ -32,7 +32,7 @@ function new_follow_list(name, avatar, score) {
 function new_unfollow_list(name, avatar, score) {
   return (`
     <img src=${avatar} class='avatar' />
-    <span>Score: ${score}</span>
+    <span>Score: ${score}</span><img src="/static/images/coin.png" />
     <button type="button" id=${name} class="btn btn-primary unfollow">Unfollow</button>
   `);
 }
@@ -43,16 +43,25 @@ $("#slider").slider({
   step: 0.01,
   slide: function(event, ui) {
     $('#correlation')[0].innerHTML = ui.value;
+      socket.send(JSON.stringify({
+      'action': 'slider',
+      "sliderValue": ui.value
+    }));
   },
   change: function(event, ui) {
     $('.ui-slider-handle').show();
     $('#guess').val(ui.value);
-    socket.send(JSON.stringify({
-      'action': 'slider',
-      "sliderValue": ui.value
-    }));
   }
 });
+
+$('.slider').slider({ 
+  min: 0,
+  max: 1,
+  step: 0.01,
+  disabled: true 
+});
+
+$(".slider").slider('value',0.5);
 
 //breadcrumbs
 function set_breadcrumbs(state, round) {
@@ -173,6 +182,7 @@ $(function () {
             <td id=${user.username}>
               <img src=${avatar} class='avatar' />
               <span>guess: ${user.guess}</span>
+              <div class="slider" id=${user.username}></div>
             </td>
           </tr>
         `);

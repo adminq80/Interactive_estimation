@@ -94,7 +94,7 @@ html, body {
 }
 
 .sample {
-  width: 200px;
+  width: 500px;
 }
 #myModal {
   position: absolute;
@@ -112,6 +112,22 @@ html, body {
   width: 50px;
   margin: auto;
   display: block;
+}
+
+.overview {
+  width: 60%;
+  margin: auto;
+}
+.tooltip {
+  color: red #important;
+}
+
+#sampleSlider {
+  width: 280px;
+}
+
+.submitButton {
+  margin-left: 200px;
 }
 <<<<<<< HEAD
 blockquote.instr {

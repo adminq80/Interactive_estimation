@@ -3,40 +3,95 @@
 {% load staticfiles i18n %}
 
 {% block container %}
-<div class="overview">
+<div class="container">
+  <div class="overview">
   <h2>Experiment Overview</h2>
 
-  <p>
-  After completing the instructions and comprehension check, you will begin the game. The game consists of 20 rounds. Each round you will see a scatter plot and be asked to estimate the correlation of the X and Y variables. While correlations can be positive or negative depending on the slope of the correlation, no negative correlations will be used in this game. 
-  </p>
-
-  <img src="/static/images/plots.gif" class="img-responsive"/>
-
-  <p>
-  Use the slider below the graph to guess the correlation. Your guess can range from 0 to 1, with 0 meaning no correlation, and 1 meaning perfect correlation (a straight line). No calculations are necessary, just make your best estimation.
-  </p>
-
-  <p> 
-  After you have entered your guess, press "submit" and you will be taken to the next round. Once you have finished all 20 rounds, the game is complete and you will be taken to an exit survey.
-  </p>
-
- 
-  <form class="form" action="." method="post">
-  {% csrf_token %}
-
-  <div class="example">
-  <img src="/static/images/example-plot.png" class="img-responsive sample"/>
-  {% include 'components/slider.html' %}
+  <div class="overview-1">
+    <p>
+    After completing the instructions and comprehension check, you will begin the game. The game consists of 20 rounds. Each round you will see a scatter plot and be asked to <b>estimate the correlation of the X and Y variables</b>. <a href="https://en.wikipedia.org/wiki/Pearson_product-moment_correlation_coefficient">Correlation</a> measures how closely two variables are related to each other. For example, the graph below depicts the correlation between age (the X variable), and height (the Y variable). As age increases, height tends to increase as well. 
+    <div><img src="/static/images/height-age.png" /></div>
+    </p>
+    <div class="row">
+      <input class='btn btn-primary nextButton' type="submit" id="submit" value="Next">
+    </div>
   </div>
 
-  <div class="row">
- 
-  <input class='btn btn-primary nextButton' type="submit" id="submit" value="Next">
+  <div class="overview-2" hidden>
+    <p>
+    Your correlation guess can range from 0 to 1, and the closer the points fit to a line, the closer the correlation will be to 1. No calculations are necessary, just make your best estimate.
+    </p>
+    <div><img src="/static/images/correlation-examples.png" class="sample" /></div>
+    <div class="row">
+      <input class='btn btn-primary prevButton' type="submit" id="submit" value="Previous">
+      <input class='btn btn-primary nextButton' type="submit" id="submit" value="Next">
+    </div>
   </div>
-  </form>
+  <div class="overview-3" hidden>
+    <p>
+    Note that many different graphs may have the same correlation value. All 4 of the graphs below have a correlation of 0.82.
+    </p>
+    <div><img src="/static/images/same-correlation.png" /></div>
+    <div class="row">
+      <input class='btn btn-primary prevButton' type="submit" id="submit" value="Previous">
+      <input class='btn btn-primary nextButton' type="submit" id="submit" value="Next">
+    </div>
+  </div>
+
+  <div class="overview-4" hidden>
+    <p>
+    Each round will consist of 2 stages:
+    </p>
+    
+    <p>
+    1. Your Guess: You will enter your estimation for the correlation of the plot shown. Use the slider below the plot to pick a value. When you have finalized your guess, hit "Submit." You will have 30 seconds to enter your guess.
+    </p>
+    <img src="/static/images/example-plot.png" class="img-responsive sample"/>
+
+    <div class="row">
+      <label>Your guess:&nbsp;</label><span id="correlation"></span>
+    </div>
+    <div class="row">
+      <label>Actual correlation:&nbsp;</label><span class="answer"></span>
+    </div>
+    <div class="row">
+      <label>Pick a value on the line.</label>
+    </div>
+    <div class='row'>
+      <div id="sampleSlider"></div>
+        0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.25 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.5 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.75 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1
+    </div>
+    <div class="row">
+      <input class='btn btn-primary submitButton' type="submit" id="submit" value="Submit">
+    </div>
+    <div class="row">
+      <input class='btn btn-primary prevButton' type="submit" id="submit" value="Previous">
+      <input class='btn btn-primary nextButton' type="submit" id="submit" value="Next">
+    </div>
+  </div>
+
+  <div class="overview-5" hidden>
+    <p>
+    2. Round Outcome: Here you can see how well you performed on your guess. This stage shows your previous guess, the actual correlation value, as well as your score/earnings. When you are finished with the overview, hit “Next.” Or, if you wait 30 seconds you will be taken to the next round anyway.
+    </p>
+    <div>
+    <img src="/static/images/control-sample.png" class="img-responsive sample"/>
+    </div>
+    <div class="row">
+    <input class='btn btn-primary prevButton' type="submit" id="submit" value="Previous">
+
+    <form class="form" action="." method="post">
+    {% csrf_token %}
+    <input class='btn btn-primary nextButton' type="submit" id="submit" value="Next">
+    </div>
+    </form>
+  </div>
+
+ </div>
 </div>
 {% endblock %}
 
 {% block extra_javascript %}
   <script src="{% static 'js/game.js' %}"></script>
+  <script src="{% static 'js/instructions.js' %}"></script>
 {% endblock %}
