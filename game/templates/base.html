@@ -33,7 +33,7 @@
               <form class="logout" action='{% url "account_logout" %}' method="post">
                 {% if user.game_type == "i" %}
                 <span class="user">
-                  User: <img src='/static/images/avatars/{{user.avatar}}' class="avatar" />
+                  User: <img src='' class="avatar" id="user-avatar" />
                 </span>
                 {% endif %}
                 {% csrf_token %}
