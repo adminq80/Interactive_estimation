@@ -22,7 +22,7 @@ class Round(models.Model):
     plot = models.ForeignKey(Plot, on_delete=models.CASCADE)
 
     round_order = models.PositiveSmallIntegerField()
-    guess = models.DecimalField(max_digits=3, decimal_places=2)
+    guess = models.DecimalField(max_digits=3, decimal_places=2, default=Decimal('NaN'))
 
     # start time of the round
     # end time of the round

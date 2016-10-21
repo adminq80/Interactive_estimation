@@ -1,6 +1,7 @@
 import json
 import uuid
 
+from decimal import Decimal
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
@@ -41,7 +42,7 @@ class InteractiveRound(Round):
     following = models.ManyToManyField(settings.AUTH_USER_MODEL, symmetrical=False, related_name='following')
     # followers = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='followers', null=True)
 
-    influenced_guess = models.DecimalField(max_digits=3, decimal_places=2, null=True)
+    influenced_guess = models.DecimalField(max_digits=3, decimal_places=2, default=Decimal('NaN'))
     game = models.ForeignKey('Interactive', null=True, on_delete=models.CASCADE)
     outcome = models.BooleanField(default=False)
 

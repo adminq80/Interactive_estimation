@@ -158,7 +158,6 @@ def lobby(message):
         game.broadcast(action='initial', plot=round_.get('plot'), remaining=round_.get('remaining'),
                        current_round=round_.get('current_round'))
     else:
-        # TODO I think this should go to the lobby template .. only the variables are passed
         send_game_status(game)
     return
 
