@@ -1,7 +1,7 @@
 //timer
-function countdown(counterState) {
+function countdown(counterState, s) {
   var counter = $('#counter');
-  var seconds = 30;
+  var seconds = s || 30;
 
   function tick() {
     if(counterState == state) {
@@ -71,7 +71,7 @@ function resetSlider() {
   $('#correlation')[0].innerHTML = '';
 }
 
-function start_game(data) {
+function start_game(data, seconds) {
   state = data.action;
   $("#myModal").modal('hide');
   $("#lobby").hide();
@@ -79,7 +79,7 @@ function start_game(data) {
   $("#game").show();
 
   $("img.img-responsive").attr("src", '/static/plots/' + data.plot);
-  countdown(state);
+  countdown(state, seconds);
   $("#remaining").html(data.remaining);
 
   var audio = new Audio('/static/round-sound.mp3');
@@ -130,6 +130,7 @@ $(function () {
   };
 
   socket.onmessage = function (msg) {
+    console.log(msg.data);
     var data = JSON.parse(msg.data);
 
     if(data.error){
@@ -149,7 +150,7 @@ $(function () {
       $('#user-avatar').attr('src', data.url);
     }
     else if(data.action == 'initial'){
-      start_game(data);
+      start_game(data, data.seconds);
       resetSlider();
 
       $(".guess").show();
@@ -165,7 +166,7 @@ $(function () {
       console.log(data.text)
     }
     else if(data.action == 'interactive'){
-      start_game(data);
+      start_game(data, data.seconds);
       $(".guess").show();
 
       $("#interactiveGuess").show();
@@ -196,7 +197,7 @@ $(function () {
         $("#unfollow_list tbody").append("<tr><td></td></tr>");
       }
 
-      start_game(data);
+      start_game(data, data.seconds);
       $("#interactiveGuess").hide();
       $(".guess").hide();
       $(".outcome").show();

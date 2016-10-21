@@ -20,16 +20,17 @@ from game.round.models import Plot
 from .utils import avatar
 from .models import Interactive, InteractiveRound, Settings
 
+SECONDS = 30
+
 
 def get_round(game, user=None):
-    # reactor.callLater(seconds, func, *args)
-    users = game.users.all()
+    users = game.users.order_by('?')
     if not user:
         user = users[0]
     played_rounds = InteractiveRound.objects.filter(user=user, game=game)
 
     plot_pks = {i.plot.pk for i in played_rounds}
-    current_round = len(plot_pks)
+    current_round = played_rounds.count()
 
     remaining = Plot.objects.count() - current_round
     print('current_round ======================== {}'.format(current_round))
@@ -38,6 +39,7 @@ def get_round(game, user=None):
 
     plots = Plot.objects.exclude(pk__in=plot_pks)
     plot = choice(plots)
+
     for user in users.all():
         cache.set(user.username, json.dumps({
             'game': game.id,
@@ -45,21 +47,14 @@ def get_round(game, user=None):
             'plot': plot.plot,
             'remaining': remaining,
         }))
-        try:
-            i_round = InteractiveRound(user=user, game=game, plot=plot, round_order=current_round, guess=Decimal(-3),
-                                       influenced_guess=Decimal(-3))
-            i_round.save()
-        except InteractiveRound.IntegrityError:
-            round = InteractiveRound.objects.get(user=user, game=game, plot=plot, round_order=current_round,
-                                                 guess=Decimal(-3), influenced_guess=Decimal(-3))
-            return {'plot': round.plot.plot, 'current_round': round.round_order, 'remaining': remaining}
+
+        i_round = InteractiveRound(user=user, game=game, plot=plot, round_order=current_round)
+        i_round.save()
 
         if current_round == 0:
             # random initial game configuration
             following = users.exclude(username=user.username).order_by('?')[:game.constraints.max_following]  # random
-            print(user)
             for f in following.all():
-                print('Going to follow {}'.format(f.username))
                 i_round.following.add(f)
             i_round.save()
         else:
@@ -118,11 +113,27 @@ def lobby(message):
         # todo: connect him to the game
         # check if the game has ended then ??
         #
+
         if game.end_time is None:
             game.group_channel.add(message.reply_channel)
             Group(game.user_channel(user)).add(message.reply_channel)
             send_user_avatar(game, user)
-            send_game_status(game)
+            if game.started:
+                # game started we need to assigned player to the latest round with the correct mode
+                d = json.loads(cache.get(game.id))
+                state = d.get('state')
+                round_data = d.get('round_data')
+                if state == 'initial':
+                    initial(game, round_data, message)
+                elif state == 'interactive':
+                    interactive(game, round_data, message)
+                elif state == 'outcome':
+                    outcome(game, round_data, message)
+                else:
+                    raise Exception('Unknown state')
+                return
+            else:
+                send_game_status(game)
         else:
             # todo: logout then try to to connect him/ again
             game.broadcast(error=True, msg='The has ended please login back again')
@@ -193,14 +204,13 @@ def data_broadcast(message):
     slider = float(message.get('sliderValue'))
     if slider:
         user, game = user_and_game(message)
+        state = json.loads(cache.get(game.id)).get('state')
+        if state != 'interactive':
+            return
         # Returns every one who followed this user on this round
         round_data = json.loads(cache.get(user.username))
         rounds = InteractiveRound.objects.filter(following=user, round_order=round_data.get('current_round'))
         # check the game and state and make sure we are on interactive mode
-        print('1'*20)
-        print('ROUNDS')
-        print(rounds.all())
-        print('1'*20)
 
         for user_round in rounds.all():
             # r = InteractiveRound.objects.filter(user=follower,
@@ -228,18 +238,13 @@ def data_broadcast(message):
 def follow_list(message):
     user, game = user_and_game(message)
     follow_users = message.get('following')
-    print('*'*20)
-    print(follow_users)
-    print('*'*20)
     # a list of all the usernames to follow
     if len(follow_users) <= game.constraints.max_following:
         round_data = json.loads(cache.get(user.username))
         next_round = InteractiveRound.objects.get(user=user, round_order=round_data.get('current_round'))
 
-        print('Next Round Following list before clearing {}'.format(next_round.following.count()))
         next_round.following.clear()
         next_round.save()
-        print('Next Round following list {}'.format(next_round.following.count()))
 
         u_can_follow = []
         just_followed = []
@@ -258,7 +263,6 @@ def follow_list(message):
                 u_can_follow.append(d)
 
         next_round.save()
-        print('After loop following list {}'.format(next_round.following.count()))
 
         message.reply_channel.send({'text':json.dumps({
             'action': 'followNotify',
@@ -266,7 +270,6 @@ def follow_list(message):
             'all_players': u_can_follow,
         })})
     else:
-
         message.reply_channel.send({'text': json.dumps({
             'error': True,
             'msg': 'didn\'t meet game constraints max is {} and list is {}'.format(game.constraints.max_following,
@@ -298,29 +301,6 @@ def initial_submit(message):
         })
         return
 
-    remaining_users = InteractiveRound.objects.filter(game=game, guess=Decimal(-3),
-                                                      round_order=round_data.get('current_round'))
-    if remaining_users.count() == 0:
-        # Interactive On
-        pass
-        # for user in game.users.all():
-        #     current_round = InteractiveRound.objects.get(user=user, round_order=round_data.get('current_round'))
-        #     following = [{'username': u.username, 'avatar': u.get_avatar, 'guess':
-        #         float(InteractiveRound.objects.get(user=u, round_order=round_data.get('current_round')).guess)}
-        #                  for u in current_round.following.all()]
-        #     Group(game.user_channel(user)).send({
-        #         'text': json.dumps({
-        #             'action': 'interactive',
-        #             'plot': round_data.get('plot'),
-        #             'score': user.get_score,
-        #             'remaining': round_data.get('remaining'),
-        #             'current_round': round_data.get('current_round'),
-        #             # a list of dicts of {usernames and avatars} for the players that the user follows
-        #             'following': following,
-        #         })
-        #     })
-    return
-
 
 @channel_session_user
 def interactive_submit(message):
@@ -340,44 +320,6 @@ def interactive_submit(message):
         })
         return
 
-    remaining_users = InteractiveRound.objects.filter(game=game, influenced_guess=Decimal(-3),
-                                                      round_order=round_data.get('current_round'))
-    if remaining_users.count() == 0:
-        # Outcome On
-        pass
-        # for user in game.users.all():
-        #     current_round = InteractiveRound.objects.get(user=user, round_order=round_data.get('current_round'))
-        #     rest_of_users = []
-        #     print('=' * 20)
-        #     for u in current_round.game.users.filter(~Q(username__in=current_round.following.values('username')))\
-        #             .exclude(username=user.username):
-        #         print(u)
-        #         rest_of_users.append({'username': u.username, 'avatar': u.get_avatar, 'score': u.get_score})
-        #     print('=' * 20)
-        #     currently_following = []
-        #     for u in current_round.following.all():
-        #         currently_following.append({'username': u.username, 'avatar': u.get_avatar, 'score': u.get_score})
-        #
-        #     Group(game.user_channel(user)).send({
-        #         'text': json.dumps({
-        #             'action': 'outcome',
-        #             'plot': round_data.get('plot'),
-        #             'remaining': round_data.get('remaining'),
-        #             'current_round': round_data.get('current_round'),
-        #             # a list of dicts of {usernames and avatars} for the players that the user follows
-        #             'guess': float(current_round.influenced_guess),
-        #             'score': user.get_score,
-        #             'following': currently_following,
-        #             'all_players': rest_of_users,
-        #             'max_following': game.constraints.max_following,
-        #             'correct_answer': float(current_round.plot.answer),
-        #         })
-        #     })
-        # # we assign users to the next game
-        # round_ = get_round(game)
-        # if round_ is None:
-        #     game.broadcast(action='redirect', url=reverse('interactive:exit'))
-        return
     message.reply_channel.send({
         'text': json.dumps({
             'guess': guess,
@@ -390,93 +332,122 @@ def interactive_submit(message):
 def round_outcome(message):
     user, game = user_and_game(message)
     round_data = json.loads(cache.get(user.username))
-    if round_data is None:
-        print('round_data is None')
-        return
-    round_ = InteractiveRound.objects.get(user=user, game=game, round_order=round_data.get('current_round')-1)
+    round_ = InteractiveRound.objects.get(user=user, game=game, round_order=round_data.get('current_round'))
     round_.outcome = True
     round_.save()
-    waiting_for = InteractiveRound.objects.filter(game=game, round_order=round_data.get('current_round')-1,
-                                                  outcome=False).count()
-
-    print('#'*20)
-    print('waiting for')
-    print(waiting_for)
-    print('#'*20)
-
-    if waiting_for == 0:
-        game.broadcast(action='initial', plot=round_data.get('plot'), remaining=round_data.get('remaining'),
-                       current_round=round_data.get('current_round'))
     return
 
 
 def start_initial(game):
     round_data = get_round(game)
-
+    cache.set(game.id, json.dumps({'state': 'initial',
+                                   'round_data': round_data,
+                                   }))
     if round_data is None:
         game.broadcast(action='redirect', url=reverse('interactive:exit'))
-
-    game.broadcast(action='initial', plot=round_data.get('plot'), remaining=round_data.get('remaining'),
-                   current_round=round_data.get('current_round'))
-    task.deferLater(reactor, 30, start_interactive, game, round_data)
+    initial(game, round_data)
+    task.deferLater(reactor, SECONDS, start_interactive, game, round_data)
     return
+
+
+def initial(game, round_data, message=None):
+    data = {'action': 'initial',
+            'plot': round_data.get('plot'),
+            'remaining': round_data.get('remaining'),
+            'current_round': round_data.get('current_round'),
+            'seconds': SECONDS,
+    }
+
+    if message:
+        # send to only one user and return
+        message.reply_channel.send({
+            'text': json.dumps(data)
+        })
+        return
+    game.broadcast(**data)
 
 
 def start_interactive(game, round_data):
-    for user in game.users.all():
-        current_round = InteractiveRound.objects.get(user=user, round_order=round_data.get('current_round'))
-        following = [{'username': u.username, 'avatar': u.get_avatar, 'guess':
-            float(InteractiveRound.objects.get(user=u, round_order=round_data.get('current_round')).guess)}
-                     for u in current_round.following.all()]
-        Group(game.user_channel(user)).send({
-            'text': json.dumps({
-                'action': 'interactive',
-                'plot': round_data.get('plot'),
-                'score': user.get_score,
-                'remaining': round_data.get('remaining'),
-                'current_round': round_data.get('current_round'),
-                # a list of dicts of {usernames and avatars} for the players that the user follows
-                'following': following,
-            })
-        })
-    task.deferLater(reactor, 30, start_outcome, game, round_data)
+    cache.set(game.id, json.dumps({'state': 'interactive',
+                                'round_data': round_data,
+                                }))
+    interactive(game, round_data)
+    task.deferLater(reactor, SECONDS, start_outcome, game, round_data)
     return
 
 
-def start_outcome(game, round_data):
+def interactive(game, round_data, message=None):
+    if message:
+        interactive_loop(message.user, game, round_data)
+        return
+
     for user in game.users.all():
-        current_round = InteractiveRound.objects.get(user=user, round_order=round_data.get('current_round'))
-        rest_of_users = []
-        print('=' * 20)
-        for u in current_round.game.users.filter(~Q(username__in=current_round.following.values('username'))) \
-                .exclude(username=user.username):
-            print(u)
-            rest_of_users.append({'username': u.username, 'avatar': u.get_avatar, 'score': u.get_score})
-        print('=' * 20)
-        currently_following = []
-        for u in current_round.following.all():
-            currently_following.append({'username': u.username, 'avatar': u.get_avatar, 'score': u.get_score})
+        interactive_loop(user, game, round_data)
+    return
 
-        Group(game.user_channel(user)).send({
-            'text': json.dumps({
-                'action': 'outcome',
-                'plot': round_data.get('plot'),
-                'remaining': round_data.get('remaining'),
-                'current_round': round_data.get('current_round'),
-                # a list of dicts of {usernames and avatars} for the players that the user follows
-                'guess': float(current_round.influenced_guess),
-                'score': user.get_score,
-                'following': currently_following,
-                'all_players': rest_of_users,
-                'max_following': game.constraints.max_following,
-                'correct_answer': float(current_round.plot.answer),
-            })
+
+def interactive_loop(user, game, round_data):
+    current_round = InteractiveRound.objects.get(user=user, round_order=round_data.get('current_round'))
+    following = [{'username': u.username, 'avatar': u.get_avatar, 'guess':
+        float(InteractiveRound.objects.get(user=u, round_order=round_data.get('current_round')).get_guess())}
+                 for u in current_round.following.all()]
+    Group(game.user_channel(user)).send({
+        'text': json.dumps({
+            'action': 'interactive',
+            'plot': round_data.get('plot'),
+            'score': user.get_score,
+            'remaining': round_data.get('remaining'),
+            'current_round': round_data.get('current_round'),
+            # a list of dicts of {usernames and avatars} for the players that the user follows
+            'following': following,
+            'seconds': SECONDS,
         })
-    task.deferLater(reactor, 30, start_initial, game)
+    })
 
 
-def foo(game):
-    print('&'*30)
-    print("{}{}".format(' '*15, 'Called'))
-    print('&'*30)
-    game.broadcast(foo='foo', msg='Hello world')
+def start_outcome(game, round_data):
+    cache.set(game.id, json.dumps({'state': 'outcome',
+                                'round_data': round_data,
+                                }))
+    outcome(game, round_data)
+    task.deferLater(reactor, SECONDS, start_initial, game)
+    return
+
+
+def outcome(game, round_data, message=None):
+    if message:
+        outcome_loop(message.user, game, round_data)
+        return
+
+    for user in game.users.all():
+        outcome_loop(user, game, round_data)
+    return
+
+
+def outcome_loop(user, game, round_data):
+    current_round = InteractiveRound.objects.get(user=user, round_order=round_data.get('current_round'))
+    rest_of_users = []
+    for u in current_round.game.users.filter(~Q(username__in=current_round.following.values('username'))) \
+            .exclude(username=user.username):
+        rest_of_users.append({'username': u.username, 'avatar': u.get_avatar, 'score': u.get_score})
+
+    currently_following = []
+    for u in current_round.following.all():
+        currently_following.append({'username': u.username, 'avatar': u.get_avatar, 'score': u.get_score})
+
+    Group(game.user_channel(user)).send({
+        'text': json.dumps({
+            'action': 'outcome',
+            'plot': round_data.get('plot'),
+            'remaining': round_data.get('remaining'),
+            'current_round': round_data.get('current_round'),
+            # a list of dicts of {usernames and avatars} for the players that the user follows
+            'guess': float(current_round.get_influenced_guess()),
+            'score': user.get_score,
+            'following': currently_following,
+            'all_players': rest_of_users,
+            'max_following': game.constraints.max_following,
+            'correct_answer': float(current_round.plot.answer),
+            'seconds': SECONDS,
+        })
+    })

@@ -65,6 +65,9 @@ class InteractiveRound(Round):
                                       })
         return data
 
+    def get_influenced_guess(self):
+        return -1 if self.influenced_guess.is_nan() else self.influenced_guess
+
 
 class Interactive(models.Model):
     users = models.ManyToManyField(settings.AUTH_USER_MODEL)

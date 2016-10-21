@@ -45,4 +45,5 @@ class User(AbstractUser):
             raise NotImplemented('Not Implemented')
 
         played_rounds = cls.objects.filter(user=self, guess__gte=Decimal(0.0))
-        return calculate_score(played_rounds)
+        score = calculate_score(played_rounds)
+        return score if score > 0 else 0
