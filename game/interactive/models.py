@@ -1,6 +1,8 @@
 import json
 import uuid
 
+from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.conf import settings
 
@@ -10,16 +12,26 @@ from game.round.models import Round
 
 
 class Settings(models.Model):
+    """
+    :var alpha is number of rounds to take into account when making score calculation
+    """
     max_users = models.PositiveSmallIntegerField()
     min_users = models.PositiveSmallIntegerField()
 
     max_following = models.PositiveSmallIntegerField()
     min_following = models.PositiveSmallIntegerField()
 
+    score_lambda = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
+
     def __str__(self):
         return "Settings: users({},{}), following({},{})".format(self.min_users, self.max_users,
                                                                  self.min_following, self.max_following
                                                                  )
+
+    def save(self, *args, **kwargs):
+        if self.max_users > self.min_users and self.max_users > self.max_following > self.min_following:
+            return super(Settings, self).save(*args, **kwargs)
+        raise ValidationError("Didn't meet logical constraints for the Settings model")
 
     class Meta:
         verbose_name_plural = 'Settings'
