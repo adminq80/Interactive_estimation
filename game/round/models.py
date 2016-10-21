@@ -29,7 +29,7 @@ class Round(models.Model):
     start_time = models.DateTimeField(auto_now=True, null=True)
     end_time = models.DateTimeField(null=True)
 
-    # todo: add cumulative and round scores
+    # todo: change control treatment
     score = models.DecimalField(max_digits=3, decimal_places=2, default=Decimal(0))
 
     def __str__(self):
