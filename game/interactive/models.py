@@ -81,11 +81,8 @@ class Interactive(models.Model):
     def group_channel(self):
         return Group('game-{}'.format(self.id))
 
-    def broadcast(self, action, msg):
-        packet = json.dumps({
-            'action': action,
-            'text': msg,
-        })
+    def broadcast(self, **kwargs):
+        packet = json.dumps(kwargs)
         self.group_channel.send({'text': packet})
 
     def user_channel(self, user):

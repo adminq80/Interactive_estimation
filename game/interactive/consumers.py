@@ -3,8 +3,6 @@ import logging
 from random import choice
 from decimal import Decimal
 
-from twisted.internet import reactor
-
 from django.core.cache import cache
 from django.db import transaction
 from django.db.models import Q
@@ -14,6 +12,8 @@ from django.urls import reverse
 from channels import Channel
 from channels import Group
 from channels.auth import channel_session_user_from_http, channel_session_user
+from twisted.internet import task, reactor
+
 
 from game.round.models import Plot
 
@@ -92,9 +92,7 @@ def send_user_avatar(game, user):
 
 
 def send_game_status(game):
-    game.broadcast('info', 'There are currently a total of {} out of {} required '
-                           'participants waiting for the game to start.'.
-                   format(game.users.count(), game.constraints.max_users))
+    game.broadcast(action='info', connected_players=game.users.count(), total_players=game.constraints.max_users)
 
 
 @channel_session_user_from_http
@@ -156,13 +154,9 @@ def lobby(message):
         game.started = True
         game.save()
         round_ = get_round(game)
-        game.group_channel.send({'text': json.dumps({
-            'action': 'initial',
-            'plot': round_.get('plot'),
-            'remaining': round_.get('remaining'),
-            'current_round': round_.get('current_round'),
-        })
-        })
+        task.deferLater(reactor, 5, foo, game)
+        game.broadcast(action='initial', plot=round_.get('plot'), remaining=round_.get('remaining'),
+                       current_round=round_.get('current_round'))
     else:
         # TODO I think this should go to the lobby template .. only the variables are passed
         send_game_status(game)
@@ -380,10 +374,7 @@ def interactive_submit(message):
         # we assign users to the next game
         round_ = get_round(game)
         if round_ is None:
-            game.group_channel.send({'text': json.dumps({
-                'action': 'redirect',
-                'url': reverse('interactive:exit'),
-            })})
+            game.broadcast(action='redirect', url=reverse('interactive:exit'))
         return
     message.reply_channel.send({
         'text': json.dumps({
@@ -412,11 +403,13 @@ def round_outcome(message):
     print('#'*20)
 
     if waiting_for == 0:
-        game.group_channel.send({'text': json.dumps({
-            'action': 'initial',
-            'plot': round_data.get('plot'),
-            'remaining': round_data.get('remaining'),
-            'current_round': round_data.get('current_round'),
-        })
-        })
+        game.broadcast(action='initial', plot=round_data.get('plot'), remaining=round_data.get('remaining'),
+                       current_round=round_data.get('current_round'))
     return
+
+
+def foo(game):
+    print('&'*30)
+    print("{}{}".format(' '*15, 'Called'))
+    print('&'*30)
+    game.broadcast(foo='foo', msg='Hello world')

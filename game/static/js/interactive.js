@@ -138,10 +138,11 @@ $(function () {
     }
 
     if(data.action == "info"){
-      document.querySelector('#waiting').innerHTML = data.text;
+      document.querySelector('#connected_players').innerHTML = data.connected_players || 0;
+      document.querySelector('#total_players').innerHTML = data.total_players || 0;
     }
     else if(data.action == "redirect"){
-      var proto = ws_scheme == "wss" ? "https://" : "http://";
+      var proto = (ws_scheme == "wss") ? "https://" : "http://";
       window.location.href = proto + window.location.host + data.url;
     }
     else if(data.action == 'avatar'){
