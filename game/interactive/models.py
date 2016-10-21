@@ -82,7 +82,7 @@ class Interactive(models.Model):
 
 class Survey(models.Model):
     # user = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='influenced_users')
-    username = models.CharField(max_length=255)
+    username = models.CharField(max_length=255, blank=True, null=True)
     game = models.OneToOneField(Interactive)
     age = models.PositiveSmallIntegerField(null=True)
     gender = models.CharField(max_length=10, choices=(('m', 'Male'),
