@@ -46,4 +46,4 @@ class User(AbstractUser):
 
         played_rounds = cls.objects.filter(user=self, guess__gte=Decimal(0.0))
         score = calculate_score(played_rounds)
-        return score if score > 0 else 0
+        return score if score else 0
