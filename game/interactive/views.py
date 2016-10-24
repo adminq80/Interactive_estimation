@@ -118,7 +118,4 @@ def exit_survey(request):
             instance.game = game
             instance.save()
 
-    if game.end_time is None:
-        game.end_time = timezone.now()
-        game.save()
     return render(request, 'control/survey.html', {'form': form, 'score': request.user.get_score})

@@ -42,7 +42,7 @@ class InteractiveRound(Round):
     following = models.ManyToManyField(settings.AUTH_USER_MODEL, symmetrical=False, related_name='following')
     # followers = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='followers', null=True)
 
-    influenced_guess = models.DecimalField(max_digits=3, decimal_places=2, default=Decimal('NaN'))
+    influenced_guess = models.DecimalField(max_digits=3, decimal_places=2, null=True)
     game = models.ForeignKey('Interactive', null=True, on_delete=models.CASCADE)
     outcome = models.BooleanField(default=False)
 
@@ -90,7 +90,11 @@ class Interactive(models.Model):
         self.group_channel.send({'text': packet})
 
     def user_channel(self, user):
-        return 'user-{}-{}'.format(self.id, user.id)
+        return Group('user-{}-{}'.format(self.id, user.id))
+
+    def user_send(self, user, **kwargs):
+        packet = json.dumps(kwargs)
+        return self.user_channel(user).send({'text': packet})
 
 
 class Survey(models.Model):
