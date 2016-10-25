@@ -34,7 +34,7 @@ def get_round(game, user=None):
     plot_pks = {i.plot.pk for i in played_rounds}
     current_round = played_rounds.count()
 
-    remaining = Plot.objects.count() - current_round
+    remaining = game.constraints.max_rounds - current_round
     print('current_round ======================== {}'.format(current_round))
     if remaining == 0:
         return None
