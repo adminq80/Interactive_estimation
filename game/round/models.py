@@ -57,7 +57,7 @@ class Round(models.Model):
         return data
 
     def get_guess(self):
-        return -1 if self.guess.is_nan() else self.guess
+        return float(self.guess) if self.guess else -1
 
     class Meta:
         unique_together = (('user', 'round_order',),)

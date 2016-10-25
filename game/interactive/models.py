@@ -66,7 +66,7 @@ class InteractiveRound(Round):
         return data
 
     def get_influenced_guess(self):
-        return -1 if self.influenced_guess.is_nan() else self.influenced_guess
+        return float(self.influenced_guess) if self.influenced_guess else -1
 
 
 class Interactive(models.Model):

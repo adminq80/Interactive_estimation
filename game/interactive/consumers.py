@@ -3,6 +3,7 @@ import logging
 from random import choice
 from decimal import Decimal
 
+import twisted
 from django.core.cache import cache
 from django.db import transaction
 from django.db.models import Count
@@ -42,14 +43,14 @@ def get_round(game, user=None):
     plot = choice(plots)
 
     for user in users.all():
-        cache.set(user.username, json.dumps({
-            'game': game.id,
-            'current_round': current_round,
-            'plot': plot.plot,
-            'remaining': remaining,
-        }))
+        # cache.set(user.username, json.dumps({
+        #     'game': game.id,
+        #     'current_round': current_round,
+        #     'plot': plot.plot,
+        #     'remaining': remaining,
+        # }))
 
-        i_round = InteractiveRound(user=user, game=game, plot=plot, round_order=current_round)
+        i_round, _ = InteractiveRound.objects.get_or_create(user=user, game=game, plot=plot, round_order=current_round)
         i_round.save()
 
         if current_round == 0:
@@ -206,18 +207,17 @@ def data_broadcast(message):
     slider = float(message.get('sliderValue'))
     if slider:
         user, game = user_and_game(message)
-        state = json.loads(cache.get(game.id)).get('state')
-        if state != 'interactive':
-            return
-        # Returns every one who followed this user on this round
-        round_data = json.loads(cache.get(user.username))
-        rounds = InteractiveRound.objects.filter(following=user, round_order=round_data.get('current_round'))
-        # check the game and state and make sure we are on interactive mode
+        d = json.loads(cache.get(game.id))
+        state = d.get('state')
+        round_data = d.get('round_data')
+        if state == 'interactive':
+            # Returns every one who followed this user on this round
+            rounds = InteractiveRound.objects.filter(following=user, game=game, round_order=round_data.get('current_round'))
+            # check the game and state and make sure we are on interactive mode
 
-        for user_round in rounds.all():
-            print('Going to send data to {}'.format(user_round.user.username))
-            game.user_send(user, action='sliderChange', username=user.username, slider=slider)
-
+            for user_round in rounds.all():
+                print('Going to send data to {}'.format(user_round.user.username))
+                game.user_send(user_round.user, action='sliderChange', username=user.username, slider=slider)
     else:
         logging.error('Got invalid value for slider')
 
@@ -227,13 +227,15 @@ def follow_list(message):
     user, game = user_and_game(message)
     follow_users = message.get('following')
     # a list of all the usernames to follow
+    d = json.loads(cache.get(game.id))
+    state = d.get('state')
+    round_data = d.get('round_data')
+    if state != 'outcome':
+        return
     if len(follow_users) <= game.constraints.max_following:
-        round_data = json.loads(cache.get(user.username))
         next_round = InteractiveRound.objects.get(user=user, round_order=round_data.get('current_round'))
-
         next_round.following.clear()
         next_round.save()
-
         u_can_follow = []
         just_followed = []
         for u in game.users.all():
@@ -269,61 +271,63 @@ def follow_list(message):
 def initial_submit(message):
     user, game = user_and_game(message)
     guess = message.get('guess')
-    try:
-        round_data = json.loads(cache.get(user.username))
-        current_round = InteractiveRound.objects.get(user=user, round_order=round_data.get('current_round'))
-        current_round.guess = Decimal(guess)
-        current_round.save()
-        message.reply_channel.send({
-            'text': json.dumps({
-                'guess': guess,
-                'status': 1,
+    d = json.loads(cache.get(game.id))
+    state = d.get('state')
+    round_data = d.get('round_data')
+    if state == 'initial':
+        try:
+            current_round = InteractiveRound.objects.get(user=user, game=game,
+                                                         round_order=round_data.get('current_round'))
+            current_round.guess = Decimal(guess)
+            current_round.save()
+        except InteractiveRound.DoesNotExist:
+            message.reply_channel.send({
+                'text': json.dumps({
+                    'error': True,
+                    'msg': "User not found",
+                })
             })
-        })
-    except InteractiveRound.DoesNotExist:
-        message.reply_channel.send({
-            'text': json.dumps({
-                'error': True,
-                'msg': "User not found",
-            })
-        })
-        return
 
 
 @channel_session_user
 def interactive_submit(message):
-    auth_user, game = user_and_game(message)
+    user, game = user_and_game(message)
     guess = message.get('socialGuess')
-    try:
-        round_data = json.loads(cache.get(auth_user.username))
-        current_round = InteractiveRound.objects.get(user=auth_user, round_order=round_data.get('current_round'))
-        current_round.influenced_guess = Decimal(guess)
-        current_round.save()
-    except InteractiveRound.DoesNotExist:
-        message.reply_channel.send({
-            'text': json.dumps({
-                'error': True,
-                'msg': "User not found",
+    d = json.loads(cache.get(game.id))
+    state = d.get('state')
+    round_data = d.get('round_data')
+    if state == 'interactive':
+        try:
+            current_round = InteractiveRound.objects.get(user=user, game=game,
+                                                         round_order=round_data.get('current_round'))
+            current_round.influenced_guess = Decimal(guess)
+            current_round.save()
+        except InteractiveRound.DoesNotExist:
+            message.reply_channel.send({
+                'text': json.dumps({
+                    'error': True,
+                    'msg': "User not found",
+                })
             })
-        })
-        return
-
-    message.reply_channel.send({
-        'text': json.dumps({
-            'guess': guess,
-            'status': 1,
-        })
-    })
 
 
 @channel_session_user
 def round_outcome(message):
-    user, game = user_and_game(message)
-    round_data = json.loads(cache.get(user.username))
-    round_ = InteractiveRound.objects.get(user=user, game=game, round_order=round_data.get('current_round'))
-    round_.outcome = True
-    round_.save()
+    # user, game = user_and_game(message)
+    # round_data = json.loads(cache.get(user.username))
+    # round_ = InteractiveRound.objects.get(user=user, game=game, round_order=round_data.get('current_round'))
+    # round_.outcome = True
+    # round_.save()
     return
+
+
+def twisted_error(*args, **kwargs):
+    print('Twisted Error')
+    print(args)
+    for e in args:
+        print(e)
+    print('*'*20)
+    print(kwargs)
 
 
 def start_initial(game):
@@ -336,7 +340,7 @@ def start_initial(game):
         game.save()
         game.broadcast(action='redirect', url=reverse('interactive:exit'))
     initial(game, round_data)
-    task.deferLater(reactor, SECONDS, start_interactive, game, round_data)
+    task.deferLater(reactor, SECONDS, start_interactive, game, round_data).addErrback(twisted_error)
     return
 
 
@@ -361,15 +365,15 @@ def start_interactive(game, round_data):
                                    }))
     for user in game.users.all():
         interactive(user, game, round_data)
-    task.deferLater(reactor, SECONDS, start_outcome, game, round_data)
+    task.deferLater(reactor, SECONDS, start_outcome, game, round_data).addErrback(twisted_error)
     return
 
 
 def interactive(user, game, round_data):
-    current_round = InteractiveRound.objects.get(user=user, round_order=round_data.get('current_round'))
-    following = [{'username': u.username, 'avatar': u.get_avatar, 'guess':
-        float(InteractiveRound.objects.get(user=u, round_order=round_data.get('current_round')).get_guess())}
-                 for u in current_round.following.all()]
+    current_round = InteractiveRound.objects.get(user=user, game=game, round_order=round_data.get('current_round'))
+
+    following = [{'username': u.username, 'avatar': u.get_avatar, 'guess': InteractiveRound.objects.get(user=u,
+                    round_order=round_data.get('current_round')).get_guess()} for u in current_round.following.all()]
 
     game.user_send(user, action='interactive', score=user.get_score, following=following, seconds=SECONDS, **round_data)
 
@@ -380,7 +384,7 @@ def start_outcome(game, round_data):
                                    }))
     for user in game.users.all():
         outcome(user, game, round_data)
-    task.deferLater(reactor, SECONDS, start_initial, game)
+    task.deferLater(reactor, SECONDS, start_initial, game).addErrback(twisted_error)
     return
 
 

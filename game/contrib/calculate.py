@@ -18,9 +18,10 @@ def calculate_score(rounds):
             guess = r.influenced_guess
         else:
             guess = r.guess
-
+        if guess is None:
+            continue
         answer = r.plot.answer
         error = math.fabs(answer - guess)
         score += (1.0-error)**2
             
-    return round(score, 2)
+    return round(float(score), 2)

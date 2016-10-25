@@ -43,7 +43,7 @@ $("#slider").slider({
   step: 0.01,
   slide: function(event, ui) {
     $('#correlation')[0].innerHTML = ui.value;
-      socket.send(JSON.stringify({
+    socket.send(JSON.stringify({
       'action': 'slider',
       "sliderValue": ui.value
     }));
@@ -130,7 +130,7 @@ $(function () {
   };
 
   socket.onmessage = function (msg) {
-    console.log(msg.data);
+    // console.log(msg.data);
     var data = JSON.parse(msg.data);
 
     if(data.error){
