@@ -106,16 +106,21 @@ def view_answers(request):
 
 @login_required(login_url='/')
 def exit_survey(request):
-    u = User.objects.get(username=request.user.username)
-    game = Interactive.objects.get(users=u)
     form = ExitSurvey(request.POST or None)
-
     if request.method == 'POST':
         if form.is_valid():
+            u = User.objects.get(username=request.user.username)
+            game = Interactive.objects.get(users=u)
             instance = form.save(commit=False)
             instance.username = u.username
             # instance.user.add(request.user)
             instance.game = game
             instance.save()
-
+            return redirect('interactive:done')
+        else:
+            print('NOT Valid')
     return render(request, 'control/survey.html', {'form': form, 'score': request.user.get_score})
+
+
+def done(request):
+    return render(request, 'interactive/done.html')

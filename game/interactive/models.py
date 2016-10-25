@@ -110,4 +110,4 @@ class Survey(models.Model):
     feedback = models.TextField(null=True)
 
     def __str__(self):
-        return self.user.username
+        return self.username
