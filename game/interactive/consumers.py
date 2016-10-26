@@ -16,7 +16,7 @@ from channels.auth import channel_session_user_from_http, channel_session_user
 from django.utils import timezone
 from twisted.internet import task, reactor
 
-
+from game.contrib.calculate import calculate_score
 from game.round.models import Plot
 
 from .utils import avatar
@@ -313,11 +313,12 @@ def interactive_submit(message):
 
 @channel_session_user
 def round_outcome(message):
-    # user, game = user_and_game(message)
-    # round_data = json.loads(cache.get(user.username))
-    # round_ = InteractiveRound.objects.get(user=user, game=game, round_order=round_data.get('current_round'))
-    # round_.outcome = True
-    # round_.save()
+    user, game = user_and_game(message)
+    d = json.loads(cache.get(game.id))
+    round_data = d.get('round_data')
+    round_ = InteractiveRound.objects.get(user=user, game=game, round_order=round_data.get('current_round'))
+    round_.outcome = True
+    round_.save()
     return
 
 
@@ -330,18 +331,53 @@ def twisted_error(*args, **kwargs):
     print(kwargs)
 
 
+def game_state_checker(game, state, round_data, counter=0):
+    if counter == SECONDS:
+        # move to the next state
+        if state == 'initial':
+            start_interactive(game, round_data)
+        elif state == 'interactive':
+            start_outcome(game, round_data)
+        else:
+            start_initial(game)
+        return
+
+    if state == 'initial':
+        r = InteractiveRound.objects.filter(game=game, round_order=round_data.get('current_round'), guess=None).count()
+        if r == 0:
+            start_interactive(game, round_data)
+            return
+    elif state == 'interactive':
+        r = InteractiveRound.objects.filter(game=game, round_order=round_data.get('current_round'),
+                                            influenced_guess=None).count()
+        if r == 0:
+            start_outcome(game, round_data)
+            return
+    elif state == 'outcome':
+        r = InteractiveRound.objects.filter(game=game, round_order=round_data.get('current_round'),
+                                            outcome=False).count()
+        if r == 0:
+            start_initial(game)
+            return
+    counter += 1
+    task.deferLater(reactor, 1, game_state_checker, game, state, round_data, counter).addErrback(twisted_error)
+
+
 def start_initial(game):
     round_data = get_round(game)
-    cache.set(game.id, json.dumps({'state': 'initial',
-                                   'round_data': round_data,
-                                   }))
+    state = 'initial'
+
     if round_data is None:
         game.end_time = timezone.now()
         game.save()
         game.broadcast(action='redirect', url=reverse('interactive:exit'))
+        return
+    else:
+        cache.set(game.id, json.dumps({'state': state,
+                                       'round_data': round_data,
+                                       }))
     initial(game, round_data)
-    task.deferLater(reactor, SECONDS, start_interactive, game, round_data).addErrback(twisted_error)
-    return
+    task.deferLater(reactor, 1, game_state_checker, game, state, round_data).addErrback(twisted_error)
 
 
 def initial(game, round_data, message=None):
@@ -365,7 +401,7 @@ def start_interactive(game, round_data):
                                    }))
     for user in game.users.all():
         interactive(user, game, round_data)
-    task.deferLater(reactor, SECONDS, start_outcome, game, round_data).addErrback(twisted_error)
+    task.deferLater(reactor, 1, game_state_checker, game, 'interactive', round_data).addErrback(twisted_error)
     return
 
 
@@ -384,20 +420,27 @@ def start_outcome(game, round_data):
                                    }))
     for user in game.users.all():
         outcome(user, game, round_data)
-    task.deferLater(reactor, SECONDS, start_initial, game).addErrback(twisted_error)
-    return
+    task.deferLater(reactor, 1, game_state_checker, game, 'outcome', round_data).addErrback(twisted_error)
 
 
-def outcome(user, game, round_data):
+def outcome_loop(lim, l):
+    temp = []
+    for u in l:
+        d = {'username': u.username, 'avatar': u.get_avatar}
+        rounds = InteractiveRound.objects.filter(user=u).order_by('-round_order')[:lim]
+        score = calculate_score(rounds.all())
+        d['score'] = score
+        temp.append(d)
+    return temp
+
+
+def outcome(user, game: Interactive, round_data):
     current_round = InteractiveRound.objects.get(user=user, round_order=round_data.get('current_round'))
-    rest_of_users = []
-    for u in current_round.game.users.filter(~Q(username__in=current_round.following.values('username'))) \
-            .exclude(username=user.username):
-        rest_of_users.append({'username': u.username, 'avatar': u.get_avatar, 'score': u.get_score})
+    rest_of_users = outcome_loop(game.constraints.score_lambda,
+                                 current_round.game.users.filter(~Q(username__in=current_round.following.
+                                                                values('username'))).exclude(username=user.username))
 
-    currently_following = []
-    for u in current_round.following.all():
-        currently_following.append({'username': u.username, 'avatar': u.get_avatar, 'score': u.get_score})
+    currently_following = outcome_loop(game.constraints.score_lambda, current_round.following.all())
 
     game.user_send(user, action='outcome', guess=float(current_round.get_influenced_guess()),
                    score=user.get_score, following=currently_following, all_players=rest_of_users,
