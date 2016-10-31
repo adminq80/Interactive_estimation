@@ -75,16 +75,52 @@
     2. Round Outcome: Here you can see how well you performed on your guess. This stage shows your previous guess, the actual correlation value, as well as your score/earnings. When you are finished with the overview, hit “Next.” Or, if you wait 30 seconds you will be taken to the next round anyway.
     </p>
     <div>
-    <img src="/static/images/control-sample.png" class="img-responsive sample"/>
+     <img src="/static/images/control-sample.png" class="img-responsive sample"/>
     </div>
     <div class="row">
-    <input class='btn btn-primary prevButton' type="submit" id="submit" value="Previous">
+      <input class='btn btn-primary prevButton' type="submit" id="submit" value="Previous">
+      <input class='btn btn-primary nextButton' type="submit" id="submit" value="Next">
+    </div>
+  </div>
 
+  <div class="overview-6" hidden>
     <form class="form" action="." method="post">
     {% csrf_token %}
-    <input class='btn btn-primary nextButton' type="submit" id="submit" value="Next">
+
+    {% for error in form.non_field_errors %}
+      <ul>
+        <li><b>{{ error }}</b></li>
+      </ul>
+    {% endfor %}
+    <div class="form-group">
+      {{ form.q1.label }}
+      {% for option in form.q1 %}
+      <div> 
+        {{ option }}
+      </div>
+      {% endfor %}
     </div>
-    </form>
+    <div class="form-group">
+      {{ form.q2.label }} {{ form.q2 }} {{ form.q3.label }} {{ form.q3 }}
+    </div>
+    <div class="form-group">
+      {{ form.q4.label }}
+      {% for option in form.q4 %}
+      <div> 
+        {{ option }}
+      </div>
+      {% endfor %}
+    </div>
+    <div class="form-group">
+      {{ form.q5.label }}
+      {% for option in form.q5 %}
+      <div> 
+        {{ option }}
+      </div>
+      {% endfor %}
+    </div>
+    <button type="submit" value="Submit" class="btn btn-danger nextButton">Submit</button>
+  </form>
   </div>
 
  </div>

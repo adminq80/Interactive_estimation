@@ -96,17 +96,11 @@ def instruction(request):
         u = authenticate(username=u.username, password=password)
         login(request, u)
 
-    if request.method == 'POST':
-        u = request.user
-        game = Control.objects.get(user=u)
-        game.instruction = True
-        game.save()
-        return redirect('control:check')
-    return render(request, 'control/instructions.html')
-
-
-@login_required(login_url='/')
-def check(request):
+    u = request.user
+    game = Control.objects.get(user=u)
+    game.instruction = True
+    game.save()
+    
     form = CheckForm(request.POST or None)
     u = request.user
     game = Control.objects.get(user=u, instruction=True)
@@ -129,8 +123,8 @@ def check(request):
             except Control.DoesNotExist:
                 return redirect('control:instruction')
 
-    return render(request, 'control/check.html', {'form': form})
 
+    return render(request, 'control/instructions.html', {'form': form})
 
 @login_required(login_url='/')
 def exit_survey(request):

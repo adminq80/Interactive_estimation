@@ -1,37 +1,17 @@
-$(document).ready(function(){
-  $(".overview-1 > .row > .nextButton").click(function() {
-    $(".overview-1").hide();
-    $(".overview-2").show();
-  })
-  $(".overview-2 > .row > .nextButton").click(function() {
-    $(".overview-2").hide();
-    $(".overview-3").show();
-  })
-  $(".overview-3 > .row > .nextButton").click(function() {
-    $(".overview-3").hide();
-    $(".overview-4").show();
-  })
-  $(".overview-4 > .row > .nextButton").click(function() {
-    $(".overview-4").hide();
-    $(".overview-5").show();
-  })
+$(document).ready(function() {
+  for(let i = 1; i <= 5; i++) {
+    $(`.overview-${i} > .row > .nextButton`).click(function() {
+      $(`.overview-${i}`).hide();
+      $(`.overview-${i+1}`).show();
+    })
+  }
 
-  $(".overview-2 > .row > .prevButton").click(function() {
-    $(".overview-2").hide();
-    $(".overview-1").show();
-  })
-  $(".overview-3 > .row > .prevButton").click(function() {
-    $(".overview-3").hide();
-    $(".overview-2").show();
-  })
-  $(".overview-4 > .row > .prevButton").click(function() {
-    $(".overview-4").hide();
-    $(".overview-3").show();
-  })
-  $(".overview-5 > .row > .prevButton").click(function() {
-    $(".overview-5").hide();
-    $(".overview-4").show();
-  })
+  for(let i = 2; i <= 6; i++) {
+    $(`.overview-${i} > .row > .prevButton`).click(function() {
+      $(`.overview-${i}`).hide();
+      $(`.overview-${i-1}`).show();
+    })
+  }
 
   $(".submitButton").click(function() {
     $(".answer").html("0.87");
