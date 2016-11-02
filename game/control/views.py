@@ -53,18 +53,19 @@ def play(request):
     if round_data.get('new_round', False):
         if len(plot_pks) == 0:
             # first round no batch has been assigned yet
-            plots = Plot.objects.exclude(pk__in=plot_pks)
+            plots = Plot.objects.all()
             plot = choice(plots)
             batch = plot.batch
-            data = {'played_batches': [], 'current_batch': batch, 'remaining': game.batch_size-1}
+            data = {'current_batch': batch, 'remaining': game.batch_size-1}
         else:
             data = cache.get('control_user_{}'.format(u.id))
             if data.get('remaining') == 0:
                 # assign to new batch
                 plots = Plot.objects.exclude(pk__in=plot_pks)
+                print(plots)
                 plot = choice(plots)
                 batch = plot.batch
-                data['played_batches'].append(batch)
+                # data['played_batches'].append(batch)
                 data['current_batch'] = batch
                 data['remaining'] = game.batch_size - 1
             else:
