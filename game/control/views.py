@@ -56,16 +56,16 @@ def play(request):
             plots = Plot.objects.all()
             plot = choice(plots)
             batch = plot.batch
-            data = {'current_batch': batch, 'remaining': game.batch_size-1}
+            data = {'played_batches': [batch], 'current_batch': batch, 'remaining': game.batch_size-1}
         else:
             data = cache.get('control_user_{}'.format(u.id))
             if data.get('remaining') == 0:
                 # assign to new batch
-                plots = Plot.objects.exclude(pk__in=plot_pks)
+                plots = Plot.objects.exclude(pk__in=plot_pks, batch__in=data['played_batches'])
                 print(plots)
                 plot = choice(plots)
                 batch = plot.batch
-                # data['played_batches'].append(batch)
+                data['played_batches'].append(batch)
                 data['current_batch'] = batch
                 data['remaining'] = game.batch_size - 1
             else:
