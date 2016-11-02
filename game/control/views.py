@@ -102,13 +102,12 @@ def submit_answer(request):
             game = Control.objects.get(user=request.user)
             try:
                 round_data = cache.get('control-{}'.format(game.id))
-                cache.delete('control-{}'.format(game.id))
             except ValueError:
                 round_data = {'plot_id': 1}
                 print("Couldn't load from cache??")
             score = request.user.get_score
             plot = Plot.objects.get(id=round_data.get('plot_id'))
-            r = Round.objects.get(user=request.user, plot=plot, round_order=round_data.get('currentRound')-1)
+            r = Round.objects.filter(user=request.user, plot=plot, round_order=round_data.get('currentRound')-1)[0]
             r.guess = guess
             r.score = score
             r.end_time = timezone.now()
