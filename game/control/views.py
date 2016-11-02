@@ -69,7 +69,9 @@ def play(request):
                 data['current_batch'] = batch
                 data['remaining'] = game.batch_size - 1
             else:
-                plots = Plot.objects.filter(batch=data.get('current_batch')).exclude(pk__in=plot_pks)
+                plots = Plot.objects.exclude(pk__in=plot_pks).filter(batch=data.get('current_batch'))
+                print('PLOT')
+                print(plots)
                 plot = choice(plots)
                 data['remaining'] -= 1
         cache.set('control_user_{}'.format(u.id), data)
