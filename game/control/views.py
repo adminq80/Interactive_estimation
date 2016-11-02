@@ -11,13 +11,11 @@ from game.contrib.random_user import random_user
 from game.round.models import Round, Plot
 
 from .forms import RoundForm, CheckForm, ExitSurvey
-from .models import Control, Survey, Setting
+from .models import Control, Setting
 
 
 def assign(request):
-    print('assign')
     if request.method == 'POST':
-        print('Going to redirect')
         return redirect('control:instruction')
     return render(request, 'pages/home2.html')
 
@@ -26,15 +24,9 @@ def assign(request):
 @login_required(login_url='control:instruction')
 def play(request):
 
-    if request.user.is_anonymous:
-        u, password = random_user('c', length=130)
-        Control.objects.create(user=u)
-        u = authenticate(username=u.username, password=password)
-        login(request, u)
-    else:
-        u = request.user
-        if u.game_type != 'c':
-            return redirect('/')
+    u = request.user
+    if u.game_type != 'c':
+        return redirect('/')
 
     game = Control.objects.get(user=u)
 
@@ -64,7 +56,7 @@ def play(request):
             plots = Plot.objects.exclude(pk__in=plot_pks)
             plot = choice(plots)
             batch = plot.batch
-            data = {'played_batches': [], 'current_batch': batch, 'remaining': game.batch_size}
+            data = {'played_batches': [], 'current_batch': batch, 'remaining': game.batch_size-1}
         else:
             data = cache.get('control_user_{}'.format(u.id))
             if data.get('remaining') == 0:
@@ -116,7 +108,7 @@ def submit_answer(request):
                 print("Couldn't load from cache??")
             score = request.user.get_score
             plot = Plot.objects.get(id=round_data.get('plot_id'))
-            r = Round.objects.get(user=request.user, plot=plot)
+            r = Round.objects.get(user=request.user, plot=plot, round_order=round_data.get('currentRound')-1)
             r.guess = guess
             r.score = score
             r.end_time = timezone.now()
@@ -133,7 +125,7 @@ def submit_answer(request):
 
 def instruction(request):
     if request.user.is_anonymous:
-        u, password = random_user('c', length=130)
+        u, password = random_user('c', length=60)
         settings = Setting.objects.all()
         if settings.count() != 0:
             setting = settings.order_by('?')[0]
@@ -183,4 +175,5 @@ def exit_survey(request):
             instance.save()
             return render(request, 'control/done.html')
 
-    return render(request, 'control/survey.html', {'form': form, 'score': request.user.get_score})
+    return render(request, 'control/survey.html', {'form': form, 'score':
+        round(float(request.user.get_score or 0.0) / 10.0, 2)})
