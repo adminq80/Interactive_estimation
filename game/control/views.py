@@ -61,7 +61,9 @@ def play(request):
             data = cache.get('control_user_{}'.format(u.id))
             if data.get('remaining') == 0:
                 # assign to new batch
-                plots = Plot.objects.exclude(pk__in=plot_pks, batch__in=data['played_batches'])
+                print('ONE')
+                print(data)
+                plots = Plot.objects.exclude(batch__in=data.get('played_batches', [])).exclude(pk__in=plot_pks)
                 print(plots)
                 plot = choice(plots)
                 batch = plot.batch
@@ -69,6 +71,8 @@ def play(request):
                 data['current_batch'] = batch
                 data['remaining'] = game.batch_size - 1
             else:
+                print('TWO')
+                print(data)
                 plots = Plot.objects.exclude(pk__in=plot_pks).filter(batch=data.get('current_batch'))
                 print('PLOT')
                 print(plots)
@@ -108,13 +112,7 @@ def submit_answer(request):
                 print("Couldn't load from cache??")
             score = request.user.get_score
             plot = Plot.objects.get(id=round_data.get('plot_id'))
-            r = Round.objects.filter(user=request.user, plot=plot, round_order=round_data.get('currentRound')-1)
-            if r.count() > 1:
-                r = r[0]
-            elif r.count() == 0:
-                r = Round.objects.create(user=request.user, plot=plot, round_order=round_data.get('currentRound')-1)
-            else:
-                r = Round.objects.get(user=request.user, plot=plot, round_order=round_data.get('currentRound')-1)
+            r = Round.objects.get(user=request.user, plot=plot, round_order=round_data.get('currentRound')-1)
 
             if r.guess is None:
                 r.guess = guess
