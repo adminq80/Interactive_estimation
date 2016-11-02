@@ -7,6 +7,7 @@ from django.conf import settings
 
 class Setting(models.Model):
     max_rounds = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
+    batch_size = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
 
     def __str__(self):
         return "Setting: max_rounds: {} ".format(self.max_rounds)
@@ -25,6 +26,7 @@ class Control(models.Model):
     check_done = models.BooleanField(default=False)
 
     max_rounds = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)], null=True)
+    batch_size = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)], null=True)
 
     def __str__(self):
         return self.user.username

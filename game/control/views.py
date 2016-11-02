@@ -1,4 +1,3 @@
-import json
 from random import choice
 
 from django.contrib.auth import authenticate, login
@@ -55,23 +54,45 @@ def play(request):
         return redirect('control:exit')
 
     round_data = cache.get('control-{}'.format(game.id))
+    if round_data is None:
+        # new user
+        round_data = {'new_round': True}
 
-    if round_data:
-        round_data = json.loads(round_data)
-        plot = Plot.objects.get(id=round_data.get('plot_id'))
+    if round_data.get('new_round', False):
+        if len(plot_pks) == 0:
+            # first round no batch has been assigned yet
+            plots = Plot.objects.exclude(pk__in=plot_pks)
+            plot = choice(plots)
+            batch = plot.batch
+            data = {'played_batches': [], 'current_batch': batch, 'remaining': game.batch_size}
+        else:
+            data = cache.get('control_user_{}'.format(u.id))
+            if data.get('remaining') == 0:
+                # assign to new batch
+                plots = Plot.objects.exclude(batch__in=data.get('played_batches'), pk__in=plot_pks)
+                plot = choice(plots)
+                batch = plot.batch
+                data['played_batches'].append(batch)
+                data['current_batch'] = batch
+                data['remaining'] = game.batch_size
+            else:
+                plots = Plot.objects.filter(batch=data.get('current_batch', 0)).exclude(pk__in=plot_pks)
+                plot = choice(plots)
+                data['remaining'] -= 1
+        cache.set('control_user_{}'.format(u.id), data)
     else:
-        plots = Plot.objects.exclude(pk__in=plot_pks)
-        plot = choice(plots)
+        plot = Plot.objects.get(id=round_data.get('plot_id'))
 
     r = Round.objects.create(user=u, plot=plot, round_order=played_rounds.count())
 
     d = {
+        'new_round': False,
         'plot_id': plot.id,
         'round_id': r.id,
         'remaining': remaining,
         'currentRound': len(plot_pks) + 1,
     }
-    cache.set('control-{}'.format(game.id), json.dumps(d))
+    cache.set('control-{}'.format(game.id), d)
 
     form = RoundForm()
     d['form'] = form
@@ -88,7 +109,7 @@ def submit_answer(request):
             guess = form.cleaned_data['guess']
             game = Control.objects.get(user=request.user)
             try:
-                round_data = json.loads(cache.get('control-{}'.format(game.id)))
+                round_data = cache.get('control-{}'.format(game.id))
                 cache.delete('control-{}'.format(game.id))
             except ValueError:
                 round_data = {'plot_id': 1}
@@ -103,6 +124,8 @@ def submit_answer(request):
             round_data['round'] = plot
             round_data['guess'] = guess
             round_data['score'] = score
+            round_data['new_round'] = True
+            cache.set('control-{}'.format(game.id), round_data)
             return render(request, 'control/answer.html', round_data)
 
     return redirect('control:play')
@@ -115,8 +138,8 @@ def instruction(request):
         if settings.count() != 0:
             setting = settings.order_by('?')[0]
         else:
-            setting = Setting.objects.create(max_rounds=10)
-        Control.objects.create(user=u, max_rounds=setting.max_rounds)
+            setting = Setting.objects.create(max_rounds=10, batch_size=5)
+        Control.objects.create(user=u, max_rounds=setting.max_rounds, batch_size=setting.batch_size)
         u = authenticate(username=u.username, password=password)
         login(request, u)
 
