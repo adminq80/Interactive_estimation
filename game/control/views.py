@@ -115,6 +115,8 @@ def submit_answer(request):
             r = Round.objects.get(user=request.user, plot=plot, round_order=round_data.get('currentRound')-1)
 
             if r.guess is None:
+                print('R TYPE')
+                print(type(r))
                 r.guess = guess
                 r.score = score
                 r.end_time = timezone.now()
