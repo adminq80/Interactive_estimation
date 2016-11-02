@@ -110,7 +110,7 @@ def submit_answer(request):
             if r.count() > 1:
                 r = r[0]
             elif r.count() == 0:
-                r = Round.objects.create(user=u, plot=plot, round_order=round_data.get('currentRound')-1)
+                r = Round.objects.create(user=request.user, plot=plot, round_order=round_data.get('currentRound')-1)
             else:
                 r = Round.objects.get(user=request.user, plot=plot, round_order=round_data.get('currentRound')-1)
 
