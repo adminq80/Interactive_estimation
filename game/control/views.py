@@ -1,6 +1,8 @@
+import json
 from random import choice
 
 from django.contrib.auth import authenticate, login
+from django.core.cache import cache
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
@@ -10,16 +12,19 @@ from game.contrib.random_user import random_user
 from game.round.models import Round, Plot
 
 from .forms import RoundForm, CheckForm, ExitSurvey
-from .models import Control, Survey
+from .models import Control, Survey, Setting
 
 
 def assign(request):
+    print('assign')
     if request.method == 'POST':
-        return redirect('control:play')
+        print('Going to redirect')
+        return redirect('control:instruction')
     return render(request, 'pages/home2.html')
 
 
 # Create your views here.
+@login_required(login_url='control:instruction')
 def play(request):
 
     if request.user.is_anonymous:
@@ -35,33 +40,43 @@ def play(request):
     game = Control.objects.get(user=u)
 
     if not game.check_done:
-        if not game.instruction:
-            return redirect('control:instruction')
         if game.check >= 4:
             return redirect('control:exit')
+        return redirect('control:instruction')
 
     played_rounds = Round.objects.filter(user=u)
     plot_pks = {i.plot.pk for i in played_rounds}
 
-    remaining = Plot.objects.count() - len(plot_pks)
+    remaining = int(game.max_rounds or 10) - len(plot_pks)
 
     if remaining == 0:
+        game.end_time = timezone.now()
+        game.save()
         return redirect('control:exit')
 
-    if request.session.get('PLOT'):  # Or None
-        plot = Plot.objects.get(plot=request.session.get('PLOT'))
+    round_data = cache.get('control-{}'.format(game.id))
+
+    if round_data:
+        round_data = json.loads(round_data)
+        plot = Plot.objects.get(id=round_data.get('plot_id'))
     else:
         plots = Plot.objects.exclude(pk__in=plot_pks)
         plot = choice(plots)
 
-    request.session['PLOT'] = plot.plot
-    form = RoundForm()
+    r = Round.objects.create(user=u, plot=plot, round_order=played_rounds.count())
 
-    return render(request, 'control/play.html', {'round': plot,
-                                                 'form': form,
-                                                 'remaining': remaining,
-                                                 'currentRound': len(plot_pks) + 1,
-                                                 })
+    d = {
+        'plot_id': plot.id,
+        'round_id': r.id,
+        'remaining': remaining,
+        'currentRound': len(plot_pks) + 1,
+    }
+    cache.set('control-{}'.format(game.id), json.dumps(d))
+
+    form = RoundForm()
+    d['form'] = form
+    d['round'] = plot
+    return render(request, 'control/play.html', d)
 
 
 # TODO: score, plots remaining off by one
@@ -71,28 +86,37 @@ def submit_answer(request):
         form = RoundForm(request.POST)
         if form.is_valid():
             guess = form.cleaned_data['guess']
-            plot = request.session.get('PLOT', None)
-
-            p = Plot.objects.get(plot=plot)
-            played_rounds = Round.objects.filter(user=request.user)
-            
-            Round.objects.create(user=request.user, guess=guess, plot=p, round_order=played_rounds.count()).save()
-            request.session.pop('PLOT')
-
-            plot_pks = {i.plot.pk for i in played_rounds}
-
-            remaining = Plot.objects.count() - len(plot_pks)
-            return render(request, 'control/answer.html', {'round': p, 'guess': guess, 'score': request.user.get_score,
-                                                           'remaining': remaining, 'currentRound': len(plot_pks)})
+            game = Control.objects.get(user=request.user)
+            try:
+                round_data = json.loads(cache.get('control-{}'.format(game.id)))
+                cache.delete('control-{}'.format(game.id))
+            except ValueError:
+                round_data = {'plot_id': 1}
+                print("Couldn't load from cache??")
+            score = request.user.get_score
+            plot = Plot.objects.get(id=round_data.get('plot_id'))
+            r = Round.objects.get(user=request.user, plot=plot)
+            r.guess = guess
+            r.score = score
+            r.end_time = timezone.now()
+            r.save()
+            round_data['round'] = plot
+            round_data['guess'] = guess
+            round_data['score'] = score
+            return render(request, 'control/answer.html', round_data)
 
     return redirect('control:play')
 
 
-@login_required(login_url='/')
 def instruction(request):
     if request.user.is_anonymous:
         u, password = random_user('c', length=130)
-        Control.objects.create(user=u)
+        settings = Setting.objects.all()
+        if settings.count() != 0:
+            setting = settings.order_by('?')[0]
+        else:
+            setting = Setting.objects.create(max_rounds=10)
+        Control.objects.create(user=u, max_rounds=setting.max_rounds)
         u = authenticate(username=u.username, password=password)
         login(request, u)
 
@@ -102,10 +126,7 @@ def instruction(request):
     game.save()
     
     form = CheckForm(request.POST or None)
-    u = request.user
-    game = Control.objects.get(user=u, instruction=True)
     check_count = game.check
-
     if check_count >= 4:
         return redirect('control:exit')
 
@@ -123,8 +144,8 @@ def instruction(request):
             except Control.DoesNotExist:
                 return redirect('control:instruction')
 
-
     return render(request, 'control/instructions.html', {'form': form})
+
 
 @login_required(login_url='/')
 def exit_survey(request):
@@ -134,11 +155,9 @@ def exit_survey(request):
     if request.method == 'POST':
         if form.is_valid():
             instance = form.save(commit=False)
-            instance.user = request.user
-            instance.game = game
+            instance.username = request.user.username
+            instance.game = game.id
             instance.save()
+            return render(request, 'control/done.html')
 
-    if game.end_time is None:
-        game.end_time = timezone.now()
-        game.save()
     return render(request, 'control/survey.html', {'form': form, 'score': request.user.get_score})

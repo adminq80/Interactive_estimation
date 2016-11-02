@@ -1,7 +1,15 @@
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.conf import settings
 
 # from game.round.models import Round
+
+
+class Setting(models.Model):
+    max_rounds = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
+
+    def __str__(self):
+        return "Setting: max_rounds: {} ".format(self.max_rounds)
 
 
 # Create your models here.
@@ -16,16 +24,18 @@ class Control(models.Model):
     check = models.PositiveIntegerField(default=0)
     check_done = models.BooleanField(default=False)
 
+    max_rounds = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)], null=True)
+
     def __str__(self):
         return self.user.username
 
 
 class Survey(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    game = models.OneToOneField(Control)
+    user = models.CharField(max_length=255, blank=True, null=True)
+    game = models.CharField(max_length=255, blank=True, null=True)
     age = models.PositiveSmallIntegerField(null=True)
     gender = models.TextField(null=True)
     feedback = models.TextField(null=True)
 
     def __str__(self):
-        return self.user.username
+        return self.username
