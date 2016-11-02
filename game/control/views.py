@@ -170,7 +170,7 @@ def exit_survey(request):
     if request.method == 'POST':
         if form.is_valid():
             instance = form.save(commit=False)
-            instance.username = request.user.username
+            instance.user = request.user.username
             instance.game = game.id
             instance.save()
             return render(request, 'control/done.html')
