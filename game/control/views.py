@@ -72,16 +72,14 @@ def play(request):
                 plot = choice(plots)
                 data['remaining'] -= 1
         cache.set('control_user_{}'.format(u.id), data)
+        Round.objects.get_or_create(user=u, plot=plot, round_order=len(plot_pks))
     else:
         plot = Plot.objects.get(id=round_data.get('plot_id'))
-
-    r = Round.objects.create(user=u, plot=plot, round_order=played_rounds.count())
 
     d = {
         'new_round': False,
         'plot_id': plot.id,
-        'round_id': r.id,
-        'remaining': remaining,
+        'remaining': remaining - 1,
         'currentRound': len(plot_pks) + 1,
     }
     cache.set('control-{}'.format(game.id), d)
@@ -107,14 +105,22 @@ def submit_answer(request):
                 print("Couldn't load from cache??")
             score = request.user.get_score
             plot = Plot.objects.get(id=round_data.get('plot_id'))
-            r = Round.objects.filter(user=request.user, plot=plot, round_order=round_data.get('currentRound')-1)[0]
-            r.guess = guess
-            r.score = score
-            r.end_time = timezone.now()
-            r.save()
+            r = Round.objects.filter(user=request.user, plot=plot, round_order=round_data.get('currentRound')-1)
+            if r.count() > 1:
+                r = r[0]
+            elif r.count() == 0:
+                r = Round.objects.create(user=u, plot=plot, round_order=round_data.get('currentRound')-1)
+            else:
+                r = Round.objects.get(user=request.user, plot=plot, round_order=round_data.get('currentRound')-1)
+
+            if r.guess is None:
+                r.guess = guess
+                r.score = score
+                r.end_time = timezone.now()
+                r.save()
             round_data['round'] = plot
-            round_data['guess'] = guess
-            round_data['score'] = score
+            round_data['guess'] = r.guess
+            round_data['score'] = r.score
             round_data['new_round'] = True
             cache.set('control-{}'.format(game.id), round_data)
             return render(request, 'control/answer.html', round_data)
