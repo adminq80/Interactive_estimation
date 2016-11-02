@@ -118,7 +118,7 @@ def submit_answer(request):
             if r.guess is None:
                 print('R TYPE')
                 print(type(r))
-                r.guess = guess, 2
+                r.guess = guess
                 r.score = score
                 r.end_time = timezone.now()
                 r.save()
