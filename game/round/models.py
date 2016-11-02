@@ -31,7 +31,7 @@ class Round(models.Model):
     end_time = models.DateTimeField(null=True)
 
     # todo: change control treatment
-    score = models.DecimalField(max_digits=3, decimal_places=2, default=Decimal(0))
+    score = models.DecimalField(max_digits=4, decimal_places=2, default=Decimal(0))
 
     def __str__(self):
         return self.user.username
