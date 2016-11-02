@@ -1,5 +1,6 @@
 from random import choice
 
+from decimal import Decimal
 from django.contrib.auth import authenticate, login
 from django.core.cache import cache
 from django.utils import timezone
@@ -117,13 +118,13 @@ def submit_answer(request):
             if r.guess is None:
                 print('R TYPE')
                 print(type(r))
-                r.guess = guess
-                r.score = score
+                r.guess = Decimal(round(guess, 2))
+                r.score = Decimal(score)
                 r.end_time = timezone.now()
                 r.save()
             round_data['round'] = plot
-            round_data['guess'] = r.guess
-            round_data['score'] = r.score
+            round_data['guess'] = float(r.guess or 0.0)
+            round_data['score'] = float(r.score or 0.0)
             round_data['new_round'] = True
             cache.set('control-{}'.format(game.id), round_data)
             return render(request, 'control/answer.html', round_data)
