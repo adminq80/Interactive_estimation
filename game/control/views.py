@@ -1,11 +1,12 @@
 from random import choice
 
-from decimal import Decimal
+from datetime import timedelta
 from django.contrib.auth import authenticate, login
 from django.core.cache import cache
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from django.db import transaction
 
 from game.contrib.random_user import random_user
 
@@ -19,6 +20,9 @@ def assign(request):
     if request.method == 'POST':
         return redirect('control:instruction')
     return render(request, 'pages/home2.html')
+
+
+SECONDS = 30
 
 
 # Create your views here.
@@ -80,17 +84,47 @@ def play(request):
                 plot = choice(plots)
                 data['remaining'] -= 1
         cache.set('control_user_{}'.format(u.id), data)
-        Round.objects.get_or_create(user=u, plot=plot, round_order=len(plot_pks))
+        with transaction.atomic():
+            r, created = Round.objects.get_or_create(user=u, plot=plot, round_order=len(plot_pks))
+        if created:
+            extra = {'round_id': r.id}
+        else:
+            extra = None
+            print('Tried to create a round with an old plot or round_order {}'.format(r))
     else:
+        extra = None
         plot = Plot.objects.get(id=round_data.get('plot_id'))
 
-    d = {
-        'new_round': False,
-        'plot_id': plot.id,
-        'remaining': remaining - 1,
-        'currentRound': len(plot_pks) + 1,
-    }
-    cache.set('control-{}'.format(game.id), d)
+    d = cache.get('control-{}'.format(game.id))
+
+    if extra:
+        # new round was found
+        payload = {
+            'new_round': False,
+            'plot_id': plot.id,
+            'remaining': remaining - 1,
+            'currentRound': len(plot_pks) + 1,
+        }
+        payload.update(extra)
+        cache.set('control-{}'.format(game.id), payload)
+    else:
+        payload = None
+
+    if d:
+        # there was new data  before
+        if payload:
+            if payload.get('currentRound') > d.get('currentRound'):
+                d = payload
+            else:
+                print('Cache has more recent data than payload')
+                return redirect('control:play')
+        else:
+            print('Found data in the cache and Payload is None')
+            r = Round.objects.get(id=d.get('round_id'))
+            if (r.start_time + timedelta(seconds=SECONDS)) < timezone.now():
+                return redirect('control:play')
+    else:
+        d = payload
 
     form = RoundForm()
     d['form'] = form
@@ -115,6 +149,9 @@ def submit_answer(request):
             plot = Plot.objects.get(id=round_data.get('plot_id'))
             r = Round.objects.get(user=request.user, plot=plot, round_order=round_data.get('currentRound')-1)
 
+            if (r.start_time + timedelta(seconds=SECONDS)) < timezone.now():
+                guess = -1
+
             if r.guess is None:
                 print('R TYPE')
                 print(type(r))
@@ -122,6 +159,9 @@ def submit_answer(request):
                 r.score = score
                 r.end_time = timezone.now()
                 r.save()
+            else:
+                print("Either r.guess was found or the user didn't submit the answer within the allowed time")
+                return redirect('control:play')
             round_data['round'] = plot
             round_data['guess'] = r.guess
             round_data['score'] = r.score
