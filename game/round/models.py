@@ -43,11 +43,16 @@ class Round(models.Model):
         this_round = self.__class__.objects.filter(user=self.user, round_order=self.round_order,
                                                    guess__gte=Decimal(0.0))
         round_score = calculate_score(this_round)
+        try:
+            duration = self.end_time - self.start_time
+        except TypeError:
+            duration = None
 
         data = {'username': self.user.username, 'cumulative_score': score,
                 'avatar': self.user.avatar, 'task_path': self.plot.plot, 'correct_answer': self.plot.answer,
                 'independent_guess': self.guess, 'round_id': self.round_order, 'score': round_score,
-                'game_id': None, 'condition': None, 'following': None, 'revised_guess': None
+                'game_id': None, 'condition': None, 'following': None, 'revised_guess': None,
+                'duration': duration, 'start_time': self.start_time, 'end_time': self.end_time,
                 }
 
         if self.user.game_type == 'c':
