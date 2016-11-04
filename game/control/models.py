@@ -44,3 +44,15 @@ class Survey(models.Model):
 
     def __str__(self):
         return '{}@{}'.format(self.user, self.game)
+
+    def dump(self):
+        return {
+            'user': self.user or '',
+            'game': self.game or '',
+            'age': self.age or '',
+            'gender': self.gender or '',
+            'feedback': self.feedback or '',
+            'bugs': self.bugs or '',
+            'pay': self.pay or '',
+            'education': self.education or '',
+        }
