@@ -38,7 +38,8 @@ class Command(BaseCommand):
             except Survey.DoesNotExist:
                 survey = None
             d['survey'] = survey
-            d['rounds'] = [r.round_data() for r in Round.objects.all()]
+            d['rounds'] = [r.round_data() for r in Round.objects.filter(user=u)]
             d['completed_hit'] = c.max_rounds == len(d['rounds'])
             users.append(d)
-        print(json.dumps(users, cls=DecimalEncoder))
+        with open('control_data.json', 'w') as f:
+            f.write(json.dumps(users, cls=DecimalEncoder))

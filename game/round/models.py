@@ -53,6 +53,7 @@ class Round(models.Model):
                 'independent_guess': self.guess, 'round_id': self.round_order, 'score': round_score,
                 'game_id': None, 'condition': None, 'following': None, 'revised_guess': None,
                 'duration': duration, 'start_time': self.start_time, 'end_time': self.end_time,
+                'batch': self.plot.batch or None,
                 }
 
         if self.user.game_type == 'c':
