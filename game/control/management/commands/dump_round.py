@@ -47,5 +47,5 @@ class Command(BaseCommand):
             d['rounds'] = [r.round_data() for r in rounds]
             d['completed_hit'] = c.max_rounds == len(d['rounds'])
             users.append(d)
-        with open('control_data.json', 'w') as f:
-            f.write(json.dumps(users, cls=DecimalEncoder))
+        print('Users = {}'.format(len(users)))
+        print(json.dumps(users, cls=DecimalEncoder))
