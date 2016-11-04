@@ -24,13 +24,19 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         users = []
         for u in User.objects.filter(game_type='c'):
-            c = Control.objects.get(user=u)
+            rounds = Round.objects.filter(user=u)
+            if rounds.count() < 1:
+                continue
+            try:
+                c = Control.objects.get(user=u)
+            except Control.DoesNotExist:
+                continue
             d = {'user': u.username,
                  'final_score': u.get_score,
                  'condition': 'control',
                  'time_created': u.date_joined,
                  'game_id': c.id,
-                 'unanswered': Round.objects.filter(user=u, guess__lt=0).count(),
+                 'unanswered': rounds.filter(guess__lt=0).count(),
                  }
             try:
                 s = Survey.objects.get(user=u.username)
@@ -38,7 +44,7 @@ class Command(BaseCommand):
             except Survey.DoesNotExist:
                 survey = None
             d['survey'] = survey
-            d['rounds'] = [r.round_data() for r in Round.objects.filter(user=u)]
+            d['rounds'] = [r.round_data() for r in rounds]
             d['completed_hit'] = c.max_rounds == len(d['rounds'])
             users.append(d)
         with open('control_data.json', 'w') as f:
