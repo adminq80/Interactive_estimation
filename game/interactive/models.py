@@ -8,6 +8,7 @@ from django.db import models
 from django.conf import settings
 
 from channels import Group
+from django.utils import timezone
 
 from game.round.models import Round
 
@@ -73,7 +74,7 @@ class InteractiveRound(Round):
 
 class Interactive(models.Model):
     users = models.ManyToManyField(settings.AUTH_USER_MODEL)
-    start_time = models.DateTimeField(auto_now_add=True, null=True)
+    start_time = models.DateTimeField(default=timezone.now)
     end_time = models.DateTimeField(null=True)
 
     constraints = models.ForeignKey(Settings, on_delete=models.CASCADE)

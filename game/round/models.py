@@ -4,6 +4,8 @@ from django.conf import settings
 
 
 # Create your models here.
+from django.utils import timezone
+
 from game.contrib.calculate import calculate_score
 from game.control.models import Control
 
@@ -27,7 +29,7 @@ class Round(models.Model):
 
     # start time of the round
     # end time of the round
-    start_time = models.DateTimeField(auto_now=True, null=True)
+    start_time = models.DateTimeField(default=timezone.now)
     end_time = models.DateTimeField(null=True)
 
     # todo: change control treatment
