@@ -1,7 +1,5 @@
 import json
-import uuid
 
-from decimal import Decimal
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models

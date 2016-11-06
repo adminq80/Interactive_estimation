@@ -1,6 +1,7 @@
 from django.conf.urls import url
 
-from .views import assign, lobby, exit_survey, done
+
+from .views import assign, lobby, exit_survey, done, instruction
 
 urlpatterns = [
     url(r'^$', assign),
@@ -9,5 +10,6 @@ urlpatterns = [
     # url(r'^submit/$', submit_answer, name='submit'),
     # url(r'^view_answers/$', view_answers, name='view_answers'),
     url(r'^exit/$', exit_survey, name='exit'),
-    url(r'^done/$', done, name='done')
+    url(r'^done/$', done, name='done'),
+    url(r'^instruction/$', instruction, name='instruction'),
 ]

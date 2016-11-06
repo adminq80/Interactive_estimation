@@ -30,7 +30,8 @@
 </p>
 
 <h2>Comprehension Check</h2>
-<form class="form">
+<form class="form" method="post">
+{% csrf_token %}
   <div class="form-group">
     <label>Your goal in the game is to</label>
     <div>
@@ -79,6 +80,7 @@
       <input class="radio" type="radio"> No
     </div>
   </div>
+<input type="submit" class="btn btn-primary" name="submit" />
 </form> 
 
 {% endblock %}
