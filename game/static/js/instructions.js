@@ -1,12 +1,12 @@
 $(document).ready(function() {
-  for(let i = 1; i <= 5; i++) {
+  for(let i = 1; i <= 6; i++) {
     $(`.overview-${i} > .row > .nextButton`).click(function() {
       $(`.overview-${i}`).hide();
       $(`.overview-${i+1}`).show();
     })
   }
 
-  for(let i = 2; i <= 6; i++) {
+  for(let i = 2; i <= 7; i++) {
     $(`.overview-${i} > .row > .prevButton`).click(function() {
       $(`.overview-${i}`).hide();
       $(`.overview-${i-1}`).show();
