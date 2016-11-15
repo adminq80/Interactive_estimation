@@ -24,7 +24,8 @@ function new_follow_list(name, avatar, score) {
       <a href="#" data-toggle="tooltip" data-placement="right" class="toolTip" title="Unfollow a user first">
         <img src="/static/images/plus.ico" class="plusIcon" />
       </a>
-      <img src=${avatar} class="avatar" /> <span class="userScore">score: ${score}</span><img id="coin" src="/static/images/coin.png" />
+      <img src=${avatar} class="avatar" /> 
+      <span class="userScore">${score} </span><img id="coin" src="/static/images/coin.png" />
     </div>
   `);
 }
@@ -32,7 +33,7 @@ function new_follow_list(name, avatar, score) {
 function new_unfollow_list(name, avatar, score) {
   return (`
     <img src=${avatar} class='avatar' />
-    <span>Score: ${score}</span><img id="coin" src="/static/images/coin.png" />
+    <span>${score} </span><img id="coin" src="/static/images/coin.png" />
     <button type="button" id=${name} class="btn btn-primary unfollow">Unfollow</button>
   `);
 }
@@ -49,7 +50,7 @@ $("#slider").slider({
     }));
   },
   change: function(event, ui) {
-    $('.ui-slider-handle').show();
+    $('#slider > .ui-slider-handle').show();
     $('#guess').val(ui.value);
   }
 });
@@ -149,7 +150,8 @@ $(function () {
     else if(data.action == 'avatar'){
       $('#user-avatar').attr('src', data.url);
     }
-    else if(data.action == 'initial'){
+    else if(data.action == 'initial') {
+
       start_game(data, data.seconds);
       resetSlider();
 
@@ -165,14 +167,14 @@ $(function () {
     else if(data.action == 'ping'){
       console.log(data.text)
     }
-    else if(data.action == 'interactive'){
+    else if(data.action == 'interactive') {
+      console.log(data);
       start_game(data, data.seconds);
       $(".guess").show();
 
       $("#interactiveGuess").show();
-      $(".box#score").html(`${data.score}`);
+      // $(".box#score").html(`${data.score}`);
 
-      // data.following = [{"username":"Test", "avatar":"cow.png", "score": 1.0}]
       $("#following_list tbody").html("");
       $.each(data.following, function(i, user) {
         if (user.guess < 0) {
@@ -183,14 +185,30 @@ $(function () {
           <tr>
             <td id=${user.username}>
               <img src=${avatar} class='avatar' />
-              <span>guess: ${user.guess}</span>
+              <span>${user.guess}</span>
+              <div class="followingSlider"></div>
             </td>
           </tr>
         `);
+
+        $(`td#${user.username} > .followingSlider`).slider({
+          min: 0,
+          max: 1,
+          step: 0.01,
+          disabled: true
+        });
+
+        if (user.guess == '') {
+          $(`td#${user.username} > .followingSlider > .ui-slider-handle`).hide();
+        }
+        else {
+          $(`td#${user.username} > .followingSlider`).slider( "option", "value", user.guess);
+        }
       })
     }
     else if(data.action == 'outcome'){
-      $(".box#score").html(`${data.score}`);
+      console.log(data);
+      // $(".box#score").html(`${data.score}`);
       $("#unfollow_list tbody").html("");
 
       for(var i = 0; i < data.max_following; i++) {
@@ -246,7 +264,9 @@ $(function () {
 
     }
     else if(data.action == 'sliderChange'){
-      $(`#${data.username} > span`).html(data.slider);
+      $(`td#${data.username} > span`).html(data.slider);
+      $(`td#${data.username} > .followingSlider > .ui-slider-handle`).show();
+      $(`td#${data.username} > .followingSlider`).slider( "option", "value", data.slider);
     }
     else if(data.action == 'followNotify'){
       following = data.following.map(function(user) {
@@ -254,7 +274,7 @@ $(function () {
       });
       start_interactive(data);
     }
-    else{
+    else {
       console.log(data)
     }
   };

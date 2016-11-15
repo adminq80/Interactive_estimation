@@ -28,11 +28,11 @@ $("#slider").slider({
     $('#correlation')[0].innerHTML = ui.value;
   },
   change: function(event, ui) {
-    $('.ui-slider-handle').show();
+    $('#slider > .ui-slider-handle').show();
     $('#guess').val(ui.value);
   }
 });
 
-$('.ui-slider-handle').hide();
+$('#slider > .ui-slider-handle').hide();
 
 
