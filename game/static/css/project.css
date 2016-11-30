@@ -129,6 +129,17 @@ html, body {
 .submitButton {
   margin-left: 200px;
 }
+
+.screenshot {
+  width: 100%;
+}
+
+.followingSlider {
+  margin-top: 10px;
+  width: 100%;
+  opacity: 1;
+}
+
 <<<<<<< HEAD
 blockquote.instr {
     font-size: 16px;

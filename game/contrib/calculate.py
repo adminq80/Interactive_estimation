@@ -24,4 +24,4 @@ def calculate_score(rounds):
         error = math.fabs(answer - guess)
         score += (1.0-error)**2
             
-    return round(float(score), 2)
+    return 100*round(float(score), 2)
