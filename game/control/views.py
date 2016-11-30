@@ -58,9 +58,17 @@ def play(request):
     if round_data.get('new_round', False):
         if len(plot_pks) == 0:
             # first round no batch has been assigned yet
-            plots = Plot.objects.all()
-            plot = choice(plots)
-            batch = plot.batch
+            if u.level == 'e':
+                batch = 1
+            elif u.level == 'm':
+                batch = 2
+            elif u.level == 'h':
+                batch = 3
+            else:
+                batch = 1
+                print('Error no LEVEL was found on the user object')
+            plots = Plot.objects.filter(batch=batch)
+            plot = plots[0]
             data = {'played_batches': [batch], 'current_batch': batch, 'remaining': game.batch_size-1}
         else:
             data = cache.get('control_user_{}'.format(u.id))
@@ -68,7 +76,7 @@ def play(request):
                 # assign to new batch
                 print('ONE')
                 print(data)
-                plots = Plot.objects.exclude(batch__in=data.get('played_batches', [])).exclude(pk__in=plot_pks)
+                plots = Plot.objects.exclude(batch__in=data.get('played_batches', []))
                 print(plots)
                 plot = choice(plots)
                 batch = plot.batch
@@ -76,12 +84,9 @@ def play(request):
                 data['current_batch'] = batch
                 data['remaining'] = game.batch_size - 1
             else:
-                print('TWO')
-                print(data)
                 plots = Plot.objects.exclude(pk__in=plot_pks).filter(batch=data.get('current_batch'))
-                print('PLOT')
-                print(plots)
-                plot = choice(plots)
+                plot_seq = game.batch_size - data['remaining']
+                plot = plots[plot_seq]
                 data['remaining'] -= 1
         cache.set('control_user_{}'.format(u.id), data)
         with transaction.atomic():

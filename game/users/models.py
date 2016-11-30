@@ -24,6 +24,7 @@ class User(AbstractUser):
         ('i', 'Interactive'),
     ))
     avatar = models.URLField(null=True)
+    user_level = models.CharField(max_length=10, null=True, blank=True)  # level should be either 'e', 'm', or 'h'
 
     def __str__(self):
         return self.username
@@ -46,3 +47,15 @@ class User(AbstractUser):
 
         played_rounds = cls.objects.filter(user=self, guess__gte=Decimal(0.0))
         return calculate_score(played_rounds)
+
+    @property
+    def level(self):
+        return self.user_level
+
+    @level.setter
+    def level(self, val):
+        if val in ['e', 'm', 'h']:
+            self.user_level = val
+            self.save()
+        else:
+            raise TypeError('level must be e, m, or h')
