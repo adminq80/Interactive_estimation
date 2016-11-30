@@ -140,6 +140,9 @@ html, body {
   opacity: 1;
 }
 
+.img-responsive {
+  width: 100%;
+}
 <<<<<<< HEAD
 blockquote.instr {
     font-size: 16px;
