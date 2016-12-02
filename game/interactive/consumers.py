@@ -240,10 +240,11 @@ def follow_list(message):
         just_followed = []
         for u in game.users.all():
             d = {
-                    'username': u.username,
-                    'avatar': u.get_avatar,
-                    'score': u.get_score,
-                }
+                'username': u.username,
+                'avatar': u.get_avatar,
+            }
+            rounds = InteractiveRound.objects.filter(user=u).order_by('-round_order')[:game.constraints.score_lambda]
+            d['score'] = calculate_score(rounds.all())
             if u.username == user.username:
                 continue
             elif u.username in follow_users:
