@@ -26,6 +26,17 @@ def lobby(request):
 
 @login_required(login_url='/')
 def exit_survey(request):
+    """
+    username = models.CharField(max_length=255, blank=True, null=True)
+    game = models.OneToOneField(Interactive)
+    age = models.PositiveSmallIntegerField(null=True)
+    gender = models.CharField(max_length=10, choices=(('m', 'Male'),
+                                                      ('f', 'Female'),
+                                                      ), blank=True, null=True)
+    feedback = models.TextField(null=True)
+    :param request:
+    :return:
+    """
     form = ExitSurvey(request.POST or None)
     if request.method == 'POST':
         if form.is_valid():
@@ -33,8 +44,7 @@ def exit_survey(request):
             game = Interactive.objects.get(users=u)
             instance = form.save(commit=False)
             instance.username = u.username
-            # instance.user.add(request.user)
-            instance.game = game
+            instance.game = game.id
             instance.save()
             return redirect('interactive:done')
         else:
