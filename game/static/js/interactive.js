@@ -173,7 +173,7 @@ $(function () {
       $(".guess").show();
 
       $("#interactiveGuess").show();
-      // $(".box#score").html(`${data.score}`);
+      $(".box#score").html(`${data.score}`);
 
       $("#following_list tbody").html("");
       $.each(data.following, function(i, user) {
@@ -208,7 +208,7 @@ $(function () {
     }
     else if(data.action == 'outcome'){
       console.log(data);
-      // $(".box#score").html(`${data.score}`);
+      $(".box#score").html(`${data.score}`);
       $("#unfollow_list tbody").html("");
 
       for(var i = 0; i < data.max_following; i++) {
