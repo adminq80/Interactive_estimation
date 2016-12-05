@@ -69,7 +69,4 @@ def instruction(request):
     if request.method == 'POST':
         cache.set('interactive_instruction_{}'.format(u.id), True)
         return redirect('interactive:lobby')
-    render(request, 'interactive/instructions.html')
-    cache.set('interactive_instruction_{}'.format(u.id), True)
-    return redirect('interactive:lobby')
-    # return render(request, 'interactive/instructions.html')
+    return render(request, 'interactive/instructions.html')
