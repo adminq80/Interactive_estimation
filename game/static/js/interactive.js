@@ -9,12 +9,17 @@ function countdown(counterState, s) {
       counter[0].innerHTML = "0:" + (seconds < 10 ? "0" : "") + String(seconds);
       if( seconds > 0 ) {
         setTimeout(tick, 1000);
+        if(seconds == 10) {
+          $("#counter").css("color", "red");
+        }
       } else {
         var submit = $("#submit")[0];
+        $("#submit").removeAttr("disabled");
         submit.click();
       }
     }
   }
+  $("#counter").css("color", "#006400");
   tick();
 }
 
@@ -52,6 +57,7 @@ $("#slider").slider({
   change: function(event, ui) {
     $('#slider > .ui-slider-handle').show();
     $('#guess').val(ui.value);
+    $("#submit").removeAttr("disabled");
   }
 });
 
@@ -151,6 +157,7 @@ $(function () {
       $('#user-avatar').attr('src', data.url);
     }
     else if(data.action == 'initial') {
+      $(".img-responsive").removeClass("faded");
 
       start_game(data, data.seconds);
       resetSlider();
@@ -207,7 +214,7 @@ $(function () {
       })
     }
     else if(data.action == 'outcome'){
-      console.log(data);
+      
       $(".box#score").html(`${data.score}`);
       $("#unfollow_list tbody").html("");
 
@@ -222,6 +229,7 @@ $(function () {
       if(data.guess != -1) {
         $("#yourGuess").html(data.guess);
       }
+      $(".img-responsive").addClass("faded");
       $("#roundAnswer").html(data.correct_answer);
 
       start_interactive(data);

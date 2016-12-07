@@ -33,7 +33,7 @@
       </div>
       <div id="picker">
         {% include 'components/slider.html' %}
-        <input type="submit" value="Next" id="submit" class="btn btn-primary nextButton">
+        <input type="submit" value="Submit" id="submit" class="btn btn-success nextButton" disabled>
       </div>
     </div>
 
@@ -41,21 +41,22 @@
       <div>
         <img src='#' class="img-responsive"/>
       </div>
-      <div>
-        Your guess: <span id="yourGuess"></span>
+      <div class="row">
+        <div class="col-md-5"><b>Your guess:</b></div>
+        <div class="col-md-2"><span id="yourGuess"></span></div>
       </div>
-
-      <div>
-        Actual correlation: <span id="roundAnswer"></span>
+      <div class="row">
+        <div class="col-md-5"><b>Actual correlation:</b></div>
+        <div class="col-md-2"><span id="roundAnswer"></span></div>
       </div>
-      <input type="submit" value="Next" id="submit" class="btn btn-primary nextButton">
+      <input type="submit" value="Next" id="submit" class="btn btn-success nextButton">
     </div>
 
 
     <div class="col-md-3">
+      {% include 'components/timer.html' %}
       <div class="outcome" hidden>
         <b>You are following:</b>
-        <div>User Scores</div>
         <table class="table table-bordered" id="unfollow_list">
           <tbody>
           </tbody>
@@ -64,13 +65,11 @@
 
       <div id="interactiveGuess" hidden>
         <div><b>You are following:</b></div>
-        <div>User Guesses</div>
         <table class="table table-bordered" id="following_list">
           <tbody>
           </tbody>
         </table>
       </div>
-      {% include 'components/timer.html' %}
     </div>
 
     <div class="col-md-3">

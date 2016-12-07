@@ -13,14 +13,12 @@ function countdown() {
       }
     } else {
       var submit = $("#submit")[0];
+      $("#submit").removeAttr("disabled");
       submit.click();
     }
   }
   if(counter) {
     tick();
-    if(seconds < 10) {
-      $("#counter").css("color", "red");
-    }
   }
 }
 countdown();
@@ -34,10 +32,10 @@ $("#slider").slider({
   },
   change: function(event, ui) {
     $('#slider > .ui-slider-handle').show();
+    $("#submit").removeAttr("disabled");
     $('#guess').val(ui.value);
   }
 });
 
 $('#slider > .ui-slider-handle').hide();
-
 
