@@ -1,9 +1,16 @@
+@import url(https://fonts.googleapis.com/css?family=Orbitron);
 .box {
   width: 70%;
   text-align: center;
   padding: 0px 5px;
   margin-top: 5px;
   border: 2px solid #000;
+}
+
+#counter {
+  color: #006400;
+  font-size: 24px;
+  font-family: Orbitron, sans-serif;
 }
 
 .info {

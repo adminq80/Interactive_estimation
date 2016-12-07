@@ -6,17 +6,10 @@
 
 <div>
   <div id="timer" class="info">
-    Timer
-    <div class="box">
-      <div id="counter"></div>
-    </div>
+    Timer: <span id="counter"></span>
   </div>
   <div class="info">
-    Score 
-    <div class="box" id="score">
-      {{ user.get_score }}
-      <img id="coin" src="/static/images/coin.png" />
-    </div>
+    Bonus: {{ user.get_score }} <img id="coin" src="/static/images/coin.png" />
   </div>
   <div class="info">Plots remaining: {{ remaining }} <span id="remaining"></span></div>
 </div>

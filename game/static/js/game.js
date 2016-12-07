@@ -6,16 +6,21 @@ function countdown() {
   function tick() {
     seconds--;
     counter.innerHTML = "0:" + (seconds < 10 ? "0" : "") + String(seconds);
-    if( seconds > 0 ) {
-        setTimeout(tick, 1000);
+    if(seconds > 0) {
+      setTimeout(tick, 1000);
+      if(seconds == 10) {
+        $("#counter").css("color", "red");
+      }
     } else {
       var submit = $("#submit")[0];
       submit.click();
     }
   }
-  console.log(counter);
   if(counter) {
     tick();
+    if(seconds < 10) {
+      $("#counter").css("color", "red");
+    }
   }
 }
 countdown();

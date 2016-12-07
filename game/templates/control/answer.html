@@ -14,22 +14,21 @@
 {% block container %}
 
 <div class="col-md-6">
-  <h3>Your results</h3>
-  <img src="/static/plots/{{ round.plot }}" class="img-responsive" />
+  <img src="/static/plots/{{ round.plot }}" class="img-responsive faded" />
   <div class="form">
-    {% if guess > 0 %}
-    <div>
-      Your guess: {{ guess }}
+    <div class="row">
+      <div class="col-md-5"><b>Your guess:</b></div>
+      {% if guess > 0 %}
+        <div class="col-md-2">{{guess}}</div>
+      {% else %}
+        <div class="col-md-2">N/A</div>
+      {% endif %}
     </div>
-    {% else %}
-    <div>
-      Your guess: N/A
+    <div class="row">
+      <div class="col-md-5"><b>Actual correlation:</b></div>
+      <div class="col-md-2">{{ round.answer }}</div>
     </div>
-    {% endif %}
-
-    <div>
-      Actual correlation: {{ round.answer }}
-    </div>
+   
     <form action="{% url 'control:play' %}">
       <input type="submit" value="Next" id="submit" class="btn btn-primary nextButton">
     </form>
