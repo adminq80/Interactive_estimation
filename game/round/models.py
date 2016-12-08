@@ -11,10 +11,14 @@ from game.control.models import Control
 
 
 class Plot(models.Model):
-    plot = models.URLField()
+    plot = models.URLField(unique=True)
     answer = models.DecimalField(max_digits=3, decimal_places=2)
     duration = models.TimeField(null=True)
     batch = models.PositiveSmallIntegerField(null=True)
+
+    non_stationary_seq = models.PositiveSmallIntegerField(null=True)
+    stationary_seq = models.PositiveSmallIntegerField(null=True)
+    seq = models.PositiveSmallIntegerField(null=True)  # not efficient but it will do the job
 
     def __str__(self):
         return self.plot
