@@ -13,7 +13,7 @@ game_routes = [
     route('game.route', initial_submit, action='^initial$'),  # initial guess submission
     route('game.route', data_broadcast, action='^slider$'),  # broadcast guess to player
     route('game.route', interactive_submit, action='^interactive$'),
-    route('game.route', follow_list, action='^follow$'),
+    # route('game.route', follow_list, action='^follow$'),
     route('game.route', round_outcome, action='^outcome$'),
 
 ]
