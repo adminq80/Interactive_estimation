@@ -11,6 +11,7 @@ function countdown(counterState, s) {
         setTimeout(tick, 1000);
         if(seconds == 10) {
           $("#counter").css("color", "red");
+          $("#counter").css("font-size", "26px");
         }
       } else {
         var submit = $("#submit")[0];
@@ -20,6 +21,7 @@ function countdown(counterState, s) {
     }
   }
   $("#counter").css("color", "#006400");
+  $("#counter").css("font-size", "#24px");
   tick();
 }
 
