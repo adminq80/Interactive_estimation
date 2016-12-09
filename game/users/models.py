@@ -10,6 +10,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from game.contrib.calculate import calculate_score
 from game.interactive.models import InteractiveRound
+from game.interactive_shocks.models import InteractiveShocksRound
+from game.interactive_static.models import InteractiveStaticRound
 from game.round.models import Round
 
 
@@ -39,6 +41,10 @@ class User(AbstractUser):
             cls = InteractiveRound
         elif self.game_type == 'c':
             cls = Round
+        elif self.game_type == 'shocks':
+            cls = InteractiveShocksRound
+        elif self.game_type == 'static':
+            cls = InteractiveStaticRound
         else:
             raise NotImplemented('Not Implemented')
 
