@@ -420,8 +420,6 @@ def start_interactive(game, round_data, users_plots):
                         'round_data': round_data,
                         'users_plots': users_plots,
                         })
-    print("USERS_PLOTS")
-    print(users_plots)
     for i in users_plots:
         user = i['user']
         round_data['plot'] = i['plot']

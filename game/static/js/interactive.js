@@ -88,6 +88,7 @@ function start_game(data, seconds) {
   $("img.img-responsive").attr("src", '/static/plots/' + data.plot);
   countdown(state, seconds);
   $("#remaining").html(data.remaining);
+  $("#user_score").html(data.score);
 
   var audio = new Audio('/static/round-sound.mp3');
   audio.play();
@@ -117,7 +118,17 @@ function start_interactive(data) {
 $(function () {
 
   var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
-  var ws_path = ws_scheme + '://' + window.location.host + "/multiplayer/lobby/";
+  var path = null;
+  if(window.location.pathname == '/multiplay/lobby/'){
+    path = "/multiplay/lobby/";
+  }
+  else if (window.location.pathname == '/multiplayer/lobby/') {
+    path = "/multiplayer/lobby/";
+  }
+  else{
+    path = '/multiplay_game/lobby/';
+  }
+  var ws_path = ws_scheme + '://' + window.location.host + path;
 
   // console.log("Connecting to " + ws_path);
   socket = new ReconnectingWebSocket(ws_path);
