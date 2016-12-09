@@ -316,6 +316,7 @@ def interactive_submit(message):
                                                          round_order=round_data.get('current_round'))
             current_round.influenced_guess = Decimal(guess)
             current_round.save()
+            game.broadcast(action='user_submitted', username=user.username)
         except InteractiveRound.DoesNotExist:
             message.reply_channel.send({
                 'text': json.dumps({
