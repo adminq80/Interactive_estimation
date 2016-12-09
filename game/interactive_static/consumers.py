@@ -255,7 +255,7 @@ def follow_list(message):
                 'username': u.username,
                 'avatar': u.get_avatar,
             }
-            rounds = InteractiveStaticRound.objects.filter(user=u).order_by('-round_order')[:game.constraints.score_lambda]
+            rounds = InteractiveStaticRound.objects.filter(user=u, guess__gte=Decimal(0.0)).order_by('-round_order')[:game.constraints.score_lambda]
             d['score'] = calculate_score(rounds.all())
             if u.username == user.username:
                 continue
@@ -453,7 +453,7 @@ def outcome_loop(lim, l):
     temp = []
     for u in l:
         d = {'username': u.username, 'avatar': u.get_avatar}
-        rounds = InteractiveStaticRound.objects.filter(user=u).order_by('-round_order')[:lim]
+        rounds = InteractiveStaticRound.objects.filter(user=u, guess__gte=Decimal(0.0)).order_by('-round_order')[:lim]
         score = calculate_score(rounds.all())
         d['score'] = score
         temp.append(d)
