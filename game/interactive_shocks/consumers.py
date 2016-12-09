@@ -455,14 +455,15 @@ def outcome_loop(lim, l):
         d = {'username': u.username, 'avatar': u.get_avatar}
         rounds = InteractiveShocksRound.objects.filter(user=u, guess__gte=Decimal(0.0)).order_by('-round_order')[:lim]
         score = calculate_score(rounds.all())
-        d['score'] = score
+        d['round_score'] = score
+        d['score'] = u.get_score
         temp.append(d)
     return temp
 
 
 def outcome(user, game: InteractiveShocks, round_data):
     current_round = InteractiveShocksRound.objects.get(user=user, round_order=round_data.get('current_round'))
-    rest_of_users = outcome_loop(game.constraints.score_lambda,
+    rest_of_users = outcome_loop(1,
                                  current_round.game.users.filter(~Q(username__in=current_round.following.
                                                                 values('username'))).exclude(username=user.username))
 
