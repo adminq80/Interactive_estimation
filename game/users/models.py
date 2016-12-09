@@ -19,10 +19,7 @@ class User(AbstractUser):
     # First Name and Last Name do not cover name patterns
     # around the globe.
     name = models.CharField(_('Name of User'), blank=True, max_length=255)
-    game_type = models.CharField(_('User Type'), max_length=10, choices=(
-        ('c', 'Control'),
-        ('i', 'Interactive'),
-    ))
+    game_type = models.CharField(_('User Type'), max_length=10)
     avatar = models.URLField(null=True)
     user_level = models.CharField(max_length=10, null=True, blank=True)  # level should be either 'e', 'm', or 'h'
 

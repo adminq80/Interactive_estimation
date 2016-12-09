@@ -52,6 +52,8 @@ LOCAL_APPS = (
     'game.round',
     'game.interactive',
     'game.control',
+    'game.interactive_shocks',
+    'game.interactive_static',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

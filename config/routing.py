@@ -10,8 +10,9 @@ from game.interactive.consumers import lobby
 from channels import include
 
 channel_routing = [
-    include('game.interactive.routing.websocket_routing', path=r'^/multiplayer/lobby'),
-
+    include('game.interactive.routing.websocket_routing', path=r'^/multiplay/lobby'),
+    include('game.interactive_shocks.routing.websocket_routing', path=r'^/multiplayer/lobby'),
+    include('game.interactive_static.routing.websocket_routing', path=r'^/multiplay_game/lobby'),
     # # route('http.request', TemplateView.as_view(template_name='pages/home.html'), path=r'^/$', name='home'),
     #
     # # route("http.request", home),
