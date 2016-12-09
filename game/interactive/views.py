@@ -5,9 +5,9 @@ from django.contrib.auth.decorators import login_required
 
 from game.users.models import User
 from game.contrib.random_user import random_user
-from game.interactive.forms import ExitSurvey
+from game.interactive.forms import ExitSurvey, CheckForm
 
-from .models import Interactive
+from .models import Interactive, Settings
 
 
 def assign(request):
@@ -57,6 +57,7 @@ def done(request):
 
 
 def instruction(request):
+    form = CheckForm(request.POST or None)
     if request.user.is_anonymous:
         u, password = random_user('i')
         u = authenticate(username=u.username, password=password)
@@ -67,6 +68,12 @@ def instruction(request):
         if u.game_type != 'i':
             return redirect('/')
     if request.method == 'POST':
-        cache.set('interactive_instruction_{}'.format(u.id), True)
-        return redirect('interactive:lobby')
-    return render(request, 'interactive/instructions.html')
+        if form.is_valid():
+            cache.set('interactive_instruction_{}'.format(u.id), True)
+            return redirect('interactive:lobby')
+    game_settings = Settings.objects.order_by('?')[0]
+    return render(request, 'interactive/instructions.html', {'players_num': game_settings.max_users,
+                                                             'rounds_num': game_settings.max_rounds,
+                                                             'following_num': game_settings.max_following,
+                                                             'form': form,
+                                                             })
