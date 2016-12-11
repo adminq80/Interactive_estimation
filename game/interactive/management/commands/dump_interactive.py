@@ -27,15 +27,15 @@ class Command(BaseCommand):
             rounds = InteractiveRound.objects.filter(user=u)
             if rounds.count() < 1:
                 continue
-            try:
-                c = Interactive.objects.get(users=u)
-            except Interactive.DoesNotExist:
-                continue
+            # try:
+            #     c = Interactive.objects.get(users=u)
+            # except Interactive.DoesNotExist:
+            #     continue
             d = {'user': u.username,
                  'final_score': u.get_score,
                  'condition': 'control',
                  'time_created': u.date_joined,
-                 'game_id': c.id,
+                 # 'game_id': c.id,
                  'unanswered': rounds.filter(guess__lt=0).count(),
                  }
             try:
