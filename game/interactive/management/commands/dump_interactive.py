@@ -1,0 +1,51 @@
+import json
+import datetime
+from decimal import Decimal
+
+from django.core.management.base import BaseCommand
+from game.users.models import User
+
+from game.interactive.models import Interactive, InteractiveRound, Survey
+
+
+class DecimalEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, Decimal):
+            return float(o)
+        if isinstance(o, datetime.datetime):
+            return str(o)
+        if isinstance(o, datetime.timedelta):
+            return o.seconds
+        return super(DecimalEncoder, self).default(o)
+
+
+class Command(BaseCommand):
+
+    def handle(self, *args, **options):
+        users = []
+        for u in User.objects.filter(game_type='i'):
+            rounds = InteractiveRound.objects.filter(user=u)
+            if rounds.count() < 1:
+                continue
+            try:
+                c = Interactive.objects.get(users=u)
+            except Interactive.DoesNotExist:
+                continue
+            d = {'user': u.username,
+                 'final_score': u.get_score,
+                 'condition': 'control',
+                 'time_created': u.date_joined,
+                 'game_id': c.id,
+                 'unanswered': rounds.filter(guess__lt=0).count(),
+                 }
+            try:
+                s = Survey.objects.get(username=u.username)
+                survey = s.dump()
+            except Survey.DoesNotExist:
+                survey = None
+            d['survey'] = survey
+            d['rounds'] = [r.round_data() for r in rounds]
+            # d['completed_hit'] = c.max_rounds == len(d['rounds'])
+            users.append(d)
+        print('Users = {}'.format(len(users)))
+        print(json.dumps(users, cls=DecimalEncoder))

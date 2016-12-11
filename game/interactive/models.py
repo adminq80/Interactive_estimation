@@ -108,3 +108,12 @@ class Survey(models.Model):
 
     def __str__(self):
         return self.username
+
+    def dump(self):
+        return {
+            'user': self.username or '',
+            'game': self.game or '',
+            'age': self.age or '',
+            'gender': self.gender or '',
+            'feedback': self.feedback or '',
+        }
