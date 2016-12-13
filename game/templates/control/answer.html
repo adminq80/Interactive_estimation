@@ -30,11 +30,7 @@
     </div>
     <div class="row">
       <div class="col-md-5"><b>Difference:</b></div>
-      {% if guess > 0 %}
-        <div class="col-md-2">{{ round.answer }} - {{guess}}</div>
-      {% else %}
-        <div class="col-md-2">N/A</div>
-      {% endif %}
+      <div class="col-md-2">{{ round.difference }}</div>
     </div>
     <div class="row">
       <div class="col-md-5"><b>Bonus earned:</b></div>

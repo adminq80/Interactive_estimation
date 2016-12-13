@@ -11,7 +11,7 @@ function countdown(counterState, s) {
         setTimeout(tick, 1000);
         if(seconds == 10) {
           $("#counter").css("color", "red");
-          $("#counter").css("font-size", "26px");
+          $("#counter").css("font-size", "32px");
         }
       } else {
         var submit = $("#submit")[0];
@@ -21,7 +21,7 @@ function countdown(counterState, s) {
     }
   }
   $("#counter").css("color", "#006400");
-  $("#counter").css("font-size", "24px");
+  $("#counter").css("font-size", "28px");
   tick();
 }
 
@@ -90,7 +90,7 @@ function start_game(data, seconds) {
   $("img.img-responsive").attr("src", '/static/plots/' + data.plot);
   countdown(state, seconds);
   $("#remaining").html(data.remaining);
-  $("#user_score").html(data.score);
+  $(".user_score").html(data.score);
 
   var audio = new Audio('/static/round-sound.mp3');
   audio.play();
@@ -167,7 +167,7 @@ $(function () {
       window.location.href = proto + window.location.host + data.url;
     }
     else if(data.action == 'avatar'){
-      $('#user-avatar').attr('src', data.url);
+      $('.user-avatar').attr('src', data.url);
     }
     else if(data.action == 'initial') {
       $(".img-responsive").removeClass("faded");
@@ -242,7 +242,8 @@ $(function () {
       $(".outcome").show();
       if(data.guess != -1) {
         $("#yourGuess").html(data.guess);
-        $("#roundDifference").html(data.guess - data.correct_answer);
+        const diff = Math.abs(data.guess - data.correct_answer);
+        $("#roundDifference").html(Math.round(diff * 100) / 100);
       }
       $(".img-responsive").addClass("faded");
       $("#roundAnswer").html(data.correct_answer);

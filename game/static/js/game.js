@@ -10,7 +10,7 @@ function countdown() {
       setTimeout(tick, 1000);
       if(seconds == 10) {
         $("#counter").css("color", "red");
-        $("#counter").css("font-size", "26px");
+        $("#counter").css("font-size", "32px");
       }
     } else {
       var submit = $("#submit")[0];

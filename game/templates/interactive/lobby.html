@@ -61,12 +61,18 @@
         <div class="col-md-5"><b>Bonus earned:</b></div>
         <div class="col-md-2"><span id="roundBonus"></span></div>
       </div>
-      <input type="submit" value="Next" id="submit" class="btn btn-success nextButton">
+      <input type="submit" value="Submit" id="submit" class="btn btn-success nextButton">
     </div>
 
 
     <div class="col-md-3">
       <div class="outcome" hidden>
+        <div><b>Your bonus:</b></div>
+        <div>
+          <img src='' class="avatar user-avatar" />
+          <span class="user_score">0.0</span>&nbsp;<span id="user_round_score">(+0.5)</span>&nbsp;<img id="coin" src="/static/images/coin.png" />
+        </div>
+        <br>
         <b>You are following:</b>
         <table class="table table-bordered" id="unfollow_list">
           <tbody>
@@ -75,6 +81,7 @@
       </div>
 
       <div id="interactiveGuess" hidden>
+       
         <div><b>You are following:</b></div>
         <table class="table table-bordered" id="following_list">
           <tbody>
