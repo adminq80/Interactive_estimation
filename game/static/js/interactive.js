@@ -21,7 +21,7 @@ function countdown(counterState, s) {
     }
   }
   $("#counter").css("color", "#006400");
-  $("#counter").css("font-size", "#24px");
+  $("#counter").css("font-size", "24px");
   tick();
 }
 
@@ -37,10 +37,10 @@ function new_follow_list(name, avatar, score) {
   `);
 }
 
-function new_unfollow_list(name, avatar, score) {
+function new_unfollow_list(name, avatar, score, round_score) {
   return (`
     <img src=${avatar} class='avatar' />
-    <span>${score} </span><img id="coin" src="/static/images/coin.png" />
+    <span>${score} </span> (+${round_score}) <img id="coin" src="/static/images/coin.png" />
     <button type="button" id=${name} class="btn btn-primary unfollow">Unfollow</button>
   `);
 }
@@ -111,7 +111,7 @@ function start_interactive(data) {
   $.each(data.following, function(i, user) {
     var avatar = "/static/"+user.avatar;
     var row = $($("#unfollow_list tbody td")[i]);
-    row.html(new_unfollow_list(user.username, avatar, user.score));
+    row.html(new_unfollow_list(user.username, avatar, user.score, user.round_score));
   });
 
 }
@@ -227,6 +227,7 @@ $(function () {
       })
     }
     else if(data.action == 'outcome'){
+      console.log('data', data);
       
       $(".box#score").html(`${data.score}`);
       $("#unfollow_list tbody").html("");
@@ -241,9 +242,14 @@ $(function () {
       $(".outcome").show();
       if(data.guess != -1) {
         $("#yourGuess").html(data.guess);
+        $("#roundDifference").html(data.guess - data.correct_answer);
       }
       $(".img-responsive").addClass("faded");
       $("#roundAnswer").html(data.correct_answer);
+
+      // TO-DO add user's round_bonus to the data
+      // $("#roundBonus").html(data.round_bonus);
+
 
       start_interactive(data);
 
@@ -257,8 +263,6 @@ $(function () {
 
       $(document).on("click", ".plusIcon", function(e) {
         var username = e.target.parentElement.parentElement.id;
-        var avatar = $(`div#${username}>.avatar`).attr('src');
-        var score = $(`div#${username}>.userScore`).html();
 
         var followingCopy = following.slice();
         followingCopy.push(username);

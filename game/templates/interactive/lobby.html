@@ -27,7 +27,11 @@
 
 <div id="game" hidden>
   <div class="form">
-    <div class="col-md-6 guess" hidden>
+    <div class="col-md-1">
+      {% include 'components/timer.html' %}
+    </div>
+
+    <div class="col-md-5 guess" hidden>
       <div>
         <img src='#' class="img-responsive"/>
       </div>
@@ -37,7 +41,7 @@
       </div>
     </div>
 
-    <div class="col-md-6 outcome" hidden>
+    <div class="col-md-5 outcome" hidden>
       <div>
         <img src='#' class="img-responsive"/>
       </div>
@@ -49,12 +53,19 @@
         <div class="col-md-5"><b>Actual correlation:</b></div>
         <div class="col-md-2"><span id="roundAnswer"></span></div>
       </div>
+      <div class="row">
+        <div class="col-md-5"><b>Difference:</b></div>
+        <div class="col-md-2"><span id="roundDifference"></span></div>
+      </div>
+      <div class="row">
+        <div class="col-md-5"><b>Bonus earned:</b></div>
+        <div class="col-md-2"><span id="roundBonus"></span></div>
+      </div>
       <input type="submit" value="Next" id="submit" class="btn btn-success nextButton">
     </div>
 
 
     <div class="col-md-3">
-      {% include 'components/timer.html' %}
       <div class="outcome" hidden>
         <b>You are following:</b>
         <table class="table table-bordered" id="unfollow_list">

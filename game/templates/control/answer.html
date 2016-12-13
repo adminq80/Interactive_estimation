@@ -28,7 +28,18 @@
       <div class="col-md-5"><b>Actual correlation:</b></div>
       <div class="col-md-2">{{ round.answer }}</div>
     </div>
-   
+    <div class="row">
+      <div class="col-md-5"><b>Difference:</b></div>
+      {% if guess > 0 %}
+        <div class="col-md-2">{{ round.answer }} - {{guess}}</div>
+      {% else %}
+        <div class="col-md-2">N/A</div>
+      {% endif %}
+    </div>
+    <div class="row">
+      <div class="col-md-5"><b>Bonus earned:</b></div>
+      <div class="col-md-2">{{ round.bonus }}</div>
+    </div>
     <form action="{% url 'control:play' %}">
       <input type="submit" value="Next" id="submit" class="btn btn-success nextButton">
     </form>
