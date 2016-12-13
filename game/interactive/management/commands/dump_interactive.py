@@ -23,29 +23,26 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         users = []
-        for u in User.objects.filter(game_type='i'):
-            rounds = InteractiveRound.objects.filter(user=u)
-            if rounds.count() < 1:
-                continue
-            # try:
-            #     c = Interactive.objects.get(users=u)
-            # except Interactive.DoesNotExist:
-            #     continue
-            d = {'user': u.username,
-                 'final_score': u.get_score,
-                 'condition': 'control',
-                 'time_created': u.date_joined,
-                 # 'game_id': c.id,
-                 'unanswered': rounds.filter(guess__lt=0).count(),
-                 }
-            try:
-                s = Survey.objects.get(username=u.username)
-                survey = s.dump()
-            except Survey.DoesNotExist:
-                survey = None
-            d['survey'] = survey
-            d['rounds'] = [r.round_data() for r in rounds]
-            # d['completed_hit'] = c.max_rounds == len(d['rounds'])
-            users.append(d)
-        print('Users = {}'.format(len(users)))
+
+        for game in Interactive.objects.all():
+            for u in game.users.all():
+                rounds = InteractiveRound.objects.filter(user=u)
+                if rounds.count() < 1:
+                    continue
+                d = {'user': u.username,
+                     'final_score': u.get_score,
+                     'condition': 'control',
+                     'time_created': u.date_joined,
+                     'game_id': game.id,
+                     'unanswered': rounds.filter(guess__lt=0).count(),
+                     }
+                try:
+                    s = Survey.objects.get(username=u.username)
+                    survey = s.dump()
+                except Survey.DoesNotExist:
+                    survey = None
+                d['survey'] = survey
+                d['rounds'] = [r.round_data() for r in rounds]
+                # d['completed_hit'] = c.max_rounds == len(d['rounds'])
+                users.append(d)
         print(json.dumps(users, cls=DecimalEncoder))
