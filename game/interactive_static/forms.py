@@ -27,7 +27,7 @@ class SettingsForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = self.cleaned_data
-        if cleaned_data.get('max_users', 0) > cleaned_data.get('max_following', 0) > \
+        if cleaned_data.get('max_users', 0) >= cleaned_data.get('max_following', 0) > \
                 cleaned_data.get('min_following', 0) and cleaned_data.get('max_users', 0) > \
                 cleaned_data.get('min_users', 0) and cleaned_data.get('score_lambda', 1) and \
                                 Plot.objects.all().count() >= cleaned_data.get('max_rounds') > 0:

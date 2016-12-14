@@ -31,7 +31,7 @@ class Settings(models.Model):
                                                                  )
 
     def save(self, *args, **kwargs):
-        if self.max_users > self.min_users and self.max_users > self.max_following > self.min_following:
+        if self.max_users > self.min_users and self.max_users >= self.max_following > self.min_following:
             return super(Settings, self).save(*args, **kwargs)
         raise ValidationError("Didn't meet logical constraints for the Settings model")
 
