@@ -59,7 +59,9 @@ $("#slider").slider({
   change: function(event, ui) {
     $('#slider > .ui-slider-handle').show();
     $('#guess').val(ui.value);
+    $("#submitText").removeClass("hide");
     $("#submit").removeAttr("disabled");
+    $("#submit").addClass("highlight");
   }
 });
 
@@ -83,6 +85,8 @@ function resetSlider() {
 function start_game(data, seconds) {
   state = data.action;
   $("#myModal").modal('hide');
+  $("#submit").removeClass("highlight");
+  $("#submitText").addClass("hide");
   $("#lobby").hide();
   set_breadcrumbs(state, data.current_round);
   $("#game").show();

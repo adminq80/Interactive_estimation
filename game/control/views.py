@@ -170,6 +170,7 @@ def submit_answer(request):
             round_data['round'] = plot
             round_data['guess'] = r.guess
             round_data['score'] = r.score
+            round_data['difference'] = abs(r.guess - plot)
             round_data['new_round'] = True
             cache.set('control-{}'.format(game.id), round_data)
             return render(request, 'control/answer.html', round_data)

@@ -37,7 +37,7 @@
       </div>
       <div id="picker">
         {% include 'components/slider.html' %}
-        <input type="submit" value="Submit" id="submit" class="btn btn-success nextButton" disabled>
+        <span id="submitText" class="hide">If this is your final guess, please click</span><input type="submit" value="Submit" id="submit" class="btn btn-success nextButton" disabled>
       </div>
     </div>
 
@@ -61,7 +61,9 @@
         <div class="col-md-5"><b>Bonus earned:</b></div>
         <div class="col-md-2"><span id="roundBonus"></span></div>
       </div>
-      <input type="submit" value="Submit" id="submit" class="btn btn-success nextButton">
+      <div>
+        <input type="submit" value="Submit" id="submit" class="btn btn-success nextButton">
+      </div>
     </div>
 
 

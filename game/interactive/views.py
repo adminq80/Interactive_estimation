@@ -72,6 +72,8 @@ def instruction(request):
             cache.set('interactive_instruction_{}'.format(u.id), True)
             return redirect('interactive:lobby')
     game_settings = Settings.objects.order_by('?')[0]
+    cache.set('interactive_instruction_{}'.format(u.id), True)
+    return redirect('interactive:lobby')
     return render(request, 'interactive/instructions.html', {'players_num': game_settings.max_users,
                                                              'rounds_num': game_settings.max_rounds,
                                                              'following_num': game_settings.max_following,
