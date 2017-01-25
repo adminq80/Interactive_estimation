@@ -8,7 +8,7 @@ from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
-from game.contrib.calculate import calculate_score
+from game.contrib.calculate import calculate_score, score_gain
 from game.interactive.models import InteractiveRound
 from game.interactive_shocks.models import InteractiveShocksRound
 from game.interactive_static.models import InteractiveStaticRound
@@ -35,8 +35,7 @@ class User(AbstractUser):
     def get_avatar(self):
         return 'images/avatars/{}'.format(self.avatar)
 
-    @property
-    def get_score(self):
+    def __get_user_cls(self):
         if self.game_type == 'i':
             cls = InteractiveRound
         elif self.game_type == 'c':
@@ -47,9 +46,17 @@ class User(AbstractUser):
             cls = InteractiveStaticRound
         else:
             raise NotImplemented('Not Implemented')
+        return cls
 
-        played_rounds = cls.objects.filter(user=self, guess__gte=Decimal(0.0))
+    @property
+    def get_score(self):
+        played_rounds = self.__get_user_cls().objects.filter(user=self, guess__gte=Decimal(0.0)).order_by('round_order')
         return calculate_score(played_rounds)
+
+    @property
+    def get_score_and_gain(self):
+        played_rounds = self.__get_user_cls().objects.filter(user=self, guess__gte=Decimal(0.0)).order_by('round_order')
+        return score_gain(played_rounds)
 
     @property
     def level(self):

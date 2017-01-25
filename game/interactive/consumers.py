@@ -433,8 +433,9 @@ def interactive(user, game, round_data):
 
     following = [{'username': u.username, 'avatar': u.get_avatar, 'guess': InteractiveRound.objects.get(user=u,
                     round_order=round_data.get('current_round')).get_guess()} for u in current_round.following.all()]
-
-    game.user_send(user, action='interactive', score=user.get_score, following=following, seconds=SECONDS, **round_data)
+    score, gain = user.get_score_and_gain
+    game.user_send(user, action='interactive', score=score, gain=gain,
+                   following=following, seconds=SECONDS, **round_data)
 
 
 def start_outcome(game, round_data, users_plots):
@@ -452,11 +453,9 @@ def start_outcome(game, round_data, users_plots):
 def outcome_loop(lim, l):
     temp = []
     for u in l:
-        d = {'username': u.username, 'avatar': u.get_avatar}
-        rounds = InteractiveRound.objects.filter(user=u, guess__gte=Decimal(0.0)).order_by('-round_order')[:lim]
-        score = calculate_score(rounds.all())
-        d['round_score'] = score
-        d['score'] = u.get_score
+        d = {'username': u.username, 'avatar': u.get_avatar, 'score': u.get_score_and_gain[0],
+             'gain': u.get_score_and_gain[1]}
+        # rounds = InteractiveRound.objects.filter(user=u, guess__gte=Decimal(0.0)).order_by('-round_order')[:lim]
         temp.append(d)
     return temp
 
@@ -468,8 +467,8 @@ def outcome(user, game: Interactive, round_data):
                                                                 values('username'))).exclude(username=user.username))
 
     currently_following = outcome_loop(game.constraints.score_lambda, current_round.following.all())
-
+    score, gain = user.get_score_and_gain
     game.user_send(user, action='outcome', guess=float(current_round.get_influenced_guess()),
-                   score=user.get_score, following=currently_following, all_players=rest_of_users,
+                   score=score, gain=gain, following=currently_following, all_players=rest_of_users,
                    max_following=game.constraints.max_following, correct_answer=float(current_round.plot.answer),
                    seconds=SECONDS, **round_data)
