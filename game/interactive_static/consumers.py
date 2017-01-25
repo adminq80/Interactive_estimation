@@ -28,8 +28,7 @@ def changing_levels(game):
     total_users = game.users.count()
     chunk = int(total_users / 3)
     last_chuck = total_users - chunk * 2
-#    level_list = ['e'] * chunk + ['m'] * chunk + ['h'] * last_chuck
-    level_list = ['h'] *3*chunk
+    level_list = ['e'] * chunk + ['m'] * chunk + ['h'] * last_chuck
     shuffle(level_list)
     for i, user in enumerate(game.users.all()):
         user.level = level_list[i]
