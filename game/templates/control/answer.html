@@ -30,11 +30,11 @@
     </div>
     <div class="row">
       <div class="col-md-5"><b>Difference:</b></div>
-      <div class="col-md-2">{{ round.difference }}</div>
+      <div class="col-md-2">{{ difference }}</div>
     </div>
     <div class="row">
       <div class="col-md-5"><b>Bonus earned:</b></div>
-      <div class="col-md-2">{{ round.bonus }}</div>
+      <div class="col-md-2">{{ bonus }}</div>
     </div>
     <form action="{% url 'control:play' %}">
       <input type="submit" value="Next" id="submit" class="btn btn-success nextButton">

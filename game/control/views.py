@@ -1,3 +1,4 @@
+from math import fabs
 from random import choice
 
 from datetime import timedelta
@@ -59,35 +60,35 @@ def play(request):
         if len(plot_pks) == 0:
             # first round no batch has been assigned yet
             if u.level == 'e':
-                batch = 1
+                track = 1
             elif u.level == 'm':
-                batch = 2
+                track = 2
             elif u.level == 'h':
-                batch = 3
+                track = 3
             else:
-                batch = 1
+                track = 1
                 print('Error no LEVEL was found on the user object')
-            plots = Plot.objects.filter(batch=batch)
+            plots = Plot.objects.filter(non_stationary_seq=track)
             plot = plots[0]
-            data = {'played_batches': [batch], 'current_batch': batch, 'remaining': game.batch_size-1}
+            data = {'track': track, 'remaining': game.batch_size-1}
         else:
             data = cache.get('control_user_{}'.format(u.id))
-            if data.get('remaining') == 0:
-                # assign to new batch
-                print('ONE')
-                print(data)
-                plots = Plot.objects.exclude(batch__in=data.get('played_batches', []))
-                print(plots)
-                plot = choice(plots)
-                batch = plot.batch
-                data['played_batches'].append(batch)
-                data['current_batch'] = batch
-                data['remaining'] = game.batch_size - 1
-            else:
-                plots = Plot.objects.filter(batch=data.get('current_batch'))
-                plot_seq = game.batch_size - data['remaining']
-                plot = plots[plot_seq]
-                data['remaining'] -= 1
+            # if data.get('remaining') == 0:
+            #     plots = Plot.objects.exclude(batch__in=data.get('played_batches', []))
+            #     plot = choice(plots)
+            #     batch = plot.batch
+            #     data['played_batches'].append(batch)
+            #     data['current_batch'] = batch
+            #     data['remaining'] = game.batch_size - 1
+            # else:
+            #     plots = Plot.objects.filter(non_stationary_seq=data.get('track'))
+            #     plot_seq = game.batch_size - data['remaining']
+            #     plot = plots[plot_seq]
+            #     data['remaining'] -= 1
+            plots = Plot.objects.filter(non_stationary_seq=data.get('track'))
+            plot_seq = game.batch_size - data['remaining']
+            plot = plots[plot_seq]
+            data['remaining'] -= 1
         cache.set('control_user_{}'.format(u.id), data)
         with transaction.atomic():
             r, created = Round.objects.get_or_create(user=u, plot=plot, round_order=len(plot_pks))
@@ -109,11 +110,14 @@ def play(request):
             'plot_id': plot.id,
             'remaining': remaining - 1,
             'currentRound': len(plot_pks) + 1,
+            'score': request.user.get_score,
         }
         payload.update(extra)
         cache.set('control-{}'.format(game.id), payload)
     else:
-        payload = None
+        payload = {
+            'score': 0.0,
+        }
 
     if d:
         # there was new data  before
@@ -158,8 +162,6 @@ def submit_answer(request):
                 guess = -1
 
             if r.guess is None:
-                print('R TYPE')
-                print(type(r))
                 r.guess = guess
                 r.score = score
                 r.end_time = timezone.now()
@@ -169,8 +171,9 @@ def submit_answer(request):
                 return redirect('control:play')
             round_data['round'] = plot
             round_data['guess'] = r.guess
-            round_data['score'] = r.score
-            round_data['difference'] = abs(r.guess - plot)
+            round_data['score'], round_data['bonus'] = request.user.get_score_and_gain
+            if r.guess >= 0:
+                round_data['difference'] = fabs(r.guess - plot.answer)
             round_data['new_round'] = True
             cache.set('control-{}'.format(game.id), round_data)
             return render(request, 'control/answer.html', round_data)

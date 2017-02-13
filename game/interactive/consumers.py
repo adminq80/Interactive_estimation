@@ -224,7 +224,8 @@ def data_broadcast(message):
         round_data = d.get('round_data')
         if state == 'interactive':
             # Returns every one who followed this user on this round
-            rounds = InteractiveRound.objects.filter(following=user, game=game, round_order=round_data.get('current_round'))
+            rounds = InteractiveRound.objects.filter(following=user, game=game,
+                                                     round_order=round_data.get('current_round'))
             # check the game and state and make sure we are on interactive mode
 
             for user_round in rounds.all():
@@ -238,7 +239,7 @@ def data_broadcast(message):
 def follow_list(message):
     user, game = user_and_game(message)
     follow_users = message.get('following')
-    # a list of all the usernames to follow
+    # a list of all the user names to follow
     d = cache.get(game.id)
     state = d.get('state')
     round_data = d.get('round_data')
@@ -255,8 +256,8 @@ def follow_list(message):
                 'username': u.username,
                 'avatar': u.get_avatar,
             }
-            rounds = InteractiveRound.objects.filter(user=u, guess__gte=Decimal(0.0)).\
-                         order_by('-round_order')[:game.constraints.score_lambda]
+            rounds = InteractiveRound.objects.filter(user=u, guess__gte=Decimal(0.0)).order_by(
+                '-round_order')[:game.constraints.score_lambda]
             d['score'] = calculate_score(rounds.all())
             if u.username == user.username:
                 continue
@@ -268,7 +269,7 @@ def follow_list(message):
 
         next_round.save()
 
-        message.reply_channel.send({'text':json.dumps({
+        message.reply_channel.send({'text': json.dumps({
             'action': 'followNotify',
             'following': just_followed,
             'all_players': u_can_follow,
@@ -375,7 +376,8 @@ def game_state_checker(game, state, round_data, users_plots, counter=0):
             start_initial(game)
             return
     counter += 1
-    task.deferLater(reactor, 1, game_state_checker, game, state, round_data, users_plots, counter).addErrback(twisted_error)
+    task.deferLater(reactor, 1, game_state_checker, game, state, round_data, users_plots, counter).addErrback(
+        twisted_error)
 
 
 def start_initial(game):
@@ -431,8 +433,9 @@ def start_interactive(game, round_data, users_plots):
 def interactive(user, game, round_data):
     current_round = InteractiveRound.objects.get(user=user, game=game, round_order=round_data.get('current_round'))
 
-    following = [{'username': u.username, 'avatar': u.get_avatar, 'guess': InteractiveRound.objects.get(user=u,
-                    round_order=round_data.get('current_round')).get_guess()} for u in current_round.following.all()]
+    following = [{'username': u.username, 'avatar': u.get_avatar, 'guess': InteractiveRound.objects.get(
+        user=u, round_order=round_data.get('current_round')).get_guess()} for u in current_round.following.all()]
+
     score, gain = user.get_score_and_gain
     game.user_send(user, action='interactive', score=score, gain=gain,
                    following=following, seconds=SECONDS, **round_data)
@@ -462,9 +465,10 @@ def outcome_loop(lim, l):
 
 def outcome(user, game: Interactive, round_data):
     current_round = InteractiveRound.objects.get(user=user, round_order=round_data.get('current_round'))
-    rest_of_users = outcome_loop(1,
-                                 current_round.game.users.filter(~Q(username__in=current_round.following.
-                                                                values('username'))).exclude(username=user.username))
+
+    rest_of_users = outcome_loop(
+        1, current_round.game.users.filter(~Q(username__in=current_round.following.values('username'))).exclude(
+            username=user.username))
 
     currently_following = outcome_loop(game.constraints.score_lambda, current_round.following.all())
     score, gain = user.get_score_and_gain
