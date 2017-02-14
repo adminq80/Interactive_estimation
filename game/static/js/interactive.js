@@ -1,4 +1,3 @@
-//timer
 function countdown(counterState, s) {
   var counter = $('#counter');
   var seconds = s || 30;
@@ -25,14 +24,14 @@ function countdown(counterState, s) {
   tick();
 }
 
-function new_follow_list(name, avatar, score) {
+function new_follow_list(name, avatar, score, round_score) {
   $("#follow_list").append(`
     <div class="user" id=${name}>
       <a href="#" data-toggle="tooltip" data-placement="right" class="toolTip" title="Unfollow a user first">
         <img src="/static/images/plus.ico" class="plusIcon" />
       </a>
       <img src=${avatar} class="avatar" /> 
-      <span class="userScore">${score} </span><img id="coin" src="/static/images/coin.png" />
+      <span class="userScore">${score}</span><span>(+${round_score}) </span><img id="coin" src="/static/images/coin.png" />
     </div>
   `);
 }
@@ -40,7 +39,7 @@ function new_follow_list(name, avatar, score) {
 function new_unfollow_list(name, avatar, score, round_score) {
   return (`
     <img src=${avatar} class='avatar' />
-    <span>${score} </span> (+${round_score}) <img id="coin" src="/static/images/coin.png" />
+    <span>${score} </span><span>(+${round_score}) </span><img id="coin" src="/static/images/coin.png" />
     <button type="button" id=${name} class="btn btn-primary unfollow">Unfollow</button>
   `);
 }
@@ -107,7 +106,7 @@ function start_interactive(data) {
   $("#follow_list").html("");
   $.each(data.all_players, function(i, user) {
     var avatar = '/static/' + user.avatar;
-    new_follow_list(user.username, avatar, user.score);
+    new_follow_list(user.username, avatar, user.score, user.gain);
   });
 
   $("#unfollow_list tbody td").html("");
@@ -115,7 +114,7 @@ function start_interactive(data) {
   $.each(data.following, function(i, user) {
     var avatar = "/static/"+user.avatar;
     var row = $($("#unfollow_list tbody td")[i]);
-    row.html(new_unfollow_list(user.username, avatar, user.score, user.round_score));
+    row.html(new_unfollow_list(user.username, avatar, user.score, user.gain));
   });
 
 }
@@ -124,19 +123,8 @@ function start_interactive(data) {
 $(function () {
 
   var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
-  var path = null;
-  if(window.location.pathname == '/multiplay/lobby/'){
-    path = "/multiplay/lobby/";
-  }
-  else if (window.location.pathname == '/multiplayer/lobby/') {
-    path = "/multiplayer/lobby/";
-  }
-  else{
-    path = '/multiplay_game/lobby/';
-  }
+  var path = window.location.pathname == "/static_mode/lobby/" ? "/static_mode/lobby/": "/dynamic_mode/lobby/";
   var ws_path = ws_scheme + '://' + window.location.host + path;
-
-  // console.log("Connecting to " + ws_path);
   socket = new ReconnectingWebSocket(ws_path);
 
   if (!socket){
@@ -144,7 +132,6 @@ $(function () {
     alert("Your browser doesn't support Websocket");
   }
 
-  // Helpful debugging
   socket.onopen = function () {
     console.log("Connected to chat socket");
   };
@@ -154,9 +141,7 @@ $(function () {
   };
 
   socket.onmessage = function (msg) {
-    // console.log(msg.data);
     var data = JSON.parse(msg.data);
-
     if(data.error){
       console.log(data.msg);
       return;
@@ -252,10 +237,6 @@ $(function () {
       $(".img-responsive").addClass("faded");
       $("#roundAnswer").html(data.correct_answer);
 
-      // TO-DO add user's round_bonus to the data
-      // $("#roundBonus").html(data.round_bonus);
-
-
       start_interactive(data);
 
       following = data.following.map(function(user) {
@@ -277,8 +258,6 @@ $(function () {
           following: followingCopy
         }));
       });
-
-
       $(document).on("click", ".unfollow", function(e) {
 
         var username = e.target.id;
@@ -289,9 +268,7 @@ $(function () {
           action: 'follow',
           following: followingCopy
         }));
-
       });
-
     }
     else if(data.action == 'sliderChange'){
       $(`td#${data.username} > span`).html(data.slider);

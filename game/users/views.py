@@ -4,25 +4,14 @@ from __future__ import absolute_import, unicode_literals
 from random import choice
 
 from django.core.urlresolvers import reverse
-from django.db import IntegrityError
-from django.db import transaction
+
 from django.http import Http404
 from django.views.generic import DetailView, ListView, RedirectView, UpdateView
 
-from django.shortcuts import redirect, render
-from django.contrib.auth import login, authenticate
-
-from django.contrib.auth.decorators import login_required
-
+from django.shortcuts import redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from django.core.mail import send_mass_mail
-
-from game.interactive.models import Interactive
-from game.control.models import Control
-
 from .models import User
-from .forms import UserForm
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):
@@ -66,15 +55,17 @@ class UserListView(LoginRequiredMixin, ListView):
 
 def start(request):
 
-    c = choice(['i', 'c'])
+    c = choice(['dynamic', 'control', 'static'])
 
     if request.user.is_authenticated:
         print("User is authenticated")
         c = request.user.game_type
 
-    if c == 'i':
-        return redirect('interactive:lobby')
-    elif c == 'c':
+    if c == 'dynamic':
+        return redirect('dynamic_mode:lobby')
+    elif c == 'control':
         return redirect('control:play')
+    elif c == 'static':
+        return redirect('static_mode:lobby')
     else:
         raise Http404('{} not implemented'.format(c))

@@ -1,5 +1,4 @@
 from math import fabs
-from random import choice
 
 from datetime import timedelta
 from django.contrib.auth import authenticate, login
@@ -31,7 +30,7 @@ SECONDS = 30
 def play(request):
 
     u = request.user
-    if u.game_type != 'c':
+    if u.game_type != 'control':
         return redirect('/')
 
     game = Control.objects.get(user=u)
@@ -183,7 +182,7 @@ def submit_answer(request):
 
 def instruction(request):
     if request.user.is_anonymous:
-        u, password = random_user('c', length=60)
+        u, password = random_user('control', length=60)
         settings = Setting.objects.all()
         if settings.count() != 0:
             setting = settings.order_by('?')[0]

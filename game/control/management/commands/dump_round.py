@@ -23,7 +23,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         users = []
-        for u in User.objects.filter(game_type='c'):
+        for u in User.objects.filter(game_type='control'):
             rounds = Round.objects.filter(user=u)
             if rounds.count() < 1:
                 continue

@@ -202,6 +202,7 @@ def exit_game(message):
     game.user_channel(user).discard(message.reply_channel)
 
 
+@channel_session_user
 def ws_receive(message):
     payload = json.loads(message['text'])
     action = payload.get('action')
@@ -388,7 +389,7 @@ def start_initial(game):
     if round_data is None:
         game.end_time = timezone.now()
         game.save()
-        game.broadcast(action='redirect', url=reverse('interactive_shocks:exit'))
+        game.broadcast(action='redirect', url=reverse('dynamic_mode:exit'))
         return
     else:
         cache.set(game.id, {'state': state,

@@ -9,7 +9,7 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from game.contrib.calculate import calculate_score, score_gain
-from game.interactive.models import InteractiveRound
+# from game.interactive.models import InteractiveRound
 from game.interactive_shocks.models import InteractiveShocksRound
 from game.interactive_static.models import InteractiveStaticRound
 from game.round.models import Round
@@ -36,11 +36,9 @@ class User(AbstractUser):
         return 'images/avatars/{}'.format(self.avatar)
 
     def __get_user_cls(self):
-        if self.game_type == 'i':
-            cls = InteractiveRound
-        elif self.game_type == 'c':
+        if self.game_type == 'control':
             cls = Round
-        elif self.game_type == 'shocks':
+        elif self.game_type == 'dynamic':
             cls = InteractiveShocksRound
         elif self.game_type == 'static':
             cls = InteractiveStaticRound

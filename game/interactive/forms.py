@@ -44,7 +44,6 @@ class CheckForm(forms.Form):
                            choices=Q1_choices)
 
     q2 = forms.DecimalField(label='The maximum correlation possible is', widget=forms.TextInput)
-    #q3 = forms.DecimalField(label='and', widget=forms.TextInput)
 
     q4 = forms.ChoiceField(label='In this game, all correlations will be', widget=forms.RadioSelect,
                            choices=(('1', 'Negative or positive'),
@@ -65,13 +64,10 @@ class CheckForm(forms.Form):
         cleaned_data = super(CheckForm, self).clean()
         q1 = cleaned_data.get('q1')
         q2 = float(cleaned_data.get('q2'))
-        #q3 = float(cleaned_data.get('q3'))
         q4 = cleaned_data.get('q4')
         q5 = cleaned_data.get('q5')
         q6 = cleaned_data.get('q6')
 
-
-        #if q1 == '1' and q2 == -1 and q3 == 1 and q4 == '2' and q5 == '1':
         if q1 == '1' and q2 == 1 and q4 == '2' and q5 == '1' and q6 == '1':
             return cleaned_data
         raise forms.ValidationError('Some answers are wrong .. please go back and read the instructions carefully')
