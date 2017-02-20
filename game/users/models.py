@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
+from django.core.validators import validate_comma_separated_integer_list
 
 from game.contrib.calculate import calculate_score, score_gain
 # from game.interactive.models import InteractiveRound
@@ -67,3 +68,13 @@ class User(AbstractUser):
             self.save()
         else:
             raise TypeError('level must be e, m, or h')
+
+
+class UserTypes(models.Model):
+    types = models.CharField(max_length=1000, validators=[validate_comma_separated_integer_list])
+
+    def __str__(self):
+        return self.types
+
+    class Meta:
+        verbose_name_plural = 'UserTypes'

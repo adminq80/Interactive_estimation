@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 
-from random import choice
-
 from django.core.urlresolvers import reverse
 
 from django.http import Http404
@@ -11,7 +9,7 @@ from django.views.generic import DetailView, ListView, RedirectView, UpdateView
 from django.shortcuts import redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import User
+from .models import User, UserTypes
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):
@@ -55,11 +53,21 @@ class UserListView(LoginRequiredMixin, ListView):
 
 def start(request):
 
-    c = choice(['dynamic', 'control', 'static'])
-
     if request.user.is_authenticated:
         print("User is authenticated")
         c = request.user.game_type
+    else:
+        choices = UserTypes.objects.all()[0]
+        types = choices.types.split(',')
+        t = types.pop(0)
+        d = {
+            '0': 'control',
+            '1': 'static',
+            '2': 'dynamic',
+        }
+        c = d[t]
+        choices.types = ','.join(types)
+        choices.save()
 
     if c == 'dynamic':
         return redirect('dynamic_mode:lobby')
