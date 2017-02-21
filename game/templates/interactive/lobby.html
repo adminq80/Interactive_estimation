@@ -45,6 +45,15 @@
       <div>
         <img src='#' class="img-responsive"/>
       </div>
+      <div class='row'>
+        <div id="answerSlider">
+        </div>
+        <span id="min">0</span>
+        <span class="quarter">0.25</span>
+        <span class="quarter">0.5</span>
+        <span class="quarter">0.75</span>
+        <span id="max">1</span>
+      </div>
       <div class="row">
         <div class="col-md-5"><b>Your guess:</b></div>
         <div class="col-md-2"><span id="yourGuess"></span></div>
@@ -52,10 +61,6 @@
       <div class="row">
         <div class="col-md-5"><b>Actual correlation:</b></div>
         <div class="col-md-2"><span id="roundAnswer"></span></div>
-      </div>
-      <div class="row">
-        <div class="col-md-5"><b>Difference:</b></div>
-        <div class="col-md-2"><span id="roundDifference"></span></div>
       </div>
       <div class="row">
         <div class="col-md-5"><b>Bonus earned:</b></div>
@@ -112,14 +117,9 @@
     </div>
   </div>
 </div>
-
-
 {% endblock %}
 
-
 {% block extra_javascript %}
-    <script src="{% static "js/reconnecting-websocket.min.js" %}" type="text/javascript"></script>
-
-    <script src="{% static "js/interactive.js" %}"></script>
-
+<script src="{% static "js/reconnecting-websocket.min.js" %}" type="text/javascript"></script>
+<script src="{% static "js/interactive.js" %}"></script>
 {% endblock %}

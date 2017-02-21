@@ -76,7 +76,7 @@ function set_breadcrumbs(state, round) {
 }
 
 function resetSlider() {
-  $('.ui-slider-handle').hide();
+  $('#slider > .ui-slider-handle').hide();
   $('#guess').val(-1);
   $('#correlation')[0].innerHTML = '';
 }
@@ -229,13 +229,44 @@ $(function () {
       $("#interactiveGuess").hide();
       $(".guess").hide();
       $(".outcome").show();
+      $("#yourGuess").html("");
+
+      // this is going to be an answer slider
+      $("#answerSlider").html("");
       if(data.guess != -1) {
         $("#yourGuess").html(data.guess);
-        const diff = Math.abs(data.guess - data.correct_answer);
-        $("#roundDifference").html(Math.round(diff * 100) / 100);
+        $("#answerSlider").slider({
+          range: true,
+          min: 0,
+          max: 1,
+          step: 0.01,
+          values: [data.correct_answer, data.guess].sort(),
+          disabled: true
+        });
+        if(data.guess > data.correct_answer) {
+          $($("#answerSlider > .ui-slider-handle")[0]).css("background-color", "green");
+        }
+        else {
+          $($("#answerSlider > .ui-slider-handle")[1]).css("background-color", "green");
+        }
       }
-      $(".img-responsive").addClass("faded");
+      else {
+        console.log("reset slider");
+        $("#answerSlider").slider({
+          range: true,
+          min: 0,
+          max: 1,
+          step: 0.01,
+          value: data.correct_answer,
+          disabled: true
+        });
+        $($("#answerSlider > .ui-slider-handle")[0]).css("background-color", "green");
+      }
       $("#roundAnswer").html(data.correct_answer);
+      // to be replaced 
+
+      $(".img-responsive").addClass("faded");
+
 
       start_interactive(data);
 

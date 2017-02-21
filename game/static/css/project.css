@@ -163,15 +163,21 @@ html, body {
 .hide {
   display: none;
 }
-<<<<<<< HEAD
+
+#yourGuess {
+  color: blue;
+}
+
+#roundAnswer {
+  color: green;
+}
+
 blockquote.instr {
     font-size: 16px;
-=======
 #age {
   width: 100px;
 }
 
 .gender {
   margin-left: 20px;
->>>>>>> bfb49ebec0260de6b46a3131e33ce1f6243e94ed
 }
