@@ -59,8 +59,8 @@ def get_round(game, user=None):
         plot = Plot.objects.filter(non_stationary_seq=seq)[current_round]
         users_plots.append({'user': user, 'plot': plot.plot})
 
-        i_round, _ = InteractiveShocksRound.objects.get_or_create(user=user, game=game, plot=plot, round_order=current_round)
-        i_round.save()
+        i_round, _ = InteractiveShocksRound.objects.get_or_create(user=user, game=game, plot=plot,
+                                                                  round_order=current_round)
 
         if current_round == 0:
             # random initial game configuration
@@ -145,7 +145,8 @@ def lobby(message):
             pass
         return
 
-    games = InteractiveShocks.objects.filter(started=False).annotate(num_of_users=Count('users')).order_by('-num_of_users')
+    games = InteractiveShocks.objects.filter(started=False).annotate(
+        num_of_users=Count('users')).order_by('-num_of_users')
 
     if games:
         for game in games:
@@ -201,6 +202,7 @@ def exit_game(message):
     game.user_channel(user).discard(message.reply_channel)
 
 
+@channel_session_user
 def ws_receive(message):
     payload = json.loads(message['text'])
     action = payload.get('action')
@@ -224,7 +226,8 @@ def data_broadcast(message):
         round_data = d.get('round_data')
         if state == 'interactive':
             # Returns every one who followed this user on this round
-            rounds = InteractiveShocksRound.objects.filter(following=user, game=game, round_order=round_data.get('current_round'))
+            rounds = InteractiveShocksRound.objects.filter(
+                following=user, game=game, round_order=round_data.get('current_round'))
             # check the game and state and make sure we are on interactive mode
 
             for user_round in rounds.all():
@@ -255,7 +258,8 @@ def follow_list(message):
                 'username': u.username,
                 'avatar': u.get_avatar,
             }
-            rounds = InteractiveShocksRound.objects.filter(user=u, guess__gte=Decimal(0.0)).order_by('-round_order')[:game.constraints.score_lambda]
+            rounds = InteractiveShocksRound.objects.filter(
+                user=u, guess__gte=Decimal(0.0)).order_by('-round_order')[:game.constraints.score_lambda]
             d['score'] = calculate_score(rounds.all())
             if u.username == user.username:
                 continue
@@ -267,7 +271,7 @@ def follow_list(message):
 
         next_round.save()
 
-        message.reply_channel.send({'text':json.dumps({
+        message.reply_channel.send({'text': json.dumps({
             'action': 'followNotify',
             'following': just_followed,
             'all_players': u_can_follow,
@@ -275,8 +279,8 @@ def follow_list(message):
     else:
         message.reply_channel.send({'text': json.dumps({
             'error': True,
-            'msg': 'didn\'t meet game constraints max is {} and list is {}'.format(game.constraints.max_following,
-                                                                                   len(follow_users)),
+            'msg': "didn't meet game constraints max is {} and list is {}".format(game.constraints.max_following,
+                                                                                  len(follow_users)),
             })})
 
 
@@ -290,7 +294,7 @@ def initial_submit(message):
     if state == 'initial':
         try:
             current_round = InteractiveShocksRound.objects.get(user=user, game=game,
-                                                         round_order=round_data.get('current_round'))
+                                                               round_order=round_data.get('current_round'))
             current_round.guess = Decimal(guess)
             current_round.save()
         except InteractiveShocksRound.DoesNotExist:
@@ -312,7 +316,7 @@ def interactive_submit(message):
     if state == 'interactive':
         try:
             current_round = InteractiveShocksRound.objects.get(user=user, game=game,
-                                                         round_order=round_data.get('current_round'))
+                                                               round_order=round_data.get('current_round'))
             current_round.influenced_guess = Decimal(guess)
             current_round.save()
         except InteractiveShocksRound.DoesNotExist:
@@ -356,24 +360,26 @@ def game_state_checker(game, state, round_data, users_plots, counter=0):
         return
 
     if state == 'initial':
-        r = InteractiveShocksRound.objects.filter(game=game, round_order=round_data.get('current_round'), guess=None).count()
+        r = InteractiveShocksRound.objects.filter(
+            game=game, round_order=round_data.get('current_round'), guess=None).count()
         if r == 0:
             start_interactive(game, round_data, users_plots)
             return
     elif state == 'interactive':
         r = InteractiveShocksRound.objects.filter(game=game, round_order=round_data.get('current_round'),
-                                            influenced_guess=None).count()
+                                                  influenced_guess=None).count()
         if r == 0:
             start_outcome(game, round_data, users_plots)
             return
     elif state == 'outcome':
         r = InteractiveShocksRound.objects.filter(game=game, round_order=round_data.get('current_round'),
-                                            outcome=False).count()
+                                                  outcome=False).count()
         if r == 0:
             start_initial(game)
             return
     counter += 1
-    task.deferLater(reactor, 1, game_state_checker, game, state, round_data, users_plots, counter).addErrback(twisted_error)
+    task.deferLater(
+        reactor, 1, game_state_checker, game, state, round_data, users_plots, counter).addErrback(twisted_error)
 
 
 def start_initial(game):
@@ -383,7 +389,7 @@ def start_initial(game):
     if round_data is None:
         game.end_time = timezone.now()
         game.save()
-        game.broadcast(action='redirect', url=reverse('interactive_shocks:exit'))
+        game.broadcast(action='redirect', url=reverse('dynamic_mode:exit'))
         return
     else:
         cache.set(game.id, {'state': state,
@@ -429,12 +435,15 @@ def start_interactive(game, round_data, users_plots):
 
 
 def interactive(user, game, round_data):
-    current_round = InteractiveShocksRound.objects.get(user=user, game=game, round_order=round_data.get('current_round'))
+    current_round = InteractiveShocksRound.objects.get(
+        user=user, game=game, round_order=round_data.get('current_round'))
 
-    following = [{'username': u.username, 'avatar': u.get_avatar, 'guess': InteractiveShocksRound.objects.get(user=u,
-                    round_order=round_data.get('current_round')).get_guess()} for u in current_round.following.all()]
-
-    game.user_send(user, action='interactive', score=user.get_score, following=following, seconds=SECONDS, **round_data)
+    following = [{'username': u.username, 'avatar': u.get_avatar, 'guess': InteractiveShocksRound.objects.get(
+        user=u,
+        round_order=round_data.get('current_round')).get_guess()} for u in current_round.following.all()]
+    score, gain = user.get_score_and_gain
+    game.user_send(user, action='interactive', score=score, gain=gain,
+                   following=following, seconds=SECONDS, **round_data)
 
 
 def start_outcome(game, round_data, users_plots):
@@ -450,26 +459,19 @@ def start_outcome(game, round_data, users_plots):
 
 
 def outcome_loop(lim, l):
-    temp = []
-    for u in l:
-        d = {'username': u.username, 'avatar': u.get_avatar}
-        rounds = InteractiveShocksRound.objects.filter(user=u, guess__gte=Decimal(0.0)).order_by('-round_order')[:lim]
-        score = calculate_score(rounds.all())
-        d['round_score'] = score
-        d['score'] = u.get_score
-        temp.append(d)
-    return temp
+    return [{'username': u.username, 'avatar': u.get_avatar, 'score': u.get_score_and_gain[0],
+             'gain': u.get_score_and_gain[1]} for u in l]
 
 
 def outcome(user, game: InteractiveShocks, round_data):
     current_round = InteractiveShocksRound.objects.get(user=user, round_order=round_data.get('current_round'))
-    rest_of_users = outcome_loop(1,
-                                 current_round.game.users.filter(~Q(username__in=current_round.following.
-                                                                values('username'))).exclude(username=user.username))
+
+    rest_of_users = outcome_loop(1, current_round.game.users.filter(~Q(username__in=current_round.following.values(
+                                             'username'))).exclude(username=user.username))
 
     currently_following = outcome_loop(game.constraints.score_lambda, current_round.following.all())
-
+    score, gain = user.get_score_and_gain
     game.user_send(user, action='outcome', guess=float(current_round.get_influenced_guess()),
-                   score=user.get_score, following=currently_following, all_players=rest_of_users,
+                   score=score, gain=gain, following=currently_following, all_players=rest_of_users,
                    max_following=game.constraints.max_following, correct_answer=float(current_round.plot.answer),
                    seconds=SECONDS, **round_data)

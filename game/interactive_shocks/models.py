@@ -99,7 +99,6 @@ class InteractiveShocks(models.Model):
 
 
 class Survey(models.Model):
-    # user = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='influenced_users')
     username = models.CharField(max_length=255, blank=True, null=True)
     game = models.CharField(max_length=20, blank=True, null=True)
     age = models.PositiveSmallIntegerField(null=True)
@@ -108,3 +107,12 @@ class Survey(models.Model):
 
     def __str__(self):
         return self.username
+
+    def dump(self):
+        return {
+            'user': self.username or '',
+            'game': self.game or '',
+            'age': self.age or '',
+            'gender': self.gender or '',
+            'feedback': self.feedback or '',
+        }

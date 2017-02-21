@@ -13,7 +13,6 @@ def random_user(game_type, length=80, chars=ascii_lowercase+digits):
         u.save()
         password = User.objects.make_random_password()
         u.set_password(password)
-        #u.level = choice(['e', 'm', 'h']) #abdullah
-        u.level = choice(['h'])
+        u.level = choice(['e', 'm', 'h'])
         u.save()
         return u, password

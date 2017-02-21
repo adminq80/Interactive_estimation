@@ -28,8 +28,7 @@ def changing_levels(game):
     total_users = game.users.count()
     chunk = int(total_users / 3)
     last_chuck = total_users - chunk * 2
-#    level_list = ['e'] * chunk + ['m'] * chunk + ['h'] * last_chuck
-    level_list = ['h'] *3*chunk
+    level_list = ['e'] * chunk + ['m'] * chunk + ['h'] * last_chuck
     shuffle(level_list)
     for i, user in enumerate(game.users.all()):
         user.level = level_list[i]
@@ -57,7 +56,7 @@ def get_round(game, user=None):
     }
     for user in users.all():
         seq = seqs[user.level]
-        plot = Plot.objects.filter(stationary_seq=seq)[current_round]
+        plot = Plot.objects.filter(non_stationary_seq=seq)[current_round]
         users_plots.append({'user': user, 'plot': plot.plot})
 
         i_round, _ = InteractiveStaticRound.objects.get_or_create(user=user, game=game, plot=plot, round_order=current_round)
@@ -202,6 +201,7 @@ def exit_game(message):
     game.user_channel(user).discard(message.reply_channel)
 
 
+@channel_session_user
 def ws_receive(message):
     payload = json.loads(message['text'])
     action = payload.get('action')
@@ -239,7 +239,6 @@ def data_broadcast(message):
 def follow_list(message):
     user, game = user_and_game(message)
     follow_users = message.get('following')
-    # a list of all the usernames to follow
     d = cache.get(game.id)
     state = d.get('state')
     round_data = d.get('round_data')
@@ -291,7 +290,7 @@ def initial_submit(message):
     if state == 'initial':
         try:
             current_round = InteractiveStaticRound.objects.get(user=user, game=game,
-                                                         round_order=round_data.get('current_round'))
+                                                               round_order=round_data.get('current_round'))
             current_round.guess = Decimal(guess)
             current_round.save()
         except InteractiveStaticRound.DoesNotExist:
@@ -313,7 +312,7 @@ def interactive_submit(message):
     if state == 'interactive':
         try:
             current_round = InteractiveStaticRound.objects.get(user=user, game=game,
-                                                         round_order=round_data.get('current_round'))
+                                                               round_order=round_data.get('current_round'))
             current_round.influenced_guess = Decimal(guess)
             current_round.save()
         except InteractiveStaticRound.DoesNotExist:
@@ -357,24 +356,26 @@ def game_state_checker(game, state, round_data, users_plots, counter=0):
         return
 
     if state == 'initial':
-        r = InteractiveStaticRound.objects.filter(game=game, round_order=round_data.get('current_round'), guess=None).count()
+        r = InteractiveStaticRound.objects.filter(game=game, round_order=round_data.get('current_round'),
+                                                  guess=None).count()
         if r == 0:
             start_interactive(game, round_data, users_plots)
             return
     elif state == 'interactive':
         r = InteractiveStaticRound.objects.filter(game=game, round_order=round_data.get('current_round'),
-                                            influenced_guess=None).count()
+                                                  influenced_guess=None).count()
         if r == 0:
             start_outcome(game, round_data, users_plots)
             return
     elif state == 'outcome':
         r = InteractiveStaticRound.objects.filter(game=game, round_order=round_data.get('current_round'),
-                                            outcome=False).count()
+                                                  outcome=False).count()
         if r == 0:
             start_initial(game)
             return
     counter += 1
-    task.deferLater(reactor, 1, game_state_checker, game, state, round_data, users_plots, counter).addErrback(twisted_error)
+    task.deferLater(reactor, 1, game_state_checker, game, state,
+                    round_data, users_plots, counter).addErrback(twisted_error)
 
 
 def start_initial(game):
@@ -384,7 +385,7 @@ def start_initial(game):
     if round_data is None:
         game.end_time = timezone.now()
         game.save()
-        game.broadcast(action='redirect', url=reverse('interactive_static:exit'))
+        game.broadcast(action='redirect', url=reverse('static_mode:exit'))
         return
     else:
         cache.set(game.id, {'state': state,
@@ -430,12 +431,17 @@ def start_interactive(game, round_data, users_plots):
 
 
 def interactive(user, game, round_data):
-    current_round = InteractiveStaticRound.objects.get(user=user, game=game, round_order=round_data.get('current_round'))
+    current_round = InteractiveStaticRound.objects.get(user=user, game=game,
+                                                       round_order=round_data.get('current_round'))
 
-    following = [{'username': u.username, 'avatar': u.get_avatar, 'guess': InteractiveStaticRound.objects.get(user=u,
-                    round_order=round_data.get('current_round')).get_guess()} for u in current_round.following.all()]
-
-    game.user_send(user, action='interactive', score=user.get_score, following=following, seconds=SECONDS, **round_data)
+    following = [{'username': u.username,
+                  'avatar': u.get_avatar,
+                  'guess': InteractiveStaticRound.objects.get(user=u,
+                                                              round_order=round_data.get('current_round')).get_guess()}
+                 for u in current_round.following.all()]
+    score, gain = user.get_score_and_gain
+    game.user_send(user, action='interactive', score=score, gain=gain,
+                   following=following, seconds=SECONDS, **round_data)
 
 
 def start_outcome(game, round_data, users_plots):
@@ -451,26 +457,21 @@ def start_outcome(game, round_data, users_plots):
 
 
 def outcome_loop(lim, l):
-    temp = []
-    for u in l:
-        d = {'username': u.username, 'avatar': u.get_avatar}
-        rounds = InteractiveStaticRound.objects.filter(user=u, guess__gte=Decimal(0.0)).order_by('-round_order')[:lim]
-        score = calculate_score(rounds.all())
-        d['round_score'] = score
-        d['score'] = u.get_score
-        temp.append(d)
-    return temp
+    return [{'username': u.username, 'avatar': u.get_avatar, 'score': u.get_score_and_gain[0],
+             'gain': u.get_score_and_gain[1]} for u in l]
 
 
 def outcome(user, game: InteractiveStatic, round_data):
     current_round = InteractiveStaticRound.objects.get(user=user, round_order=round_data.get('current_round'))
     rest_of_users = outcome_loop(1,
-                                 current_round.game.users.filter(~Q(username__in=current_round.following.
-                                                                values('username'))).exclude(username=user.username))
+                                 current_round.game.users.filter(~Q(
+                                     username__in=current_round.following.values('username'))).exclude(
+                                     username=user.username))
 
     currently_following = outcome_loop(game.constraints.score_lambda, current_round.following.all())
+    score, gain = user.get_score_and_gain
 
     game.user_send(user, action='outcome', guess=float(current_round.get_influenced_guess()),
-                   score=user.get_score, following=currently_following, all_players=rest_of_users,
+                   score=score, gain=gain, following=currently_following, all_players=rest_of_users,
                    max_following=game.constraints.max_following, correct_answer=float(current_round.plot.answer),
                    seconds=SECONDS, **round_data)

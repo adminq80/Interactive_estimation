@@ -7,9 +7,10 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
+from django.core.validators import validate_comma_separated_integer_list
 
-from game.contrib.calculate import calculate_score
-from game.interactive.models import InteractiveRound
+from game.contrib.calculate import calculate_score, score_gain
+# from game.interactive.models import InteractiveRound
 from game.interactive_shocks.models import InteractiveShocksRound
 from game.interactive_static.models import InteractiveStaticRound
 from game.round.models import Round
@@ -35,21 +36,26 @@ class User(AbstractUser):
     def get_avatar(self):
         return 'images/avatars/{}'.format(self.avatar)
 
-    @property
-    def get_score(self):
-        if self.game_type == 'i':
-            cls = InteractiveRound
-        elif self.game_type == 'c':
+    def __get_user_cls(self):
+        if self.game_type == 'control':
             cls = Round
-        elif self.game_type == 'shocks':
+        elif self.game_type == 'dynamic':
             cls = InteractiveShocksRound
         elif self.game_type == 'static':
             cls = InteractiveStaticRound
         else:
             raise NotImplemented('Not Implemented')
+        return cls
 
-        played_rounds = cls.objects.filter(user=self, guess__gte=Decimal(0.0))
+    @property
+    def get_score(self):
+        played_rounds = self.__get_user_cls().objects.filter(user=self, guess__gte=Decimal(0.0)).order_by('round_order')
         return calculate_score(played_rounds)
+
+    @property
+    def get_score_and_gain(self):
+        played_rounds = self.__get_user_cls().objects.filter(user=self, guess__gte=Decimal(0.0)).order_by('round_order')
+        return score_gain(played_rounds)
 
     @property
     def level(self):
@@ -62,3 +68,13 @@ class User(AbstractUser):
             self.save()
         else:
             raise TypeError('level must be e, m, or h')
+
+
+class UserTypes(models.Model):
+    types = models.CharField(max_length=1000, validators=[validate_comma_separated_integer_list])
+
+    def __str__(self):
+        return self.types
+
+    class Meta:
+        verbose_name_plural = 'UserTypes'

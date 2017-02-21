@@ -34,3 +34,40 @@ class SettingsForm(forms.ModelForm):
             return cleaned_data
 
         raise ValidationError("Didn't meet logical constraints for the Settings model")
+
+
+class CheckForm(forms.Form):
+    Q1_choices = (('1', 'Estimate the correlation of two variables'),
+                  ('2', 'Count the points in the picture'),
+                  )
+    q1 = forms.ChoiceField(label='Your goal in the game is to', widget=forms.RadioSelect(attrs={'class': 'form-group'}),
+                           choices=Q1_choices)
+
+    q2 = forms.DecimalField(label='The maximum correlation possible is', widget=forms.TextInput)
+
+    q4 = forms.ChoiceField(label='In this game, all correlations will be', widget=forms.RadioSelect,
+                           choices=(('1', 'Negative or positive'),
+                                    ('2', 'Only positive'),
+                                    ))
+
+    q5 = forms.ChoiceField(label='You will get a chance to change your estimate after your initial guess.',
+                           widget=forms.RadioSelect, choices=(('1', 'True'),
+                                                              ('2', 'False'),
+                                                              ))
+
+    q6 = forms.ChoiceField(label='Have you participated in this study before?', widget=forms.RadioSelect,
+                           choices=(('1', 'No'),
+                                    ('2', 'Yes'),
+                                    ))
+
+    def clean(self):
+        cleaned_data = super(CheckForm, self).clean()
+        q1 = cleaned_data.get('q1')
+        q2 = float(cleaned_data.get('q2'))
+        q4 = cleaned_data.get('q4')
+        q5 = cleaned_data.get('q5')
+        q6 = cleaned_data.get('q6')
+
+        if q1 == '1' and q2 == 1 and q4 == '2' and q5 == '1' and q6 == '1':
+            return cleaned_data
+        raise forms.ValidationError('Some answers are wrong .. please go back and read the instructions carefully')

@@ -50,7 +50,7 @@ LOCAL_APPS = (
     'game.users.apps.UsersConfig',
     # Your stuff: custom apps go here
     'game.round',
-    'game.interactive',
+    # 'game.interactive',
     'game.control',
     'game.interactive_shocks',
     'game.interactive_static',

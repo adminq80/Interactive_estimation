@@ -62,7 +62,7 @@ class Round(models.Model):
                 'batch': self.plot.batch or 0,
                 }
 
-        if self.user.game_type == 'c':
+        if self.user.game_type == 'control':
             game = Control.objects.get(user=self.user)
             data['game_id'] = game.id
             data['condition'] = 'control'
