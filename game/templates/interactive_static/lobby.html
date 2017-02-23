@@ -27,19 +27,32 @@
 
 <div id="game" hidden>
   <div class="form">
-    <div class="col-md-6 guess" hidden>
+    <div class="col-md-1">
+      {% include 'components/timer.html' %}
+    </div>
+
+    <div class="col-md-5 guess" hidden>
       <div>
         <img src='#' class="img-responsive"/>
       </div>
       <div id="picker">
         {% include 'components/slider.html' %}
-        <input type="submit" value="Submit" id="submit" class="btn btn-success nextButton" disabled>
+        <span id="submitText" class="hide">If this is your final guess, please click</span><input type="submit" value="Submit" id="submit" class="btn btn-success nextButton" disabled>
       </div>
     </div>
 
-    <div class="col-md-6 outcome" hidden>
+    <div class="col-md-5 outcome" hidden>
       <div>
         <img src='#' class="img-responsive"/>
+      </div>
+      <div class='row'>
+        <div id="answerSlider">
+        </div>
+        <span id="min">0</span>
+        <span class="quarter">0.25</span>
+        <span class="quarter">0.5</span>
+        <span class="quarter">0.75</span>
+        <span id="max">1</span>
       </div>
       <div class="row">
         <div class="col-md-5"><b>Your guess:</b></div>
@@ -49,16 +62,33 @@
         <div class="col-md-5"><b>Actual correlation:</b></div>
         <div class="col-md-2"><span id="roundAnswer"></span></div>
       </div>
-      <input type="submit" value="Next" id="submit" class="btn btn-success nextButton">
+      <div class="row">
+        <div class="col-md-5"><b>Bonus earned:</b></div>
+        <div class="col-md-2"><span id="roundBonus"></span></div>
+      </div>
+      <div>
+        <input type="submit" value="Submit" id="submit" class="btn btn-success nextButton">
+      </div>
     </div>
 
 
     <div class="col-md-3">
-      {% include 'components/timer.html' %}
       <div class="outcome" hidden>
+        <div><b>Your bonus:</b></div>
+        <div>
+          <img src='' class="avatar user-avatar" />
+          <span class="user_score">0.0</span>&nbsp;<span id="user_round_score">(+0.5)</span>&nbsp;<img id="coin" src="/static/images/coin.png" />
+        </div>
+        <br>
+        <b>You are following:</b>
+        <table class="table table-bordered" id="unfollow_list">
+          <tbody>
+          </tbody>
+        </table>
       </div>
 
       <div id="interactiveGuess" hidden>
+
         <div><b>You are following:</b></div>
         <table class="table table-bordered" id="following_list">
           <tbody>
@@ -69,9 +99,12 @@
 
     <div class="col-md-3">
       <div class="outcome" hidden>
+        <b>You can follow:</b>
+        <div id="follow_list">
+        </div>
       </div>
     </div>
-    
+
     <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
       <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
@@ -84,14 +117,9 @@
     </div>
   </div>
 </div>
-
-
 {% endblock %}
 
-
 {% block extra_javascript %}
-    <script src="{% static "js/reconnecting-websocket.min.js" %}" type="text/javascript"></script>
-
-    <script src="{% static "js/interactive.js" %}"></script>
-
+<script src="{% static "js/reconnecting-websocket.min.js" %}" type="text/javascript"></script>
+<script src="{% static "js/interactive.js" %}"></script>
 {% endblock %}
