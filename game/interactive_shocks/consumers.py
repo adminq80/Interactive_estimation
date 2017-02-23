@@ -257,10 +257,9 @@ def follow_list(message):
             d = {
                 'username': u.username,
                 'avatar': u.get_avatar,
+                'score': u.get_score_and_gain[0],
+                'gain': u.get_score_and_gain[1],
             }
-            rounds = InteractiveShocksRound.objects.filter(
-                user=u, guess__gte=Decimal(0.0)).order_by('-round_order')[:game.constraints.score_lambda]
-            d['score'] = calculate_score(rounds.all())
             if u.username == user.username:
                 continue
             elif u.username in follow_users:
