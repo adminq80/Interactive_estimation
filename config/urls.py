@@ -29,8 +29,6 @@ urlpatterns = [
     url(r'^solo/', include('game.control.urls', namespace='control')),
     url(r'^dynamic_mode/', include('game.interactive_shocks.urls', namespace='dynamic_mode')),
     url(r'^static_mode/', include('game.interactive_static.urls', namespace='static_mode')),
-    # url(r'^interactive_dynamic/', include('game.interactive.urls', namespace='interactive')),
-
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

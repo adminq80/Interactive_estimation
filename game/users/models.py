@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, absolute_import
 
-from decimal import Decimal
 from django.contrib.auth.models import AbstractUser
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -10,7 +9,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.validators import validate_comma_separated_integer_list
 
 from game.contrib.calculate import calculate_score, score_gain
-# from game.interactive.models import InteractiveRound
 from game.interactive_shocks.models import InteractiveShocksRound
 from game.interactive_static.models import InteractiveStaticRound
 from game.round.models import Round
@@ -49,12 +47,12 @@ class User(AbstractUser):
 
     @property
     def get_score(self):
-        played_rounds = self.__get_user_cls().objects.filter(user=self, guess__gte=Decimal(0.0)).order_by('round_order')
+        played_rounds = self.__get_user_cls().objects.filter(user=self).order_by('round_order')
         return calculate_score(played_rounds)
 
     @property
     def get_score_and_gain(self):
-        played_rounds = self.__get_user_cls().objects.filter(user=self, guess__gte=Decimal(0.0)).order_by('round_order')
+        played_rounds = self.__get_user_cls().objects.filter(user=self).order_by('round_order')
         return score_gain(played_rounds)
 
     @property

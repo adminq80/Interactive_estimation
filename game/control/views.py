@@ -67,7 +67,7 @@ def play(request):
             else:
                 track = 1
                 print('Error no LEVEL was found on the user object')
-            plots = Plot.objects.filter(non_stationary_seq=track)
+            plots = Plot.objects.filter(non_stationary_seq=track).order_by('seq')
             plot = plots[0]
             data = {'track': track, 'remaining': game.batch_size-1}
         else:
@@ -84,7 +84,7 @@ def play(request):
             #     plot_seq = game.batch_size - data['remaining']
             #     plot = plots[plot_seq]
             #     data['remaining'] -= 1
-            plots = Plot.objects.filter(non_stationary_seq=data.get('track'))
+            plots = Plot.objects.filter(non_stationary_seq=data.get('track')).order_by('seq')
             plot_seq = game.batch_size - data['remaining']
             plot = plots[plot_seq]
             data['remaining'] -= 1

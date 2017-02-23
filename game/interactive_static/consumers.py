@@ -56,7 +56,7 @@ def get_round(game, user=None):
     }
     for user in users.all():
         seq = seqs[user.level]
-        plot = Plot.objects.filter(non_stationary_seq=seq)[current_round]
+        plot = Plot.objects.filter(non_stationary_seq=seq).order_by('seq')[current_round]
         users_plots.append({'user': user, 'plot': plot.plot})
 
         i_round, _ = InteractiveStaticRound.objects.get_or_create(user=user, game=game, plot=plot, round_order=current_round)

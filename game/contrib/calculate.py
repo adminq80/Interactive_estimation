@@ -9,7 +9,7 @@ def get_guess(rnd):
 
 def get_error(rnd):
     guess = get_guess(rnd)
-    if guess is None:
+    if guess is None or guess < 0:
         return 0.0
     answer = rnd.plot.answer
     error = math.fabs(answer - guess)

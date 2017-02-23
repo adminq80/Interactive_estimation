@@ -26,9 +26,9 @@ SECONDS = 30
 
 def changing_levels(game):
     total_users = game.users.count()
-    chunk = int(total_users / 3)
+    chunk = total_users // 3
     last_chuck = total_users - chunk * 2
-    level_list = ['e'] * chunk + ['m'] * chunk + ['h'] * last_chuck
+    level_list = ['e', 'm'] * chunk + ['h'] * last_chuck
     shuffle(level_list)
     for i, user in enumerate(game.users.all()):
         user.level = level_list[i]
@@ -56,7 +56,7 @@ def get_round(game, user=None):
     }
     for user in users.all():
         seq = seqs[user.level]
-        plot = Plot.objects.filter(non_stationary_seq=seq)[current_round]
+        plot = Plot.objects.filter(non_stationary_seq=seq).order_by('seq')[current_round]
         users_plots.append({'user': user, 'plot': plot.plot})
 
         i_round, _ = InteractiveShocksRound.objects.get_or_create(user=user, game=game, plot=plot,
