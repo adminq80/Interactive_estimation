@@ -236,51 +236,6 @@ def data_broadcast(message):
 
 
 @channel_session_user
-def follow_list(message):
-    user, game = user_and_game(message)
-    follow_users = message.get('following')
-    d = cache.get(game.id)
-    state = d.get('state')
-    round_data = d.get('round_data')
-    if state != 'outcome':
-        return
-    if len(follow_users) <= game.constraints.max_following:
-        next_round = InteractiveStaticRound.objects.get(user=user, round_order=round_data.get('current_round'))
-        next_round.following.clear()
-        next_round.save()
-        u_can_follow = []
-        just_followed = []
-        for u in game.users.all():
-            d = {
-                'username': u.username,
-                'avatar': u.get_avatar,
-            }
-            rounds = InteractiveStaticRound.objects.filter(user=u, guess__gte=Decimal(0.0)).order_by('-round_order')[:game.constraints.score_lambda]
-            d['score'] = calculate_score(rounds.all())
-            if u.username == user.username:
-                continue
-            elif u.username in follow_users:
-                next_round.following.add(u)
-                just_followed.append(d)
-            else:
-                u_can_follow.append(d)
-
-        next_round.save()
-
-        message.reply_channel.send({'text':json.dumps({
-            'action': 'followNotify',
-            'following': just_followed,
-            'all_players': u_can_follow,
-        })})
-    else:
-        message.reply_channel.send({'text': json.dumps({
-            'error': True,
-            'msg': 'didn\'t meet game constraints max is {} and list is {}'.format(game.constraints.max_following,
-                                                                                   len(follow_users)),
-            })})
-
-
-@channel_session_user
 def initial_submit(message):
     user, game = user_and_game(message)
     guess = message.get('guess')
