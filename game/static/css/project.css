@@ -173,11 +173,22 @@ html, body {
 }
 
 blockquote.instr {
-    font-size: 16px;
+  font-size: 16px;
+}
 #age {
   width: 100px;
 }
 
 .gender {
   margin-left: 20px;
+}
+
+.low-gain{
+  color: darkred;
+}
+.medium-gain{
+  color: darkgoldenrod;
+}
+.high-gain{
+  color: darkgreen;
 }

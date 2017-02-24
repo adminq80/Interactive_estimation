@@ -25,21 +25,41 @@ function countdown(counterState, s) {
 }
 
 function new_follow_list(name, avatar, score, round_score) {
+  var class_color;
+  if (round_score > .66) {
+      class_color = 'high-gain';
+  }
+  else if (round_score > .33) {
+        class_color = 'medium-gain';
+    }
+    else {
+        class_color = 'low-gain';
+    }
   $("#follow_list").append(`
     <div class="user" id=${name}>
       <a href="#" data-toggle="tooltip" data-placement="right" class="toolTip" title="Unfollow a user first">
         <img src="/static/images/plus.ico" class="plusIcon" />
       </a>
       <img src=${avatar} class="avatar" /> 
-      <span class="userScore">${score}</span><span>(+${round_score}) </span><img id="coin" src="/static/images/coin.png" />
+      <span class="userScore">${score}</span><span class="${class_color}">(+${round_score}) </span><img id="coin" src="/static/images/coin.png" />
     </div>
   `);
 }
 
 function new_unfollow_list(name, avatar, score, round_score) {
+  var class_color;
+  if (round_score > .66) {
+      class_color = 'high-gain';
+  }
+  else if (round_score > .33) {
+      class_color = 'medium-gain';
+  }
+  else {
+      class_color = 'low-gain';
+  }
   return (`
     <img src=${avatar} class='avatar' />
-    <span>${score} </span><span>(+${round_score}) </span><img id="coin" src="/static/images/coin.png" />
+    <span>${score} </span><span class="${class_color}">(+${round_score})</span><img id="coin" src="/static/images/coin.png" />
     <button type="button" id=${name} class="btn btn-primary unfollow">Unfollow</button>
   `);
 }
@@ -100,18 +120,22 @@ function start_game(data, seconds) {
 
 }
 
+function comp_score(a, b) {
+  return a.score >= b.score ? a: b;
+}
+
 function start_interactive(data) {
 
   // populate list of people you can follow
   $("#follow_list").html("");
-  $.each(data.all_players, function(i, user) {
+  $.each(data.all_players.sort(comp_score), function(i, user) {
     var avatar = '/static/' + user.avatar;
     new_follow_list(user.username, avatar, user.score, user.gain);
   });
 
   $("#unfollow_list tbody td").html("");
   // populate list of people you can unfollow
-  $.each(data.following, function(i, user) {
+  $.each(data.following.sort(comp_score), function(i, user) {
     var avatar = "/static/"+user.avatar;
     var row = $($("#unfollow_list tbody td")[i]);
     row.html(new_unfollow_list(user.username, avatar, user.score, user.gain));
@@ -124,6 +148,7 @@ $(function () {
 
   var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
   var path = window.location.pathname == "/static_mode/lobby/" ? "/static_mode/lobby/": "/dynamic_mode/lobby/";
+  game_type = window.location.pathname == "/static_mode/lobby/" ? "static": "dynamic";
   var ws_path = ws_scheme + '://' + window.location.host + path;
   socket = new ReconnectingWebSocket(ws_path);
 
