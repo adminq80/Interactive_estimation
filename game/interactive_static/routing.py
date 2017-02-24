@@ -1,6 +1,6 @@
 from channels import route
 from .consumers import exit_game, lobby, ws_receive
-from .consumers import data_broadcast, follow_list, initial_submit, interactive_submit, round_outcome
+from .consumers import data_broadcast, initial_submit, interactive_submit, round_outcome
 
 
 game_routes = [
