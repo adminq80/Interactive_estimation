@@ -15,7 +15,6 @@ from channels.auth import channel_session_user_from_http, channel_session_user
 from django.utils import timezone
 from twisted.internet import task, reactor
 
-from game.contrib.calculate import calculate_score
 from game.round.models import Plot
 
 from .utils import avatar
@@ -411,9 +410,8 @@ def start_outcome(game, round_data, users_plots):
     task.deferLater(reactor, 1, game_state_checker, game, 'outcome', round_data, users_plots).addErrback(twisted_error)
 
 
-def outcome_loop(lim, l):
-    return [{'username': u.username, 'avatar': u.get_avatar, 'score': u.get_score_and_gain[0],
-             'gain': u.get_score_and_gain[1]} for u in l]
+def outcome_loop(users):
+    return [{'username': u.username, 'avatar': u.get_avatar} for u in users]
 
 
 def outcome(user, game: InteractiveStatic, round_data):
@@ -423,7 +421,7 @@ def outcome(user, game: InteractiveStatic, round_data):
                                      username__in=current_round.following.values('username'))).exclude(
                                      username=user.username))
 
-    currently_following = outcome_loop(game.constraints.score_lambda, current_round.following.all())
+    currently_following = outcome_loop(current_round.following.all())
     score, gain = user.get_score_and_gain
 
     game.user_send(user, action='outcome', guess=float(current_round.get_influenced_guess()),
