@@ -4,3 +4,11 @@
     <h1>Your username is</h1>
     <p>{{user.username}}</p>
 {% endblock %}
+
+{% block extra_javascript %}
+    <script>
+    (function(){
+        document.querySelector('.logout').style.display = 'none';
+    })();
+    </script>
+{% endblock %}

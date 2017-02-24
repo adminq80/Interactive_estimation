@@ -54,3 +54,11 @@
   </form>
 </div>
 {% endblock %}
+
+{% block extra_javascript %}
+    <script>
+    (function(){
+        document.querySelector('.logout').style.display = 'none';
+    })();
+    </script>
+{% endblock %}

@@ -29,19 +29,12 @@
             </a>
 {#            &nbsp;Guess the Correlation Game#}
             {% if user.is_authenticated %}
-
-              <form class="logout" action='{% url "account_logout" %}' method="post">
-                {% if user.game_type == "i" %}
-                <span class="user">
-                  User: <img src='' class="user-avatar" />
-                </span>
-                {% endif %}
-                {% csrf_token %}
-                <button class="btn btn-danger quit" type="submit">End Game</button>
-              </form>
+                    <form class="logout" action='{% url "account_logout" %}' method="post">
+                        {% csrf_token %}
+                        <button class="btn btn-danger quit" type="submit">End Game</button>
+                    </form>
               {% endif %}
           </span>
-
         </div>
       </nav>
     </div>
