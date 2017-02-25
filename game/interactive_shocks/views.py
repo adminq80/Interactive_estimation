@@ -75,7 +75,7 @@ def instruction(request):
             return redirect('dynamic_mode:lobby')
     game_settings = Settings.objects.order_by('?')[0]
     cache.set('interactive_dynamic_instruction_{}'.format(u.id), True)
-    return render(request, 'interactive/instructions.html', {'players_num': game_settings.max_users,
+    return render(request, 'interactive_shocks/instructions.html', {'players_num': game_settings.max_users,
                                                              'rounds_num': game_settings.max_rounds,
                                                              'following_num': game_settings.max_following,
                                                              'form': form,

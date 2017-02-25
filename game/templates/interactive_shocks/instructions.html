@@ -4,68 +4,75 @@
 {% block container %}
 <div class="container">
   <div class="overview">
-    <div class="overview-1">
+    <div class="overview-1" id="overview-1" hidden>
       <h2>Experiment Overview</h2>
       <p>
-        After completing the instructions and comprehension check, you will enter a waiting room. You will remain here until 3 players enter the waiting room. If 5 minutes elapse and there are not enough players of the game, the game will not begin and you will be taken to the exit survey. If there are enough players, then everyone will enter the game. The game consists of 20 rounds. Each round is composed of 3 stages:
+        After completing the instructions and comprehension check,
+          you will enter a waiting room. You will remain here until 3
+          players enter the waiting room. If 5 minutes elapse and there are
+          not enough players of the game, the game will not begin and you will
+          be taken to the exit survey. If there are enough players, then everyone
+          will enter the game. The game consists of 20 rounds. Each round is composed of 3 stages:
       </p>
       <p>
         1. <b>Initial Guess:</b> You will see a scatter plot and be asked to <b>estimate the correlation of the X and Y variables</b>. <a href="https://en.wikipedia.org/wiki/Pearson_product-moment_correlation_coefficient">Correlation</a> measures how closely two variables are related to each other. For example, the graph below depicts the correlation between age (the X variable), and height (the Y variable). As age increases, height tends to increase as well. 
           <div><img src="/static/images/height-age.png" class="example" /></div>
       </p>
       <div class="row">
-        <input class='btn btn-primary nextButton' type="submit" id="submit" value="Next">
+          <a class="btn btn-primary nextButton" href="#overview-2">Next</a>
+{#        <input class='btn btn-primary nextButton' type="submit" id="submit" value="Next">#}
       </div>
     </div>
 
-    <div class="overview-2" hidden>
+      <div class="overview-2" id="overview-2" hidden>
       Your correlation guess can range from 0 to 1, and the closer the points fit to a line, the closer the correlation will be to 1. No calculations are necessary, just make your best estimate.
       <div><img src="/static/images/correlation-examples.png" class="sample" /></div>
       <div class="row">
-        <input class='btn btn-primary prevButton' type="submit" id="submit" value="Previous">
-        <input class='btn btn-primary nextButton' type="submit" id="submit" value="Next">
+          <a class='btn btn-primary prevButton' href="#overview-1">Previous</a>
+          <a class="btn btn-primary nextButton" href="#overview-3">Next</a>
       </div>
-    </div>
+      </div>
 
-    <div class="overview-3" hidden>
+
+    <div class="overview-3" id="overview-3" hidden>
       <p>
       Note that many different graphs may have the same correlation value. All 4 of the graphs below have a correlation of 0.82.
       </p>
       <div><img src="/static/images/same-correlation.png" /></div>
       <div class="row">
-        <input class='btn btn-primary prevButton' type="submit" id="submit" value="Previous">
-        <input class='btn btn-primary nextButton' type="submit" id="submit" value="Next">
+        <a class='btn btn-primary prevButton' href="#overview-2">Previous</a>
+          <a class="btn btn-primary nextButton" href="#overview-4">Next</a>
       </div>
     </div>
 
-    <div class="overview-4" hidden>
+    <div class="overview-4" id="overview-4" hidden>
       Use the slider below the plot to pick a value. When you have finalized your guess, hit "Submit." You will have 30 seconds to enter your guess.
       <div><img src="/static/images/interactive-initial.png" class="screenshot"/></div>
       <div class="row">
-        <input class='btn btn-primary prevButton' type="submit" id="submit" value="Previous">
-        <input class='btn btn-primary nextButton' type="submit" id="submit" value="Next">
+        <a class='btn btn-primary prevButton' href="#overview-3">Previous</a>
+          <a class="btn btn-primary nextButton" href="#overview-5">Next</a>
       </div>
     </div>
 
-    <div class="overview-5" hidden>
+    <div class="overview-5" id="overview-5" hidden>
       2. <b>Interactive Guess:</b> Once you have submitted your initial estimate, you will be able to see the guesses of the players you follow in the game. You will have another 30 second period to alter your estimate. <b>You will be able to see as the other players you follow change their estimates in real-time.</b> You can alter your guess as many times as you like during this round. After 30 seconds elapse, your estimate will be locked in, and you will proceed to the next round.
       <div><img src="/static/images/interactive-guess.png" class="screenshot"/></div>
       <div class="row">
-        <input class='btn btn-primary prevButton' type="submit" id="submit" value="Previous">
-        <input class='btn btn-primary nextButton' type="submit" id="submit" value="Next">
+        <a class='btn btn-primary prevButton' href="#overview-4">Previous</a>
+          <a class="btn btn-primary nextButton" href="#overview-6">Next</a>
       </div>
     </div>
 
-    <div class="overview-6" hidden>
+    <div class="overview-6" id="overview-6" hidden>
       3. <b>Round Overview</b>: After you lock in your second guess, you will proceed to a "Round Overview" screen. Here you can see how well all the other players in the game performed in the last round. You may choose to ‘follow’ up to [n] other players, and you will have the option to follow/unfollow players after each round. "Following" a player means you will be able to see their real-time guess in subsequent <b>Interactive Guess</b> stages.
       <div><img src="/static/images/interactive-result.png" class="screenshot"/></div>
       These three stages will repeat every round. Once you have finished 20 rounds, the game is complete and you will be taken to an exit survey.
       <div class="row">
-        <input class='btn btn-primary prevButton' type="submit" id="submit" value="Previous">
-        <input class='btn btn-primary nextButton' type="submit" id="submit" value="Next">
+        <a class='btn btn-primary prevButton' href="#overview-5">Previous</a>
+          <a class="btn btn-primary nextButton" href="#overview-7">Next</a>
       </div>
     </div>
-    <div class="overview-7" hidden>
+    <div class="overview-7" id="overview-7" hidden>
       <h2>Comprehension Check</h2>
       <form class="form" method="post">
       {% csrf_token %}
@@ -109,7 +116,10 @@
                   </div>
               {% endfor %}
           </div>
-      <input type="submit" class="btn btn-primary" name="submit" />
+      <div class="row">
+          <a class='btn btn-primary prevButton' href="#overview-6">Previous</a>
+          <input type="submit" class="btn btn-primary" name="submit" />
+      </div>
       </form>
     </div>
   </div>
