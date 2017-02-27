@@ -151,7 +151,8 @@ html, body {
 .user-avatar {
   width: 40px;
 }
-
+.user-avatar-large{
+}
 .border {
   border: 1px solid black;
 }
@@ -164,14 +165,13 @@ html, body {
   display: none;
 }
 
-#yourGuess {
-  color: blue;
-}
-
 #roundAnswer {
   color: green;
 }
 
+#roundBonus{
+  color: orangered;
+}
 blockquote.instr {
   font-size: 16px;
 }

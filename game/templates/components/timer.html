@@ -5,11 +5,15 @@
 {% endblock %}
 
 <div>
+    <div>
+        <h6 style="white-space: nowrap;"><b>You Are:</b></h6>
+    <img src='' class="avatar-large user-avatar-large" />
+    </div>
   <div id="timer" class="info">
     <span id="counter"></span>
   </div>
   <div class="info">
-    Bonus: <span class="user_score">{{ score }}</span> <img id="coin" src="/static/images/coin.png" />
+    Total Score: <br><span class="user_score">{{ score }}</span> <img id="coin" src="/static/images/coin.png" />
   </div>
-  <div class="info">Remaining: {{ remaining }} <span id="remaining"></span></div>
+  <div class="info">Rounds left: <br>{{ remaining }} <span id="remaining"></span></div>
 </div>

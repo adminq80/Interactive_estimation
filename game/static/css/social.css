@@ -12,6 +12,10 @@
   margin-right: 5px;
   width: 30px;
 }
+.avatar-large{
+  margin: 0 10px 20px 10px;
+  width: 55px;
+}
 
 .plusIcon {
   width: 25px;

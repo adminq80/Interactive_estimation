@@ -24,17 +24,17 @@ function countdown(counterState, s) {
   tick();
 }
 
+
+function class_name_for_score(round_score){
+  if (round_score >= .66)
+    return 'high-gain';
+  if (round_score >= .33)
+      return 'medium-gain';
+  return'low-gain';
+}
+
 function new_follow_list(name, avatar, score, round_score) {
-  var class_color;
-  if (round_score > .66) {
-      class_color = 'high-gain';
-  }
-  else if (round_score > .33) {
-        class_color = 'medium-gain';
-    }
-    else {
-        class_color = 'low-gain';
-    }
+  var class_color = class_name_for_score(round_score);
   $("#follow_list").append(`
     <div class="user" id=${name}>
       <a href="#" data-toggle="tooltip" data-placement="right" class="toolTip" title="Unfollow a user first">
@@ -47,16 +47,7 @@ function new_follow_list(name, avatar, score, round_score) {
 }
 
 function new_unfollow_list(name, avatar, score, round_score) {
-  var class_color;
-  if (round_score > .66) {
-      class_color = 'high-gain';
-  }
-  else if (round_score > .33) {
-      class_color = 'medium-gain';
-  }
-  else {
-      class_color = 'low-gain';
-  }
+  var class_color = class_name_for_score(round_score);
   return (`
     <img src=${avatar} class='avatar' />
     <span>${score} </span><span class="${class_color}">(+${round_score})</span><img id="coin" src="/static/images/coin.png" />
@@ -143,48 +134,8 @@ function start_interactive(data) {
 
 }
 
-
-$(function () {
-
-  var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
-  var path = window.location.pathname == "/static_mode/lobby/" ? "/static_mode/lobby/": "/dynamic_mode/lobby/";
-  game_type = window.location.pathname == "/static_mode/lobby/" ? "static": "dynamic";
-  var ws_path = ws_scheme + '://' + window.location.host + path;
-  socket = new ReconnectingWebSocket(ws_path);
-
-  if (!socket){
-    console.log('Socket is null');
-    alert("Your browser doesn't support Websocket");
-  }
-
-  socket.onopen = function () {
-    console.log("Connected to chat socket");
-  };
-
-  socket.onclose = function () {
-    console.log("Disconnected from chat socket");
-  };
-
-  socket.onmessage = function (msg) {
-    var data = JSON.parse(msg.data);
-    if(data.error){
-      console.log(data.msg);
-      return;
-    }
-
-    if(data.action == "info"){
-      document.querySelector('#connected_players').innerHTML = data.connected_players || 0;
-      document.querySelector('#total_players').innerHTML = data.total_players || 0;
-    }
-    else if(data.action == "redirect"){
-      var proto = (ws_scheme == "wss") ? "https://" : "http://";
-      window.location.href = proto + window.location.host + data.url;
-    }
-    else if(data.action == 'avatar'){
-      $('.user-avatar').attr('src', data.url);
-    }
-    else if(data.action == 'initial') {
-      $(".img-responsive").removeClass("faded");
+function start_initial(data){
+  $(".img-responsive").removeClass("faded");
 
       start_game(data, data.seconds);
       resetSlider();
@@ -196,54 +147,9 @@ $(function () {
         var audio = new Audio('/static/bell.mp3');
         audio.play();
       }
-
-    }
-    else if(data.action == 'ping'){
-      console.log(data.text)
-    }
-    else if(data.action == 'interactive') {
-      console.log(data);
-      start_game(data, data.seconds);
-      $(".guess").show();
-
-      $("#interactiveGuess").show();
-      $(".box#score").html(`${data.score}`);
-
-      $("#following_list tbody").html("");
-      $.each(data.following, function(i, user) {
-        if (user.guess < 0) {
-          user.guess = '';
-        }
-        var avatar = "/static/"+user.avatar;
-        $("#following_list tbody").append(`
-          <tr>
-            <td id=${user.username}>
-              <img src=${avatar} class='avatar' />
-              <span>${user.guess}</span>
-              <div class="followingSlider"></div>
-            </td>
-          </tr>
-        `);
-
-        $(`td#${user.username} > .followingSlider`).slider({
-          min: 0,
-          max: 1,
-          step: 0.01,
-          disabled: true
-        });
-
-        if (user.guess == '') {
-          $(`td#${user.username} > .followingSlider > .ui-slider-handle`).hide();
-        }
-        else {
-          $(`td#${user.username} > .followingSlider`).slider( "option", "value", user.guess);
-        }
-      })
-    }
-    else if(data.action == 'outcome'){
-      console.log('data', data);
-      
-      $(".box#score").html(`${data.score}`);
+}
+function start_outcome(data){
+  $(".box#score").html(`${data.score}`);
       $("#unfollow_list tbody").html("");
 
       for(var i = 0; i < data.max_following; i++) {
@@ -288,7 +194,7 @@ $(function () {
         $($("#answerSlider > .ui-slider-handle")[0]).css("background-color", "green");
       }
       $("#roundAnswer").html(data.correct_answer);
-      // to be replaced 
+      $("#roundBonus").html('+'+ data.gain);
 
       $(".img-responsive").addClass("faded");
 
@@ -325,7 +231,97 @@ $(function () {
           following: followingCopy
         }));
       });
+
+}
+
+$(function () {
+
+  var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+  var path = window.location.pathname == "/static_mode/lobby/" ? "/static_mode/lobby/": "/dynamic_mode/lobby/";
+  game_type = window.location.pathname == "/static_mode/lobby/" ? "static": "dynamic";
+  var ws_path = ws_scheme + '://' + window.location.host + path;
+  socket = new ReconnectingWebSocket(ws_path);
+
+  if (!socket){
+    console.log('Socket is null');
+    alert("Your browser doesn't support Websocket");
+  }
+
+  socket.onopen = function () {
+    console.log("Connected to chat socket");
+  };
+
+  socket.onclose = function () {
+    console.log("Disconnected from chat socket");
+  };
+
+  socket.onmessage = function (msg) {
+    var data = JSON.parse(msg.data);
+    if(data.error){
+      console.log(data.msg);
+      return;
     }
+
+    if(data.action == "info"){
+      document.querySelector('#connected_players').innerHTML = data.connected_players || 0;
+      document.querySelector('#total_players').innerHTML = data.total_players || 0;
+    }
+    else if(data.action == "redirect"){
+      var proto = (ws_scheme == "wss") ? "https://" : "http://";
+      window.location.href = proto + window.location.host + data.url;
+    }
+    else if(data.action == 'avatar'){
+      $('.user-avatar').attr('src', data.url);
+      $('.user-avatar-large').attr('src', data.url);
+    }
+    else if(data.action == 'initial') {
+      start_initial(data);
+    }
+    else if(data.action == 'ping'){
+      console.log(data.text)
+    }
+    else if(data.action == 'interactive') {
+      console.log(data);
+      start_game(data, data.seconds);
+      $(".guess").show();
+
+      $("#interactiveGuess").show();
+      $(".box#score").html(`${data.score}`);
+
+      $("#following_list tbody").html("");
+      $.each(data.following, function(i, user) {
+        if (user.guess < 0) {
+          user.guess = '';
+        }
+        var avatar = "/static/"+user.avatar;
+        $("#following_list tbody").append(`
+          <tr>
+            <td id=${user.username}>
+              <img src=${avatar} class='avatar' />
+              <span>${user.guess}</span>
+              <div class="followingSlider"></div>
+            </td>
+          </tr>
+        `);
+
+        $(`td#${user.username} > .followingSlider`).slider({
+          min: 0,
+          max: 1,
+          step: 0.01,
+          disabled: true
+        });
+
+        if (user.guess == '') {
+          $(`td#${user.username} > .followingSlider > .ui-slider-handle`).hide();
+        }
+        else {
+          $(`td#${user.username} > .followingSlider`).slider( "option", "value", user.guess);
+        }
+      })
+    }
+    else if(data.action == 'outcome'){
+      start_outcome(data);
+}
     else if(data.action == 'sliderChange'){
       $(`td#${data.username} > span`).html(data.slider);
       $(`td#${data.username} > .followingSlider > .ui-slider-handle`).show();
