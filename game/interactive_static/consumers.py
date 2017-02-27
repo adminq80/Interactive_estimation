@@ -416,8 +416,7 @@ def outcome_loop(users):
 
 def outcome(user, game: InteractiveStatic, round_data):
     current_round = InteractiveStaticRound.objects.get(user=user, round_order=round_data.get('current_round'))
-    rest_of_users = outcome_loop(1,
-                                 current_round.game.users.filter(~Q(
+    rest_of_users = outcome_loop(current_round.game.users.filter(~Q(
                                      username__in=current_round.following.values('username'))).exclude(
                                      username=user.username))
 
