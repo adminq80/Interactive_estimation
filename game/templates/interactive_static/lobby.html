@@ -73,36 +73,36 @@
 
 
     <div class="col-md-3">
-      <div class="outcome" hidden>
-        <div><b>Score:</b> total (<span style="color: green;">+ increment</span>)</div>
-        <div>
-          <img src='' class="avatar user-avatar" />
-          <span class="user_score">0.0</span>&nbsp;<span id="user_round_score">(+0.5)</span>&nbsp;<img id="coin" src="/static/images/coin.png" />
+          <div class="outcome" hidden>
+            <div><b>Score:</b> total (<span style="color: green;">+ increment</span>)</div>
+            <div>
+              <img src='' class="avatar user-avatar" />
+              <span class="user_score">0.0</span>&nbsp;<span id="user_round_score">(+0.5)</span>&nbsp;<img id="coin" src="/static/images/coin.png" />
+            </div>
+            <br>
+    {#        <b>You are following:</b>#}
+    {#        <table class="table table-bordered" id="unfollow_list">#}
+    {#          <tbody>#}
+    {#          </tbody>#}
+    {#        </table>#}
+          </div>
+
+          <div id="interactiveGuess" hidden>
+
+            <div><b>You are following:</b></div>
+            <table class="table table-bordered" id="following_list">
+              <tbody>
+              </tbody>
+            </table>
+          </div>
         </div>
-        <br>
-        <b>You are following:</b>
-        <table class="table table-bordered" id="unfollow_list">
-          <tbody>
-          </tbody>
-        </table>
-      </div>
 
-      <div id="interactiveGuess" hidden>
-
-        <div><b>You are following:</b></div>
-        <table class="table table-bordered" id="following_list">
-          <tbody>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="col-md-3">
-      <div class="outcome" hidden>
-        <b>You can follow:</b>
-        <div id="follow_list">
-        </div>
-      </div>
+        <div class="col-md-3">
+          <div class="outcome" hidden>
+    {#        <b>You can follow:</b>#}
+    {#        <div id="follow_list">#}
+            </div>
+          </div>
     </div>
 
     <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
