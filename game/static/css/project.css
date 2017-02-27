@@ -166,7 +166,7 @@ html, body {
 }
 
 #roundAnswer {
-  color: green;
+  color: blue;
 }
 
 #roundBonus{
@@ -193,7 +193,7 @@ blockquote.instr {
   color: darkgreen;
 }
 .true-answer{
-  border: 12px solid green !important;
+  border: 12px solid blue !important;
 }
 
 #answerSlider{
