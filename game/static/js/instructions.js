@@ -1,5 +1,6 @@
 $(document).ready(function() {
-  for(let i = 1; i < 8; i++) {
+  var upperBound = document.location.pathname.match(/solo/) == null ? 7: 6;
+  for(let i = 1; i <= upperBound; i++) {
 
     $(`.overview-${i} > .row > .nextButton`).click(function() {
       $(`.overview-${i}`).hide();
@@ -7,16 +8,16 @@ $(document).ready(function() {
     })
   }
 
-  for(let i = 2; i < 7; i++) {
+  for(let i = 2; i < upperBound; i++) {
     $(`.overview-${i} > .row > .prevButton`).click(function() {
       $(`.overview-${i}`).hide();
       $(`.overview-${i-1}`).show();
     })
 
   }
-  $(".overview-7 > form >  .row > .prevButton").click(function(){
-     $(`.overview-7`).hide();
-      $(`.overview-6`).show();
+  $(`.overview-${upperBound} > form >  .row > .prevButton`).click(function(){
+     $(`.overview-${upperBound}`).hide();
+      $(`.overview-${upperBound-1}`).show();
   });
 
   $(".submitButton").click(function() {
@@ -39,8 +40,7 @@ $(document).ready(function() {
 
   if (document.location.hash){
     var j = +document.location.hash.replace(/#overview-([1-7])/, '$1');
-    console.log(j);
-    for(var i = 1; i<8; i++){
+    for(var i = 1; i <= upperBound; i++){
       $(`.overview-${i}`).hide();
     }
     $(`.overview-${j}`).show();

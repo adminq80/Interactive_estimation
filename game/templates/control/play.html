@@ -13,6 +13,9 @@
 
 {% block container %}
 <div class="row">
+<div class="col-md-1">
+    {% include 'components/timer.html' %}
+  </div>
   <div class="col-md-6">
   <form action='{% url "control:submit" %}' method="post">
     {% csrf_token %}
@@ -24,9 +27,6 @@
       <input class='btn btn-success nextButton' type="submit" id="submit" value="Submit" disabled>
     </div>
   </form>
-  </div>
-  <div class="col-md-3">
-    {% include 'components/timer.html' %}
   </div>
 </div>
 

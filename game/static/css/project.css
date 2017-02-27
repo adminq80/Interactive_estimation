@@ -192,3 +192,6 @@ blockquote.instr {
 .high-gain{
   color: darkgreen;
 }
+.true-answer{
+  border: 12px solid green !important;
+}

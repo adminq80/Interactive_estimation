@@ -1,6 +1,7 @@
 from math import fabs
-
+from random import choice
 from datetime import timedelta
+
 from django.contrib.auth import authenticate, login
 from django.core.cache import cache
 from django.utils import timezone
@@ -14,6 +15,14 @@ from game.round.models import Round, Plot
 
 from .forms import RoundForm, CheckForm, ExitSurvey
 from .models import Control, Setting
+
+
+def avatar(exclude=set()):
+    avatars = {'bee.png', 'bird.png', 'cat.png', 'cow.png', 'elephant.png', 'lion.png', 'pig.png', 'cute_cat.png',
+               'cute_panda.png', 'cute_giraffe.png', 'cute_owl.png', 'cute_cat_color.png', 'smart_dog.png',
+               'smart_fox.png', 'smart_monkey.png', 'smart_deer.png'
+               }
+    return choice(list(avatars.symmetric_difference(exclude)))
 
 
 def assign(request):
@@ -183,6 +192,8 @@ def submit_answer(request):
 def instruction(request):
     if request.user.is_anonymous:
         u, password = random_user('control', length=60)
+        u.avatar = avatar()
+        u.save()
         settings = Setting.objects.all()
         if settings.count() != 0:
             setting = settings.order_by('?')[0]
@@ -215,7 +226,6 @@ def instruction(request):
                 game.save()
             except Control.DoesNotExist:
                 return redirect('control:instruction')
-
     return render(request, 'control/instructions.html', {'form': form})
 
 
