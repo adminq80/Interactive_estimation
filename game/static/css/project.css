@@ -195,3 +195,7 @@ blockquote.instr {
 .true-answer{
   border: 12px solid green !important;
 }
+
+#answerSlider{
+  opacity: 1 !important;
+}
