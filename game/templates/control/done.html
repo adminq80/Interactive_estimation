@@ -1,6 +1,15 @@
 {% extends 'base.html' %}
 
 {% block container %}
-    <p>Remainder: Please don't forget to  submit the following code to receive your bonus</p>
+    <h2>Thanks for participating</h2>
+    <p>Please don't forget to  submit the following code to receive your bonus</p>
     <p><strong>{{user.username}}</strong></p>
+{% endblock %}
+
+{% block extra_javascript %}
+    <script>
+    (function(){
+        document.querySelector('.logout').style.display = 'none';
+    })();
+    </script>
 {% endblock %}

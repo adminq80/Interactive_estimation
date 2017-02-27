@@ -53,7 +53,7 @@ def exit_survey(request):
 
 
 def done(request):
-    return render(request, 'static/done.html')
+    return render(request, 'interactive_static/done.html')
 
 
 def instruction(request):
