@@ -175,10 +175,10 @@ function start_outcome(data){
           disabled: true
         });
         if(data.guess > data.correct_answer) {
-          $($("#answerSlider > .ui-slider-handle")[0]).css("background-color", "green");
+          $($("#answerSlider > .ui-slider-handle")[0]).addClass("true-answer");
         }
         else {
-          $($("#answerSlider > .ui-slider-handle")[1]).css("background-color", "green");
+          $($("#answerSlider > .ui-slider-handle")[1]).addClass("true-answer");
         }
       }
       else {
@@ -191,7 +191,7 @@ function start_outcome(data){
           value: data.correct_answer,
           disabled: true
         });
-        $($("#answerSlider > .ui-slider-handle")[0]).css("background-color", "green");
+        $($("#answerSlider > .ui-slider-handle")[0]).addClass("true-answer");
       }
       $("#roundAnswer").html(data.correct_answer);
       $("#roundBonus").html('+'+ data.gain);
