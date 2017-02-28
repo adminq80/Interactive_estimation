@@ -24,33 +24,32 @@ function countdown(counterState, s) {
   tick();
 }
 
-
-function class_name_for_score(round_score){
-  if (round_score >= .66)
+function class_name_for_score(group){
+  if (group == 1)
     return 'high-gain';
-  if (round_score >= .33)
+  if (group == 2)
       return 'medium-gain';
   return'low-gain';
 }
 
-function new_follow_list(name, avatar, score, round_score) {
-  var class_color = class_name_for_score(round_score);
+function new_follow_list(name, avatar, score, round_score, group) {
+  var class_color = class_name_for_score(group);
   $("#follow_list").append(`
     <div class="user" id=${name}>
       <a href="#" data-toggle="tooltip" data-placement="right" class="toolTip" title="Unfollow a user first">
         <img src="/static/images/plus.ico" class="plusIcon" />
       </a>
       <img src=${avatar} class="avatar" /> 
-      <span class="userScore">${score}</span><span class="${class_color}">(+${round_score}) </span><img id="coin" src="/static/images/coin.png" />
+      <span class="userScore">${score}</span><span class="${class_color}"><b>(+${round_score}) </b></span><img id="coin" src="/static/images/coin.png" />
     </div>
   `);
 }
 
-function new_unfollow_list(name, avatar, score, round_score) {
-  var class_color = class_name_for_score(round_score);
+function new_unfollow_list(name, avatar, score, round_score, group) {
+  var class_color = class_name_for_score(group);
   return (`
     <img src=${avatar} class='avatar' />
-    <span>${score} </span><span class="${class_color}">(+${round_score})</span><img id="coin" src="/static/images/coin.png" />
+    <span>${score} </span><span class="${class_color}"><b>(+${round_score}) </b></span><img id="coin" src="/static/images/coin.png" />
     <button type="button" id=${name} class="btn btn-primary unfollow">Unfollow</button>
   `);
 }
@@ -112,16 +111,18 @@ function start_game(data, seconds) {
 }
 
 function comp_score(a, b) {
-  return a.score >= b.score ? a: b;
+  return (+a.score) >= (+b.score) ? a: b;
 }
 
 function start_interactive(data) {
 
   // populate list of people you can follow
   $("#follow_list").html("");
+
   $.each(data.all_players.sort(comp_score), function(i, user) {
     var avatar = '/static/' + user.avatar;
-    new_follow_list(user.username, avatar, user.score, user.gain);
+    sessionStorage.setItem(user.username, user.group);
+    new_follow_list(user.username, avatar, user.score, user.gain, user.group);
   });
 
   $("#unfollow_list tbody td").html("");
@@ -129,7 +130,8 @@ function start_interactive(data) {
   $.each(data.following.sort(comp_score), function(i, user) {
     var avatar = "/static/"+user.avatar;
     var row = $($("#unfollow_list tbody td")[i]);
-    row.html(new_unfollow_list(user.username, avatar, user.score, user.gain));
+    sessionStorage.setItem(user.username, user.group);
+    row.html(new_unfollow_list(user.username, avatar, user.score, user.gain, user.group));
   });
 
 }
@@ -150,21 +152,21 @@ function start_initial(data){
 }
 function start_outcome(data){
   $(".box#score").html(`${data.score}`);
-      $("#unfollow_list tbody").html("");
+  $("#unfollow_list tbody").html("");
 
-      for(var i = 0; i < data.max_following; i++) {
-        $("#unfollow_list tbody").append("<tr><td></td></tr>");
-      }
+  for(var i = 0; i < data.max_following; i++) {
+    $("#unfollow_list tbody").append("<tr><td></td></tr>");
+  }
 
-      start_game(data, data.seconds);
-      $("#interactiveGuess").hide();
-      $(".guess").hide();
-      $(".outcome").show();
-      $("#yourGuess").html("");
+  start_game(data, data.seconds);
+  $("#interactiveGuess").hide();
+  $(".guess").hide();
+  $(".outcome").show();
+  $("#yourGuess").html("");
 
       // this is going to be an answer slider
       $("#answerSlider").html("");
-      if(data.guess != -1) {
+      if(data.guess > -1) {
         $("#yourGuess").html(data.guess);
         $("#answerSlider").slider({
           range: true,
@@ -183,8 +185,8 @@ function start_outcome(data){
       }
       else {
         console.log("reset slider");
+        $("#yourGuess").html('N/A');
         $("#answerSlider").slider({
-          range: true,
           min: 0,
           max: 1,
           step: 0.01,
@@ -194,7 +196,11 @@ function start_outcome(data){
         $($("#answerSlider > .ui-slider-handle")[0]).addClass("true-answer");
       }
       $("#roundAnswer").html(data.correct_answer);
+      $('#user_round_score').html(data.gain);
+      $('#user_round_score2').addClass(class_name_for_score(data.group));
+      $('#user_round_score').addClass(class_name_for_score(data.group));
       $("#roundBonus").html('+'+ data.gain);
+      $('#roundBonus').addClass(class_name_for_score(data.group));
 
       $(".img-responsive").addClass("faded");
 
@@ -328,7 +334,7 @@ $(function () {
       $(`td#${data.username} > .followingSlider`).slider( "option", "value", data.slider);
     }
     else if(data.action == 'followNotify'){
-      following = data.following.map(function(user) {
+      var following = data.following.map(function(user) {
         return user.username;
       });
       start_interactive(data);

@@ -15,7 +15,6 @@ from channels.auth import channel_session_user_from_http, channel_session_user
 from django.utils import timezone
 from twisted.internet import task, reactor
 
-from game.contrib.calculate import calculate_score
 from game.round.models import Plot
 
 from .utils import avatar
@@ -269,7 +268,8 @@ def follow_list(message):
                 u_can_follow.append(d)
 
         next_round.save()
-
+        data = just_followed + u_can_follow + [{'username': user.username, 'gain': user.get_score_and_gain[1]}]
+        rank(user.username, data, game.users.count())
         message.reply_channel.send({'text': json.dumps({
             'action': 'followNotify',
             'following': just_followed,
@@ -457,20 +457,37 @@ def start_outcome(game, round_data, users_plots):
     task.deferLater(reactor, 1, game_state_checker, game, 'outcome', round_data, users_plots).addErrback(twisted_error)
 
 
-def outcome_loop(lim, l):
+def outcome_loop(l):
     return [{'username': u.username, 'avatar': u.get_avatar, 'score': u.get_score_and_gain[0],
              'gain': u.get_score_and_gain[1]} for u in l]
+
+
+def rank(username, data, game_size):
+    sorted(data, key=lambda x: x['gain'], reverse=True)
+    batch = (game_size // 3)
+    for i, doc in enumerate(data):
+        if i < batch:
+            doc['group'] = 1
+        elif i < (batch * 2):
+            doc['group'] = 2
+        else:
+            doc['group'] = 3
+    return list(filter(lambda x: x['username'] == username, data))[0]['gain']
 
 
 def outcome(user, game: InteractiveShocks, round_data):
     current_round = InteractiveShocksRound.objects.get(user=user, round_order=round_data.get('current_round'))
 
-    rest_of_users = outcome_loop(1, current_round.game.users.filter(~Q(username__in=current_round.following.values(
+    rest_of_users = outcome_loop(current_round.game.users.filter(~Q(username__in=current_round.following.values(
                                              'username'))).exclude(username=user.username))
 
-    currently_following = outcome_loop(game.constraints.score_lambda, current_round.following.all())
+    currently_following = outcome_loop(current_round.following.all())
     score, gain = user.get_score_and_gain
-    game.user_send(user, action='outcome', guess=float(current_round.get_influenced_guess()),
+
+    group = rank(user.username, currently_following + rest_of_users + [{'username': user.username, 'gain': gain}],
+                 current_round.game.users.count())
+
+    game.user_send(user, action='outcome', guess=float(current_round.get_influenced_guess()), group=group,
                    score=score, gain=gain, following=currently_following, all_players=rest_of_users,
                    max_following=game.constraints.max_following, correct_answer=float(current_round.plot.answer),
                    seconds=SECONDS, **round_data)
