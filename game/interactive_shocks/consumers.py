@@ -43,7 +43,6 @@ def get_round(game, user=None):
     current_round = played_rounds.count()
 
     remaining = game.constraints.max_rounds - current_round
-    print('current_round ======================== {}'.format(current_round))
     if remaining == 0:
         return None, None
 
@@ -66,11 +65,11 @@ def get_round(game, user=None):
             following = users.exclude(username=user.username).order_by('?')[:game.constraints.max_following]  # random
             for f in following.all():
                 i_round.following.add(f)
-            i_round.save()
         else:
             previous_round = InteractiveShocksRound.objects.get(user=user, game=game, round_order=current_round-1)
             for f in previous_round.following.all():
                 i_round.following.add(f)
+        with transaction.atomic():
             i_round.save()
 
     return {'plot': None, 'remaining': remaining, 'current_round': current_round}, users_plots
@@ -230,7 +229,6 @@ def data_broadcast(message):
             # check the game and state and make sure we are on interactive mode
 
             for user_round in rounds.all():
-                print('Going to send data to {}'.format(user_round.user.username))
                 game.user_send(user_round.user, action='sliderChange', username=user.username, slider=slider)
     else:
         logging.error('Got invalid value for slider')
@@ -266,16 +264,16 @@ def follow_list(message):
                 just_followed.append(d)
             else:
                 u_can_follow.append(d)
-
-        next_round.save()
-        data = just_followed + u_can_follow + [{'username': user.username, 'gain': user.get_score_and_gain[1]}]
-        rank(user.username, data, game.users.count())
+        with transaction.atomic():
+            next_round.save()
         message.reply_channel.send({'text': json.dumps({
             'action': 'followNotify',
             'following': just_followed,
             'all_players': u_can_follow,
         })})
     else:
+        print(follow_users)
+        print(message.get('following'))
         message.reply_channel.send({'text': json.dumps({
             'error': True,
             'msg': "didn't meet game constraints max is {} and list is {}".format(game.constraints.max_following,
@@ -423,8 +421,6 @@ def start_interactive(game, round_data, users_plots):
                         'round_data': round_data,
                         'users_plots': users_plots,
                         })
-    print("USERS_PLOTS")
-    print(users_plots)
     for i in users_plots:
         user = i['user']
         round_data['plot'] = i['plot']
@@ -462,19 +458,6 @@ def outcome_loop(l):
              'gain': u.get_score_and_gain[1]} for u in l]
 
 
-def rank(username, data, game_size):
-    sorted(data, key=lambda x: x['gain'], reverse=True)
-    batch = (game_size // 3)
-    for i, doc in enumerate(data):
-        if i < batch:
-            doc['group'] = 1
-        elif i < (batch * 2):
-            doc['group'] = 2
-        else:
-            doc['group'] = 3
-    return list(filter(lambda x: x['username'] == username, data))[0]['gain']
-
-
 def outcome(user, game: InteractiveShocks, round_data):
     current_round = InteractiveShocksRound.objects.get(user=user, round_order=round_data.get('current_round'))
 
@@ -484,10 +467,7 @@ def outcome(user, game: InteractiveShocks, round_data):
     currently_following = outcome_loop(current_round.following.all())
     score, gain = user.get_score_and_gain
 
-    group = rank(user.username, currently_following + rest_of_users + [{'username': user.username, 'gain': gain}],
-                 current_round.game.users.count())
-
-    game.user_send(user, action='outcome', guess=float(current_round.get_influenced_guess()), group=group,
+    game.user_send(user, action='outcome', guess=float(current_round.get_influenced_guess()),
                    score=score, gain=gain, following=currently_following, all_players=rest_of_users,
                    max_following=game.constraints.max_following, correct_answer=float(current_round.plot.answer),
                    seconds=SECONDS, **round_data)

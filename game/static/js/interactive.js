@@ -25,7 +25,7 @@ function countdown(counterState, s) {
 }
 
 function class_name_for_score(group){
-  if (group == 1)
+    if (group == 1)
     return 'high-gain';
   if (group == 2)
       return 'medium-gain';
@@ -111,45 +111,59 @@ function start_game(data, seconds) {
 }
 
 function comp_score(a, b) {
-  return (+a.score) >= (+b.score) ? a: b;
+  return (+a.score) >= (+b.score) ? -1: 1;
 }
 
 function start_interactive(data) {
-
   // populate list of people you can follow
   $("#follow_list").html("");
-
   $.each(data.all_players.sort(comp_score), function(i, user) {
     var avatar = '/static/' + user.avatar;
-    sessionStorage.setItem(user.username, user.group);
-    new_follow_list(user.username, avatar, user.score, user.gain, user.group);
+    new_follow_list(user.username, avatar, user.score, user.gain, +sessionStorage.getItem(user.username));
   });
-
   $("#unfollow_list tbody td").html("");
   // populate list of people you can unfollow
   $.each(data.following.sort(comp_score), function(i, user) {
     var avatar = "/static/"+user.avatar;
     var row = $($("#unfollow_list tbody td")[i]);
-    sessionStorage.setItem(user.username, user.group);
-    row.html(new_unfollow_list(user.username, avatar, user.score, user.gain, user.group));
+    row.html(new_unfollow_list(user.username, avatar, user.score, user.gain, +sessionStorage.getItem(user.username)));
   });
-
 }
 
 function start_initial(data){
   $(".img-responsive").removeClass("faded");
-
       start_game(data, data.seconds);
       resetSlider();
-
       $(".guess").show();
       $(".outcome").hide();
-
       if(data.current_round == 0) {
         var audio = new Audio('/static/bell.mp3');
         audio.play();
       }
 }
+
+
+function percentile_generator(data){
+      var all_users = [];
+      $.each(data.following, function(i, user){
+        all_users.push(user);
+      });
+      $.each(data.all_players, function(i, user){
+        all_users.push(user);
+      });
+      all_users.push({username:"self", gain:data.gain});
+    var batch = Math.floor(all_users.length / 3);
+    $.each(all_users.sort(function(a, b){return +a.gain > +b.gain ? -1:1;}), function (i, user) {
+       if(i < batch) {
+           sessionStorage.setItem(user.username, 1);
+       }else if (i < (batch<<1)){
+         sessionStorage.setItem(user.username, 2);
+       }else{
+         sessionStorage.setItem(user.username, 3);
+       }
+    });
+}
+
 function start_outcome(data){
   $(".box#score").html(`${data.score}`);
   $("#unfollow_list tbody").html("");
@@ -184,7 +198,6 @@ function start_outcome(data){
         }
       }
       else {
-        console.log("reset slider");
         $("#yourGuess").html('N/A');
         $("#answerSlider").slider({
           min: 0,
@@ -195,15 +208,17 @@ function start_outcome(data){
         });
         $($("#answerSlider > .ui-slider-handle")[0]).addClass("true-answer");
       }
+
+      percentile_generator(data);
+
       $("#roundAnswer").html(data.correct_answer);
       $('#user_round_score').html(data.gain);
-      $('#user_round_score2').addClass(class_name_for_score(data.group));
-      $('#user_round_score').addClass(class_name_for_score(data.group));
+      $('#user_round_score2').addClass(class_name_for_score(sessionStorage.getItem('self')));
+      $('#user_round_score').addClass(class_name_for_score(sessionStorage.getItem('self')));
       $("#roundBonus").html('+'+ data.gain);
-      $('#roundBonus').addClass(class_name_for_score(data.group));
+      $('#roundBonus').addClass(class_name_for_score(sessionStorage.getItem('self')));
 
       $(".img-responsive").addClass("faded");
-
 
       start_interactive(data);
 
@@ -217,7 +232,6 @@ function start_outcome(data){
 
       $(document).on("click", ".plusIcon", function(e) {
         var username = e.target.parentElement.parentElement.id;
-
         var followingCopy = following.slice();
         followingCopy.push(username);
         $('[data-toggle="tooltip"]').tooltip('hide');
@@ -227,7 +241,6 @@ function start_outcome(data){
         }));
       });
       $(document).on("click", ".unfollow", function(e) {
-
         var username = e.target.id;
         var toRemove = following.indexOf(username);
         var followingCopy = following.slice();
@@ -237,11 +250,9 @@ function start_outcome(data){
           following: followingCopy
         }));
       });
-
 }
 
 $(function () {
-
   var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
   var path = window.location.pathname == "/static_mode/lobby/" ? "/static_mode/lobby/": "/dynamic_mode/lobby/";
   game_type = window.location.pathname == "/static_mode/lobby/" ? "static": "dynamic";
@@ -249,16 +260,13 @@ $(function () {
   socket = new ReconnectingWebSocket(ws_path);
 
   if (!socket){
-    console.log('Socket is null');
     alert("Your browser doesn't support Websocket");
   }
 
   socket.onopen = function () {
-    console.log("Connected to chat socket");
   };
 
   socket.onclose = function () {
-    console.log("Disconnected from chat socket");
   };
 
   socket.onmessage = function (msg) {
@@ -287,7 +295,6 @@ $(function () {
       console.log(data.text)
     }
     else if(data.action == 'interactive') {
-      console.log(data);
       start_game(data, data.seconds);
       $(".guess").show();
 
@@ -334,13 +341,12 @@ $(function () {
       $(`td#${data.username} > .followingSlider`).slider( "option", "value", data.slider);
     }
     else if(data.action == 'followNotify'){
-      var following = data.following.map(function(user) {
+      following = data.following.map(function(user) {
         return user.username;
       });
       start_interactive(data);
     }
     else {
-      console.log(data)
     }
   };
 });
@@ -368,6 +374,5 @@ $('input#submit').click(function () {
     }));
   }
   else {
-     console.log(state)
   }
 });
