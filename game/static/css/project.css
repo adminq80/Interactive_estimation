@@ -180,13 +180,13 @@ blockquote.instr {
 }
 
 .low-gain{
-  color: darkred;
+  color: #e60000;
 }
 .medium-gain{
-  color: darkgoldenrod;
+  color: #ffa31a;
 }
 .high-gain{
-  color: darkgreen;
+  color: #00cc44;
 }
 .true-answer{
   border: 12px solid blue !important;

@@ -43,7 +43,6 @@ def get_round(game, user=None):
     current_round = played_rounds.count()
 
     remaining = game.constraints.max_rounds - current_round
-    print('current_round ======================== {}'.format(current_round))
     if remaining == 0:
         return None, None
 
@@ -228,7 +227,6 @@ def data_broadcast(message):
             # check the game and state and make sure we are on interactive mode
 
             for user_round in rounds.all():
-                print('Going to send data to {}'.format(user_round.user.username))
                 game.user_send(user_round.user, action='sliderChange', username=user.username, slider=slider)
     else:
         logging.error('Got invalid value for slider')
@@ -374,8 +372,6 @@ def start_interactive(game, round_data, users_plots):
                         'round_data': round_data,
                         'users_plots': users_plots,
                         })
-    print("USERS_PLOTS")
-    print(users_plots)
     for i in users_plots:
         user = i['user']
         round_data['plot'] = i['plot']

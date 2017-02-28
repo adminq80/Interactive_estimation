@@ -40,7 +40,7 @@ function new_follow_list(name, avatar, score, round_score, group) {
         <img src="/static/images/plus.ico" class="plusIcon" />
       </a>
       <img src=${avatar} class="avatar" /> 
-      <span class="userScore">${score}</span><span class="${class_color}"><b>(+${round_score}) </b></span><img id="coin" src="/static/images/coin.png" />
+      <span class="userScore">${score}</span> (<b class="${class_color}">+${round_score})</b>) <img id="coin" src="/static/images/coin.png" />
     </div>
   `);
 }
@@ -49,7 +49,7 @@ function new_unfollow_list(name, avatar, score, round_score, group) {
   var class_color = class_name_for_score(group);
   return (`
     <img src=${avatar} class='avatar' />
-    <span>${score} </span><span class="${class_color}"><b>(+${round_score}) </b></span><img id="coin" src="/static/images/coin.png" />
+    <span>${score}</span> (<b class="${class_color}">+${round_score}</b>) <img id="coin" src="/static/images/coin.png" />
     <button type="button" id=${name} class="btn btn-primary unfollow">Unfollow</button>
   `);
 }
