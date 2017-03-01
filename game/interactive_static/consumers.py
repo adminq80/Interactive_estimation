@@ -21,6 +21,7 @@ from .utils import avatar
 from .models import InteractiveStatic, InteractiveStaticRound, Settings
 
 SECONDS = 30
+OUTCOME_SECONDS = 15
 
 
 def changing_levels(game):
@@ -174,6 +175,7 @@ def lobby(message):
     if waiting_for == 0:
         game.started = True
         game.save()
+        cache.set('{}_disconnected_users'.format(game.id), 0)
 
         # change users levels
         changing_levels(game)
@@ -187,14 +189,12 @@ def lobby(message):
 def exit_game(message):
     user, game = user_and_game(message)
     logging.info('user {} just exited'.format(user.username))
-    # if game.end_time:  # game has ended and need to remove channels
-    #     game.group_channel.discard(message.reply_channel)
-    #     game.user_channel(user).discard(message.reply_channel)
-    #
     if not game.started:
         game.users.remove(user)
         game.save()
         send_game_status(game)
+    else:
+        cache.set('{}_disconnected_users'.format(game.id), cache.get('{}_disconnected_users'.format(game.id))+1)
     game.group_channel.discard(message.reply_channel)
     game.user_channel(user).discard(message.reply_channel)
 
@@ -297,7 +297,7 @@ def twisted_error(*args, **kwargs):
 
 
 def game_state_checker(game, state, round_data, users_plots, counter=0):
-    if counter == SECONDS:
+    if counter == SECONDS or (counter == 10 and state == 'outcome'):
         # move to the next state
         if state == 'initial':
             start_interactive(game, round_data, users_plots)
@@ -310,18 +310,21 @@ def game_state_checker(game, state, round_data, users_plots, counter=0):
     if state == 'initial':
         r = InteractiveStaticRound.objects.filter(game=game, round_order=round_data.get('current_round'),
                                                   guess=None).count()
+        r -= cache.get('{}_disconnected_users'.format(game.id))
         if r == 0:
             start_interactive(game, round_data, users_plots)
             return
     elif state == 'interactive':
         r = InteractiveStaticRound.objects.filter(game=game, round_order=round_data.get('current_round'),
                                                   influenced_guess=None).count()
+        r -= cache.get('{}_disconnected_users'.format(game.id))
         if r == 0:
             start_outcome(game, round_data, users_plots)
             return
     elif state == 'outcome':
         r = InteractiveStaticRound.objects.filter(game=game, round_order=round_data.get('current_round'),
                                                   outcome=False).count()
+        r -= cache.get('{}_disconnected_users'.format(game.id))
         if r == 0:
             start_initial(game)
             return
@@ -395,6 +398,7 @@ def interactive(user, game, round_data):
 
 
 def start_outcome(game, round_data, users_plots):
+
     cache.set(game.id, {'state': 'outcome',
                         'round_data': round_data,
                         'users_plots': users_plots,
@@ -422,4 +426,4 @@ def outcome(user, game: InteractiveStatic, round_data):
     game.user_send(user, action='outcome', guess=float(current_round.get_influenced_guess()),
                    score=score, gain=gain, following=currently_following, all_players=rest_of_users,
                    max_following=game.constraints.max_following, correct_answer=float(current_round.plot.answer),
-                   seconds=SECONDS, **round_data)
+                   seconds=OUTCOME_SECONDS, **round_data)

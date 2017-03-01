@@ -32,24 +32,49 @@ function class_name_for_score(group){
   return'low-gain';
 }
 
-function new_follow_list(name, avatar, score, round_score, group) {
+function new_follow_list(name, avatar, score, round_score, group, disconnected) {
   var class_color = class_name_for_score(group);
-  $("#follow_list").append(`
+  if(disconnected == null){
+    $("#follow_list").append(`
     <div class="user" id=${name}>
       <a href="#" data-toggle="tooltip" data-placement="right" class="toolTip" title="Unfollow a user first">
         <img src="/static/images/plus.ico" class="plusIcon" />
       </a>
       <img src=${avatar} class="avatar" /> 
-      <span class="userScore">${score}</span> (<b class="${class_color}">+${round_score})</b>) <img id="coin" src="/static/images/coin.png" />
+      <span style="white-space: nowrap">
+      <span class="userScore">${score}</span> (<b class="${class_color}">+${round_score}</b>) <img id="coin" src="/static/images/coin.png" />
+      </span>
     </div>
   `);
+  }else{
+    $("#follow_list").append(`
+    <div class="user" id=${name}>
+      <a href="#" data-toggle="tooltip" data-placement="right" class="toolTip" title="Unfollow a user first">
+        <img src="/static/images/plus.ico" class="plusIcon" />
+      </a>
+      <span style="white-space: nowrap">
+      <img src=${avatar} class="avatar" /> 
+      <span>(Disconnected!)</span></span>
+    </div>`);
+  }
 }
 
-function new_unfollow_list(name, avatar, score, round_score, group) {
+function new_unfollow_list(name, avatar, score, round_score, group, disconnected) {
   var class_color = class_name_for_score(group);
-  return (`
+  if(disconnected == null){
+   return (`
     <img src=${avatar} class='avatar' />
+    <span style="white-space: nowrap">
     <span>${score}</span> (<b class="${class_color}">+${round_score}</b>) <img id="coin" src="/static/images/coin.png" />
+    </span>
+    <button type="button" id=${name} class="btn btn-primary unfollow">Unfollow</button>
+  `);
+  }
+  return (`
+    <span style="white-space: nowrap">
+    <img src=${avatar} class='avatar' />
+    <span>(Disconnected!)</span>
+    </span>
     <button type="button" id=${name} class="btn btn-primary unfollow">Unfollow</button>
   `);
 }
@@ -91,6 +116,10 @@ function resetSlider() {
   $('#correlation')[0].innerHTML = '';
 }
 
+function round_sound(){
+  var audio = new Audio('/static/round-sound.mp3');
+  audio.play();
+}
 function start_game(data, seconds) {
   state = data.action;
   $("#myModal").modal('hide');
@@ -104,9 +133,7 @@ function start_game(data, seconds) {
   countdown(state, seconds);
   $("#remaining").html(data.remaining);
   $(".user_score").html(data.score);
-
-  var audio = new Audio('/static/round-sound.mp3');
-  audio.play();
+  round_sound();
 
 }
 
@@ -117,16 +144,17 @@ function comp_score(a, b) {
 function start_interactive(data) {
   // populate list of people you can follow
   $("#follow_list").html("");
+  var arr = JSON.parse(sessionStorage.getItem('disconnected')) || [];
   $.each(data.all_players.sort(comp_score), function(i, user) {
     var avatar = '/static/' + user.avatar;
-    new_follow_list(user.username, avatar, user.score, user.gain, +sessionStorage.getItem(user.username));
+    new_follow_list(user.username, avatar, user.score, user.gain, +sessionStorage.getItem(user.username), arr.find(function(i){return i == user.username}));
   });
   $("#unfollow_list tbody td").html("");
   // populate list of people you can unfollow
   $.each(data.following.sort(comp_score), function(i, user) {
     var avatar = "/static/"+user.avatar;
     var row = $($("#unfollow_list tbody td")[i]);
-    row.html(new_unfollow_list(user.username, avatar, user.score, user.gain, +sessionStorage.getItem(user.username)));
+    row.html(new_unfollow_list(user.username, avatar, user.score, user.gain, +sessionStorage.getItem(user.username), arr.find(function(i){return i == user.username})));
   });
 }
 
@@ -258,6 +286,7 @@ $(function () {
   game_type = window.location.pathname == "/static_mode/lobby/" ? "static": "dynamic";
   var ws_path = ws_scheme + '://' + window.location.host + path;
   socket = new ReconnectingWebSocket(ws_path);
+  sessionStorage.clear();
 
   if (!socket){
     alert("Your browser doesn't support Websocket");
@@ -279,10 +308,14 @@ $(function () {
     if(data.action == "info"){
       document.querySelector('#connected_players').innerHTML = data.connected_players || 0;
       document.querySelector('#total_players').innerHTML = data.total_players || 0;
+      round_sound();
     }
     else if(data.action == "redirect"){
       var proto = (ws_scheme == "wss") ? "https://" : "http://";
       window.location.href = proto + window.location.host + data.url;
+    }else if(data.action == 'logout'){
+      console.log("logout");
+      window.location.href = data.url;
     }
     else if(data.action == 'avatar'){
       $('.user-avatar').attr('src', data.url);
@@ -293,8 +326,26 @@ $(function () {
     }
     else if(data.action == 'ping'){
       console.log(data.text)
-    }
-    else if(data.action == 'interactive') {
+    }else if(data.action == 'disconnected'){
+      console.log(data.username);
+      //noinspection JSDuplicatedDeclaration
+        var arr = JSON.parse(sessionStorage.getItem('disconnected')) || [];
+      arr.push(data.username);
+      sessionStorage.setItem('disconnected', JSON.stringify(arr));
+    }else if (data.action == 'reconnected'){
+      console.log('User '+ data.username + 'recoonected !');
+      //noinspection JSDuplicatedDeclaration
+        var arr = JSON.parse(sessionStorage.getItem('disconnected')) || [];
+      sessionStorage.setItem('disconnected', JSON.stringify(arr.filter(function(i){ return i !== data.username;})));
+    }else if (data.action = 'timeout'){
+      console.log('Timeout');
+        var s = 'It has been more than '+ data.seconds + ' seconds. Press Ok to reset the timer and wait for more players to join or cancel to end the game';
+        if (confirm(s) == true){
+          socket.send(JSON.stringify({action:'resetTimer'}));
+        }else{
+          window.location.href = data.url;
+        }
+    }else if(data.action == 'interactive') {
       start_game(data, data.seconds);
       $(".guess").show();
 
@@ -302,11 +353,24 @@ $(function () {
       $(".box#score").html(`${data.score}`);
 
       $("#following_list tbody").html("");
+
       $.each(data.following, function(i, user) {
         if (user.guess < 0) {
           user.guess = '';
         }
         var avatar = "/static/"+user.avatar;
+        var arr = JSON.parse(sessionStorage.getItem('disconnected')) || [];
+        if(arr.find(function(u){return u == user.username})){
+          $("#following_list tbody").append(`
+          <tr>
+            <td id=${user.username} style="white-space: nowrap">
+              <img src=${avatar} class='avatar' />
+              <span>(Disconnected!)</span>
+            </td>
+          </tr>
+        `);
+          return;
+        }
         $("#following_list tbody").append(`
           <tr>
             <td id=${user.username}>

@@ -25,6 +25,11 @@ class Settings(models.Model):
 
     max_rounds = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
 
+    # Number of seconds until we will prompt you to leave the game or stay
+    prompt_seconds = models.PositiveSmallIntegerField(default=60)
+    # how many seconds we will wait before you kick you out for in activity
+    kickout_seconds = models.PositiveSmallIntegerField(default=60)
+
     def __str__(self):
         return "Settings: users({},{}), following({},{})".format(self.min_users, self.max_users,
                                                                  self.min_following, self.max_following
@@ -96,6 +101,9 @@ class InteractiveShocks(models.Model):
     def user_send(self, user, **kwargs):
         packet = json.dumps(kwargs)
         return self.user_channel(user).send({'text': packet})
+
+    class Meta:
+        verbose_name_plural = 'Interactive Shocks'
 
 
 class Survey(models.Model):

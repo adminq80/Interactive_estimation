@@ -65,14 +65,16 @@
       </div>
       <div class="row">
         <div class="col-md-5"><b style="white-space: nowrap">Score increment:</b></div>
-        <div class="col-md-2"><span id="roundBonus"></span></div>
+        <div class="col-md-2"><b id="roundBonus"></b></div>
       </div>
       <div>
         <input type="submit" value="Submit" id="submit" class="btn btn-success nextButton">
       </div>
     </div>
 
-
+{#      <div id="dialog-confirm" title="Reset waiting timer?">#}
+{#          <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>It has been more than <span id="waiting_time">10</span> seconds. Press `Ok` to reset the timer and wait for more players to join or press `Cancel` to end the game'</p>#}
+{#      </div>#}
     <div class="col-md-3">
       <div class="outcome" hidden>
           <div><b>Score:</b> total (<b id='user_round_score2'>+ increment</b>)</div>

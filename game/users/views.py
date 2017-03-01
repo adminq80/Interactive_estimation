@@ -9,6 +9,8 @@ from django.views.generic import DetailView, ListView, RedirectView, UpdateView
 from django.shortcuts import redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+from django.contrib.auth import logout
+
 from .models import User, UserTypes
 
 
@@ -77,3 +79,8 @@ def start(request):
         return redirect('static_mode:lobby')
     else:
         raise Http404('{} not implemented'.format(c))
+
+
+def user_logout(request):
+    logout(request)
+    return redirect('/')

@@ -44,6 +44,7 @@ def get_round(game, user=None):
 
     remaining = game.constraints.max_rounds - current_round
     if remaining == 0:
+        # reactor.stop()
         return None, None
 
     users_plots = []
@@ -66,7 +67,7 @@ def get_round(game, user=None):
             for f in following.all():
                 i_round.following.add(f)
         else:
-            previous_round = InteractiveShocksRound.objects.get(user=user, game=game, round_order=current_round-1)
+            previous_round = InteractiveShocksRound.objects.get(user=user, game=game, round_order=current_round - 1)
             for f in previous_round.following.all():
                 i_round.following.add(f)
         with transaction.atomic():
@@ -119,10 +120,18 @@ def lobby(message):
             send_user_avatar(game, user)
             if game.started:
                 # game started we need to assigned player to the latest round with the correct mode
-                d = cache.get(game.id)
-                state = d.get('state')
-                round_data = d.get('round_data')
-                users_plots = d.get('users_plots')
+                try:
+                    d = cache.get(game.id)
+                    state = d.get('state')
+                    round_data = d.get('round_data')
+                    users_plots = d.get('users_plots')
+                except AttributeError:
+                    print('Cache invalid')
+                    game.user_send(user, action='logout', url=reverse('account_logout'))
+                    return
+                cache.set('{}_disconnected_users'.format(game.id),
+                          cache.get('{}_disconnected_users'.format(game.id)) - 1)
+                game.broadcast(action='reconnected', username=user.username)
                 for i in users_plots:
                     if i['user'] == user:
                         round_data['plot'] = i['plot']
@@ -136,11 +145,17 @@ def lobby(message):
                     raise Exception('Unknown state')
                 return
             else:
+                try:
+                    d = cache.get(game.id)
+                    state = d.get('state')
+                except AttributeError:
+                    print("Game was not found")
+                    game.user_send(user, action='logout', url=reverse('account_logout'))
+                cache.set('{}_{}_timer'.format(game.id, user.username), timezone.now())
                 send_game_status(game)
         else:
-            # todo: logout then try to to connect him/ again
+            game.user_send(user, action='logout', url=reverse('account_logout'))
             game.broadcast(error=True, msg='The has ended please login back again')
-            pass
         return
 
     games = InteractiveShocks.objects.filter(started=False).annotate(
@@ -153,6 +168,8 @@ def lobby(message):
                 user.avatar = avatar(used_avatars)
                 user.save()
                 game.users.add(user)
+                cache.set('{}_{}_timer'.format(game.id, user.username), timezone.now())
+                task.deferLater(reactor, game.constraints.prompt_seconds / 10, game_watcher, game)
                 break
         else:
             logging.error("User couldn't be assigned to a game")
@@ -162,6 +179,11 @@ def lobby(message):
         game.users.add(user)
         user.avatar = avatar()
         user.save()
+        cache.set(game.id, 1)
+
+        cache.set('{}_{}_timer'.format(game.id, user.username), timezone.now())
+        # Start event loop
+        task.deferLater(reactor, game.constraints.prompt_seconds/10, game_watcher, game)
 
     game.group_channel.add(message.reply_channel)
     game.user_channel(user).add(message.reply_channel)
@@ -175,7 +197,9 @@ def lobby(message):
     if waiting_for == 0:
         game.started = True
         game.save()
-
+        cache.set('{}_disconnected_users'.format(game.id), 0)
+        for user in game.users.all():
+            cache.delete('{}_{}_timer'.format(game.id, user.username))
         # change users levels
         changing_levels(game)
         start_initial(game)
@@ -188,16 +212,16 @@ def lobby(message):
 def exit_game(message):
     user, game = user_and_game(message)
     logging.info('user {} just exited'.format(user.username))
-    # if game.end_time:  # game has ended and need to remove channels
-    #     game.group_channel.discard(message.reply_channel)
-    #     game.user_channel(user).discard(message.reply_channel)
-    #
     if not game.started:
         game.users.remove(user)
         game.save()
         send_game_status(game)
+    elif game.end_time is None:
+        game.broadcast(action='disconnected', username=user.username)
+        cache.set('{}_disconnected_users'.format(game.id), cache.get('{}_disconnected_users'.format(game.id)) + 1)
     game.group_channel.discard(message.reply_channel)
     game.user_channel(user).discard(message.reply_channel)
+    cache.delete('{}_{}_timer'.format(game.id, user.username))
 
 
 @channel_session_user
@@ -219,9 +243,13 @@ def data_broadcast(message):
     slider = float(message.get('sliderValue'))
     if slider:
         user, game = user_and_game(message)
-        d = cache.get(game.id)
-        state = d.get('state')
-        round_data = d.get('round_data')
+        try:
+            d = cache.get(game.id)
+            state = d.get('state')
+            round_data = d.get('round_data')
+        except AttributeError:
+            game.user_send(user, action='logout', url=reverse('account_logout'))
+            return
         if state == 'interactive':
             # Returns every one who followed this user on this round
             rounds = InteractiveShocksRound.objects.filter(
@@ -239,9 +267,13 @@ def follow_list(message):
     user, game = user_and_game(message)
     follow_users = message.get('following')
     # a list of all the usernames to follow
-    d = cache.get(game.id)
-    state = d.get('state')
-    round_data = d.get('round_data')
+    try:
+        d = cache.get(game.id)
+        state = d.get('state')
+        round_data = d.get('round_data')
+    except AttributeError:
+        game.user_send(user, action='logout', url=reverse('account_logout'))
+        return
     if state != 'outcome':
         return
     if len(follow_users) <= game.constraints.max_following:
@@ -278,16 +310,20 @@ def follow_list(message):
             'error': True,
             'msg': "didn't meet game constraints max is {} and list is {}".format(game.constraints.max_following,
                                                                                   len(follow_users)),
-            })})
+        })})
 
 
 @channel_session_user
 def initial_submit(message):
     user, game = user_and_game(message)
     guess = message.get('guess')
-    d = cache.get(game.id)
-    state = d.get('state')
-    round_data = d.get('round_data')
+    try:
+        d = cache.get(game.id)
+        state = d.get('state')
+        round_data = d.get('round_data')
+    except AttributeError:
+        game.user_send(user, action='logout', url=reverse('account_logout'))
+        return
     if state == 'initial':
         try:
             current_round = InteractiveShocksRound.objects.get(user=user, game=game,
@@ -307,9 +343,14 @@ def initial_submit(message):
 def interactive_submit(message):
     user, game = user_and_game(message)
     guess = message.get('socialGuess')
-    d = cache.get(game.id)
-    state = d.get('state')
-    round_data = d.get('round_data')
+    try:
+        d = cache.get(game.id)
+        state = d.get('state')
+        round_data = d.get('round_data')
+    except AttributeError:
+        game.user_send(user, action='logout', url=reverse('account_logout'))
+        return
+
     if state == 'interactive':
         try:
             current_round = InteractiveShocksRound.objects.get(user=user, game=game,
@@ -328,8 +369,12 @@ def interactive_submit(message):
 @channel_session_user
 def round_outcome(message):
     user, game = user_and_game(message)
-    d = cache.get(game.id)
-    round_data = d.get('round_data')
+    try:
+        d = cache.get(game.id)
+        round_data = d.get('round_data')
+    except AttributeError:
+        game.user_send(user, action='logout', url=reverse('account_logout'))
+        return
     round_ = InteractiveShocksRound.objects.get(user=user, game=game, round_order=round_data.get('current_round'))
     round_.outcome = True
     round_.save()
@@ -341,7 +386,7 @@ def twisted_error(*args, **kwargs):
     print(args)
     for e in args:
         print(e)
-    print('*'*20)
+    print('*' * 20)
     print(kwargs)
 
 
@@ -359,18 +404,21 @@ def game_state_checker(game, state, round_data, users_plots, counter=0):
     if state == 'initial':
         r = InteractiveShocksRound.objects.filter(
             game=game, round_order=round_data.get('current_round'), guess=None).count()
+        r -= cache.get('{}_disconnected_users'.format(game.id))
         if r == 0:
             start_interactive(game, round_data, users_plots)
             return
     elif state == 'interactive':
         r = InteractiveShocksRound.objects.filter(game=game, round_order=round_data.get('current_round'),
                                                   influenced_guess=None).count()
+        r -= cache.get('{}_disconnected_users'.format(game.id))
         if r == 0:
             start_outcome(game, round_data, users_plots)
             return
     elif state == 'outcome':
         r = InteractiveShocksRound.objects.filter(game=game, round_order=round_data.get('current_round'),
                                                   outcome=False).count()
+        r -= cache.get('{}_disconnected_users'.format(game.id))
         if r == 0:
             start_initial(game)
             return
@@ -462,7 +510,7 @@ def outcome(user, game: InteractiveShocks, round_data):
     current_round = InteractiveShocksRound.objects.get(user=user, round_order=round_data.get('current_round'))
 
     rest_of_users = outcome_loop(current_round.game.users.filter(~Q(username__in=current_round.following.values(
-                                             'username'))).exclude(username=user.username))
+        'username'))).exclude(username=user.username))
 
     currently_following = outcome_loop(current_round.following.all())
     score, gain = user.get_score_and_gain
@@ -471,3 +519,47 @@ def outcome(user, game: InteractiveShocks, round_data):
                    score=score, gain=gain, following=currently_following, all_players=rest_of_users,
                    max_following=game.constraints.max_following, correct_answer=float(current_round.plot.answer),
                    seconds=SECONDS, **round_data)
+
+
+def game_watcher(game):
+    for user in game.users.all():
+        try:
+            time = cache.get('{}_{}_timer'.format(game.id, user.username))
+            if game.constraints.prompt_seconds < (timezone.now() - time).seconds:
+                # send prompt to the user
+                print("Going to send data for user")
+                game.user_send(user, action='timeout', seconds=game.constraints.prompt_seconds,
+                               url=reverse('dynamic_mode:exit'))
+                cache.delete('{}_{}_timer'.format(game.id, user.username))
+                # kickout timer should start
+                task.deferLater(reactor, game.constraints.kickout_seconds + 3, kickout, game)
+                cache.set('{}_{}_kickout'.format(game.id, user.username), timezone.now())
+        except AttributeError:
+            continue
+    if not game.started:
+        task.deferLater(reactor, game.constraints.prompt_seconds/10, game_watcher, game)
+
+
+def kickout(game):
+    print('Kickout')
+    for user in game.users.all():
+        try:
+            time = cache.get('{}_{}_kickout'.format(game.id, user.username))
+            if game.constraints.kickout_seconds < (timezone.now() - time).seconds:
+                print('Going to kick user')
+                game.user_send(user, action='logout', url=reverse('account_logout'))
+                cache.delete('{}_{}_kickout'.format(game.id, user.username))
+        except AttributeError:
+            continue
+    if not game.started:
+        task.deferLater(reactor, game.constraints.prompt_seconds/10, game_watcher, game)
+
+
+@channel_session_user
+def reset_timer(message):
+    user, game = user_and_game(message)
+    print('User reseted')
+    cache.set('{}_{}_timer'.format(game.id, user.username), timezone.now())
+    cache.delete('{}_{}_kickout'.format(game.id, user.username))
+    if not game.started:
+        task.deferLater(reactor, game.constraints.prompt_seconds/10, game_watcher, game)
