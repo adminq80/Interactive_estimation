@@ -550,6 +550,8 @@ def game_watcher(message):
     game_class = InteractiveShocks
     try:
         game = InteractiveShocks.objects.get(pk=message['game'])
+        if game.started:
+            return
     except game_class.DoesNotExist:
         return
     try:
@@ -560,8 +562,6 @@ def game_watcher(message):
     print('Timer reached for {}'.format(username))
     if user.prompted < game.constraints.max_prompts:
         print("Going to prompt {}".format(user.username))
-        if game.started:
-            return
 
         if game.constraints.minutes_mode:
             game.user_send(user, action='timeout', minutes=game.constraints.prompt_seconds//60,
@@ -580,14 +580,14 @@ def kickout(message):
     game_class = InteractiveShocks
     try:
         game = InteractiveShocks.objects.get(pk=message['game'])
+        if game.started:
+            return
     except game_class.DoesNotExist:
         return
     try:
         username = message['username']
         user = game.users.get(username=username)
     except game.users.models.DoesNotExit:
-        return
-    if game.started:
         return
     print("Kickout pk={} started {}".format(game.pk, game.started))
     print('Going to kick user {}'.format(username))
@@ -617,7 +617,8 @@ def reset_timer(message):
             print(e)
         user.prompted += 1
         user.save()
-        watch_user(game, user)
+        if not game.started:
+            watch_user(game, user)
 
 
 @channel_session_user
