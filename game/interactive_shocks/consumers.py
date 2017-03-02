@@ -595,7 +595,7 @@ def kickout(message):
     user.save()
     game.users.remove(user)
     game.save()
-    game.user_send(user, action='logout', url=reverse('account_logout'))
+    game.user_send(user, action='AFK')
     send_game_status(game)
 
 

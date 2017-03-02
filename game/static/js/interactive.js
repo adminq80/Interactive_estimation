@@ -317,7 +317,9 @@ $(function () {
       console.log("logout");
       window.location.href = data.url;
     }
-    else if(data.action == 'avatar'){
+    else if(data.action == 'AFK'){
+      window.location.href = 'http://acronym.wikia.com/wiki/AFK';
+    }else if(data.action == 'avatar'){
       $('.user-avatar').attr('src', data.url);
       $('.user-avatar-large').attr('src', data.url);
     }
