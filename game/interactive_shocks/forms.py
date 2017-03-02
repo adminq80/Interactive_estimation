@@ -24,7 +24,7 @@ class SettingsForm(forms.ModelForm):
     class Meta:
         model = Settings
         fields = ['max_users', 'min_users', 'score_lambda', 'max_following', 'min_following', 'max_rounds',
-                  'prompt_seconds', 'kickout_seconds']
+                  'prompt_seconds', 'kickout_seconds', 'max_prompts', ]
 
     def clean(self):
         cleaned_data = self.cleaned_data

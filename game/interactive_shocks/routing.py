@@ -5,12 +5,6 @@ from .consumers import cancel_game, data_broadcast, follow_list, initial_submit,
 
 
 game_routes = [
-    # route('initial.guess', initial_submit),  # initial guess submission
-    # route('slider.change', data_broadcast),  # broadcast guess to player
-    # route('interactive.guess', interactive_submit),
-    # route('follow.list', follow_list),
-    # todo: creating a route for next round
-
     route('game.route', initial_submit, action='^initial$'),  # initial guess submission
     route('game.route', data_broadcast, action='^slider$'),  # broadcast guess to player
     route('game.route', interactive_submit, action='^interactive$'),
@@ -18,8 +12,6 @@ game_routes = [
     route('game.route', round_outcome, action='^outcome$'),
     route('game.route', reset_timer, action='^resetTimer$'),
     route('game.route', cancel_game, action='^exit_game$'),
-
-
 ]
 
 
@@ -27,6 +19,4 @@ websocket_routing = [
     route('websocket.connect', lobby),  # , path=r'^/multiplayer/lobby/$'),
     route('websocket.disconnect', exit_game),
     route('websocket.receive', ws_receive),
-
-    # route('websocket.connect', lobby2, path='^/some/$'),
 ] + game_routes
