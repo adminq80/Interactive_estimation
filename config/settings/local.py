@@ -60,6 +60,10 @@ DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TEMPLATE_CONTEXT': True,
 }
 
+DEBUG_TOOLBAR_PANEL = [
+    'channels_panel.panel.ChannelsDebugPanel',
+]
+
 # django-extensions
 # ------------------------------------------------------------------------------
 INSTALLED_APPS += ('django_extensions', )

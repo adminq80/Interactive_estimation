@@ -1,7 +1,7 @@
 from channels import route
 from .consumers import exit_game, lobby, ws_receive
-from .consumers import cancel_game, data_broadcast, follow_list, initial_submit, interactive_submit, reset_timer, \
-    round_outcome
+from .consumers import cancel_game, data_broadcast, follow_list, initial_submit, interactive_submit, \
+    reset_timer, round_outcome
 
 
 game_routes = [
@@ -17,7 +17,8 @@ game_routes = [
     route('game.route', follow_list, action='^follow$'),
     route('game.route', round_outcome, action='^outcome$'),
     route('game.route', reset_timer, action='^resetTimer$'),
-    route('game.route', cancel_game, action='^exit_game$')
+    route('game.route', cancel_game, action='^exit_game$'),
+
 
 ]
 

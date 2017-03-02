@@ -11,6 +11,7 @@ from django.urls import reverse
 
 from channels import Channel
 from channels.auth import channel_session_user_from_http, channel_session_user
+from channels.delay.models import DelayedMessage as channel_delayed_message
 from django.utils import timezone
 from twisted.internet import task, reactor
 
@@ -18,6 +19,7 @@ from game.round.models import Plot
 
 from .utils import avatar
 from .models import InteractiveShocks, InteractiveShocksRound, Settings
+from .delayed_message import DelayedMassage
 
 SECONDS = 30
 
@@ -78,7 +80,10 @@ def get_round(game, user=None):
 def user_and_game(message):
     user = message.user
     if user.is_authenticated:
-        game = InteractiveShocks.objects.get(users=user)
+        try:
+            game = InteractiveShocks.objects.get(users=user)
+        except InteractiveShocks.DoesNotExist:
+            game = None
     else:
         logging.error('User is anonymous and needs to login')
         raise Exception('User is Anonymous')
@@ -93,19 +98,13 @@ def send_game_status(game):
     game.broadcast(action='info', connected_players=game.users.count(), total_players=game.constraints.max_users)
 
 
-def watch_user(game, user, watch=True, value=None):
+def watch_user(game, user):
     if game.started or user.exited or user.kicked:
         return
-    cache_key = '{}_timer'.format(game.id)
-    time = value or timezone.now()
-    try:
-        watched_users = cache.get(cache_key)
-        watched_users[user.username] = time
-    except TypeError:
-        watched_users = {user.username: time}
-    cache.set(cache_key, watched_users)
-    if watch:
-        task.deferLater(reactor, game.constraints.prompt_seconds + 3, game_watcher, game.pk)
+    DelayedMassage('delayed_task', {'game': game.pk,
+                                    'username': user.username,
+                                    }, game.constraints.prompt_seconds + 3).send()
+        # task.deferLater(reactor, game.constraints.prompt_seconds + 3, game_watcher, game.pk)
 
 
 @channel_session_user_from_http
@@ -186,6 +185,7 @@ def lobby(message):
                 watch_user(game, user)
                 break
         else:
+            print("Could not find an empty game")
             logging.error("User couldn't be assigned to a game")
             return
     else:
@@ -222,18 +222,20 @@ def lobby(message):
 
 @channel_session_user
 def exit_game(message):
-    user = message.user
+    user, game = user_and_game(message)
     logging.info('user {} just exited'.format(user.username))
-    if not user.kicked and not user.exited:
-        user, game = user_and_game(message)
-        if not game.started:
+    if game:
+        # game and user found
+        if user.kicked or not game.started:
             game.users.remove(user)
             game.save()
             send_game_status(game)
-            task.deferLater(reactor, game.constraints.prompt_seconds + 3, game_watcher, game.pk)
-        elif game.end_time is None:
-            game.broadcast(action='disconnected', username=user.username)
-            cache.set('{}_disconnected_users'.format(game.id), cache.get('{}_disconnected_users'.format(game.id)) + 1)
+            DelayedMassage('delayed_task', {'game_pk': game.pk}, game.constraints.prompt_seconds + 3).send()
+        if game.started:
+            if game.end_time is None:
+                game.broadcast(action='disconnected', username=user.username)
+                cache.set('{}_disconnected_users'.format(game.id), cache.get('{}_disconnected_users'.format(game.id)) + 1)
+                # task.deferLater(reactor, game.constraints.prompt_seconds + 3, game_watcher, game.pk)
         game.group_channel.discard(message.reply_channel)
         game.user_channel(user).discard(message.reply_channel)
     else:
@@ -251,6 +253,8 @@ def ws_receive(message):
         Channel('game.route').send(payload)
     else:
         # TODO: unrecognized action
+        print('unrecognized action')
+        print(message)
         logging.error('Unknown action {}'.format(action))
 
 
@@ -537,83 +541,125 @@ def outcome(user, game: InteractiveShocks, round_data):
                    seconds=SECONDS, **round_data)
 
 
-def game_watcher(game_pk):
-    print('watcher')
-    game = InteractiveShocks.objects.get(pk=game_pk)
-    if game.started:
-        return
-    print("Watcher pk={} started {}".format(game_pk, game.started))
-    cache_key = '{}_timer'.format(game.id)
-    user_timers = cache.get(cache_key)
-    watch = True
-    for username, timer in user_timers.items():
-        if game.constraints.prompt_seconds < (timezone.now() - timer).seconds:
-            print('Timer reached for {}'.format(username))
-            user = game.users.get(username=username)
-            if user.prompted < game.constraints.max_prompts:
-                print("Going to prompt {}".format(username))
-                if game.started:
-                    return
-                if game.constraints.minutes_mode:
-                    game.user_send(user, action='timeout', minutes=game.constraints.prompt_seconds//60,
-                                   url=reverse('dynamic_mode:exit'))
-                else:
-                    game.user_send(user, action='timeout', minutes=None, seconds=game.constraints.prompt_seconds,
-                                   url=reverse('dynamic_mode:exit'))
-                watch_user(game, user, watch)
-                watch = False
-                # starting Kickout timer
-                task.deferLater(reactor, game.constraints.kickout_seconds + 3, kickout, game.pk)
-            else:
-                time = timezone.now()-timezone.timedelta(seconds=game.constraints.kickout_seconds*2)
-                watch_user(game, user, watch, value=time)
-                watch = False
-                kickout(game)
-    if not game.started and watch:
-        task.deferLater(reactor, game.constraints.prompt_seconds + 3, game_watcher, game.pk)
-
-
-def remove_user_from_cache(game, user):
-    cache_key = '{}_timer'.format(game.id)
-    user_timers = cache.get(cache_key)
+def game_watcher(message):
+    game_class = InteractiveShocks
     try:
-        user_timers.pop(user.username)
-        cache.set(cache_key, user_timers)
+        game = InteractiveShocks.objects.get(pk=message['game'])
+        username = message['username']
+        user = game.users.get(username=username)
+    except game_class.DoesNotExist:
+        return
+    print('Timer reached for {}'.format(username))
+    if user.prompted < game.constraints.max_prompts:
+        print("Going to prompt {}".format(user.username))
+        if game.started:
+            return
+
+        if game.constraints.minutes_mode:
+            game.user_send(user, action='timeout', minutes=game.constraints.prompt_seconds//60,
+                           url=reverse('dynamic_mode:exit'))
+        else:
+            game.user_send(user, action='timeout', minutes=None, seconds=game.constraints.prompt_seconds,
+                           url=reverse('dynamic_mode:exit'))
+        DelayedMassage('kickout', {'game': game.pk,
+                                   'username': username,
+                                   }, game.constraints.kickout_seconds + 3).send()
+    else:
+        user.kicked = True
+        user.save()
+        game.user_send(user, action='logout', url=reverse('account_logout'))
         game.users.remove(user)
         game.save()
-    except AttributeError:
+
+
+def kickout(message):
+    game_class = InteractiveShocks
+    try:
+        game = InteractiveShocks.objects.get(pk=message['game'])
+        username = message['username']
+        user = game.users.get(username=username)
+    except game_class.DoesNotExist:
         return
-
-
-def kickout(game_pk):
-    game = InteractiveShocks.objects.get(pk=game_pk)
     if game.started:
         return
-    print("Kickout pk={} started {}".format(game_pk, game.started))
-    cache_key = '{}_timer'.format(game.id)
-    user_timers = cache.get(cache_key)
-    for username, timer in user_timers.items():
-        if game.constraints.kickout_seconds < (timezone.now() - timer).seconds:
-            print('Going to kick user {}'.format(username))
-            user = game.users.get(username=username)
-            user.kicked = True
-            user.save()
-            remove_user_from_cache(game, user.username)
-            game.user_send(user, action='logout', url=reverse('account_logout'))
-            send_game_status(game)
+    print("Kickout pk={} started {}".format(game.pk, game.started))
+    print('Going to kick user {}'.format(username))
+    user.kicked = True
+    user.save()
+    game.users.remove(user)
+    game.save()
+    game.user_send(user, action='logout', url=reverse('account_logout'))
+    send_game_status(game)
 
 
 @channel_session_user
 def reset_timer(message):
     user, game = user_and_game(message)
-    print('Reset timer for {}'.format(user.username))
-    user.prompted += 1
-    user.save()
-    watch_user(game, user, watch=False)
+    if game:
+        print('Reset timer for {}'.format(user.username))
+        msg = {
+            'game': game.pk,
+            'username': user.username,
+        }
+        m = channel_delayed_message.objects.get(channel_name='kickout', content=json.dumps(msg))
+        m.delete()
+        user.prompted += 1
+        user.save()
+        watch_user(game, user)
 
 
 @channel_session_user
 def cancel_game(message):
     user, game = user_and_game(message)
-    remove_user_from_cache(game, user)
-    game.user_send(user, action='logout', url=reverse('dynamic_mode:exit'))
+    if game:
+        msg = {
+            'game': game.pk,
+            'username': user.username,
+        }
+        msg = json.dumps(msg)
+        [m.delete() for m in channel_delayed_message.objects.filter(channel_name='kickout', content=msg)]
+        [m.delete() for m in channel_delayed_message.objects.filter(channel_name='delayed_task', content=msg)]
+        game.user_send(user, action='logout', url=reverse('dynamic_mode:exit'))
+
+
+
+# def game_watcher(message):
+#     print('watcher')
+#     game_pk = message['game_pk']
+#     game = InteractiveShocks.objects.get(pk=game_pk)
+#     if game.started:
+#         return
+#     print("Watcher pk={} started {}".format(game_pk, game.started))
+#     cache_key = '{}_timer'.format(game.id)
+#     user_timers = cache.get(cache_key)
+#     watch = True
+#     for username, timer in user_timers.items():
+#         if game.constraints.prompt_seconds < (timezone.now() - timer).seconds:
+#             print('Timer reached for {}'.format(username))
+#             try:
+#                 user = game.users.get(username=username)
+#             except InteractiveShocks.DoesNotExist:
+#                 return
+#             if user.prompted < game.constraints.max_prompts:
+#                 print("Going to prompt {}".format(username))
+#                 if game.started:
+#                     return
+#                 if game.constraints.minutes_mode:
+#                     game.user_send(user, action='timeout', minutes=game.constraints.prompt_seconds//60,
+#                                    url=reverse('dynamic_mode:exit'))
+#                 else:
+#                     game.user_send(user, action='timeout', minutes=None, seconds=game.constraints.prompt_seconds,
+#                                    url=reverse('dynamic_mode:exit'))
+#                 watch_user(game, user, watch)
+#                 watch = False
+#                 # starting Kickout timer
+#                 DelayedMassage('kickout', {'game_pk': game.pk}, game.constraints.kickout_seconds + 3).send()
+#                 # task.deferLater(reactor, game.constraints.kickout_seconds + 3, kickout, game.pk)
+#             else:
+#                 time = timezone.now()-timezone.timedelta(seconds=game.constraints.kickout_seconds*2)
+#                 watch_user(game, user, watch, value=time)
+#                 watch = False
+#                 kickout(game)
+#     if not game.started and watch:
+#         DelayedMassage('delayed_task', {'game_pk': game.pk}, game.constraints.prompt_seconds + 3).send()
+#         # task.deferLater(reactor, game.constraints.prompt_seconds + 3, game_watcher, game.pk)

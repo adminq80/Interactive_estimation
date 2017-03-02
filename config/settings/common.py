@@ -253,6 +253,7 @@ CHANNEL_LAYERS = {
             "hosts": [env('REDIS_URL')],
         },
         "ROUTING": "config.routing.channel_routing",
+        # "BACKEND": "asgiref.inmemory.ChannelLayer",
     },
 }
 
