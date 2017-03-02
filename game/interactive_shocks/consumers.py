@@ -7,7 +7,6 @@ from django.core.cache import cache
 from django.db import transaction
 from django.db.models import Count
 from django.db.models import Q
-from django.shortcuts import redirect
 from django.urls import reverse
 
 from channels import Channel
@@ -94,12 +93,28 @@ def send_game_status(game):
     game.broadcast(action='info', connected_players=game.users.count(), total_players=game.constraints.max_users)
 
 
+def watch_user(game, user, watch=True, value=None):
+    if game.started or user.exited or user.kicked:
+        return
+    cache_key = '{}_timer'.format(game.id)
+    time = value or timezone.now()
+    try:
+        watched_users = cache.get(cache_key)
+        watched_users[user.username] = time
+    except TypeError:
+        watched_users = {user.username: time}
+    cache.set(cache_key, watched_users)
+    if watch:
+        task.deferLater(reactor, game.constraints.prompt_seconds + 3, game_watcher, game.pk)
+
+
 @channel_session_user_from_http
 def lobby(message):
     user = message.user
 
-    if not user.is_authenticated:
-        return redirect('/')
+    if not user.is_authenticated or user.kicked or user.exited:
+        message.reply_channel.send({'text': json.dumps({'action': 'logout', 'url': reverse('account_logout')})})
+        return
 
     try:
         game_settings = Settings.objects.order_by('?')[0]
@@ -151,7 +166,7 @@ def lobby(message):
                 except AttributeError:
                     print("Game was not found")
                     game.user_send(user, action='logout', url=reverse('account_logout'))
-                cache.set('{}_{}_timer'.format(game.id, user.username), timezone.now())
+                watch_user(game, user)
                 send_game_status(game)
         else:
             game.user_send(user, action='logout', url=reverse('account_logout'))
@@ -168,8 +183,7 @@ def lobby(message):
                 user.avatar = avatar(used_avatars)
                 user.save()
                 game.users.add(user)
-                cache.set('{}_{}_timer'.format(game.id, user.username), timezone.now())
-                task.deferLater(reactor, game.constraints.prompt_seconds / 10, game_watcher, game)
+                watch_user(game, user)
                 break
         else:
             logging.error("User couldn't be assigned to a game")
@@ -180,10 +194,7 @@ def lobby(message):
         user.avatar = avatar()
         user.save()
         cache.set(game.id, 1)
-
-        cache.set('{}_{}_timer'.format(game.id, user.username), timezone.now())
-        # Start event loop
-        task.deferLater(reactor, game.constraints.prompt_seconds/10, game_watcher, game)
+        watch_user(game, user)
 
     game.group_channel.add(message.reply_channel)
     game.user_channel(user).add(message.reply_channel)
@@ -193,13 +204,14 @@ def lobby(message):
     users_count = game.users.count()
     waiting_for = game.constraints.max_users - users_count
 
-    # TODO: add time to the condition
     if waiting_for == 0:
-        game.started = True
-        game.save()
+        print("Going to start the game")
+        with transaction.atomic():
+            game.started = True
+            game.save()
+            print("Game started value {}".format(game.started))
         cache.set('{}_disconnected_users'.format(game.id), 0)
-        for user in game.users.all():
-            cache.delete('{}_{}_timer'.format(game.id, user.username))
+        cache.delete('{}_timer'.format(game.id))
         # change users levels
         changing_levels(game)
         start_initial(game)
@@ -210,18 +222,22 @@ def lobby(message):
 
 @channel_session_user
 def exit_game(message):
-    user, game = user_and_game(message)
+    user = message.user
     logging.info('user {} just exited'.format(user.username))
-    if not game.started:
-        game.users.remove(user)
-        game.save()
-        send_game_status(game)
-    elif game.end_time is None:
-        game.broadcast(action='disconnected', username=user.username)
-        cache.set('{}_disconnected_users'.format(game.id), cache.get('{}_disconnected_users'.format(game.id)) + 1)
-    game.group_channel.discard(message.reply_channel)
-    game.user_channel(user).discard(message.reply_channel)
-    cache.delete('{}_{}_timer'.format(game.id, user.username))
+    if not user.kicked and not user.exited:
+        user, game = user_and_game(message)
+        if not game.started:
+            game.users.remove(user)
+            game.save()
+            send_game_status(game)
+            task.deferLater(reactor, game.constraints.prompt_seconds + 3, game_watcher, game.pk)
+        elif game.end_time is None:
+            game.broadcast(action='disconnected', username=user.username)
+            cache.set('{}_disconnected_users'.format(game.id), cache.get('{}_disconnected_users'.format(game.id)) + 1)
+        game.group_channel.discard(message.reply_channel)
+        game.user_channel(user).discard(message.reply_channel)
+    else:
+        message.reply_channel.send({'text': json.dumps({'action': 'logout', 'url': reverse('account_logout')})})
 
 
 @channel_session_user
@@ -521,45 +537,83 @@ def outcome(user, game: InteractiveShocks, round_data):
                    seconds=SECONDS, **round_data)
 
 
-def game_watcher(game):
-    for user in game.users.all():
-        try:
-            time = cache.get('{}_{}_timer'.format(game.id, user.username))
-            if game.constraints.prompt_seconds < (timezone.now() - time).seconds:
-                # send prompt to the user
-                print("Going to send data for user")
-                game.user_send(user, action='timeout', seconds=game.constraints.prompt_seconds,
-                               url=reverse('dynamic_mode:exit'))
-                cache.delete('{}_{}_timer'.format(game.id, user.username))
-                # kickout timer should start
-                task.deferLater(reactor, game.constraints.kickout_seconds + 3, kickout, game)
-                cache.set('{}_{}_kickout'.format(game.id, user.username), timezone.now())
-        except AttributeError:
-            continue
-    if not game.started:
-        task.deferLater(reactor, game.constraints.prompt_seconds/10, game_watcher, game)
+def game_watcher(game_pk):
+    print('watcher')
+    game = InteractiveShocks.objects.get(pk=game_pk)
+    if game.started:
+        return
+    print("Watcher pk={} started {}".format(game_pk, game.started))
+    cache_key = '{}_timer'.format(game.id)
+    user_timers = cache.get(cache_key)
+    watch = True
+    for username, timer in user_timers.items():
+        if game.constraints.prompt_seconds < (timezone.now() - timer).seconds:
+            print('Timer reached for {}'.format(username))
+            user = game.users.get(username=username)
+            if user.prompted < game.constraints.max_prompts:
+                print("Going to prompt {}".format(username))
+                if game.started:
+                    return
+                if game.constraints.minutes_mode:
+                    game.user_send(user, action='timeout', minutes=game.constraints.prompt_seconds//60,
+                                   url=reverse('dynamic_mode:exit'))
+                else:
+                    game.user_send(user, action='timeout', minutes=None, seconds=game.constraints.prompt_seconds,
+                                   url=reverse('dynamic_mode:exit'))
+                watch_user(game, user, watch)
+                watch = False
+                # starting Kickout timer
+                task.deferLater(reactor, game.constraints.kickout_seconds + 3, kickout, game.pk)
+            else:
+                time = timezone.now()-timezone.timedelta(seconds=game.constraints.kickout_seconds*2)
+                watch_user(game, user, watch, value=time)
+                watch = False
+                kickout(game)
+    if not game.started and watch:
+        task.deferLater(reactor, game.constraints.prompt_seconds + 3, game_watcher, game.pk)
 
 
-def kickout(game):
-    print('Kickout')
-    for user in game.users.all():
-        try:
-            time = cache.get('{}_{}_kickout'.format(game.id, user.username))
-            if game.constraints.kickout_seconds < (timezone.now() - time).seconds:
-                print('Going to kick user')
-                game.user_send(user, action='logout', url=reverse('account_logout'))
-                cache.delete('{}_{}_kickout'.format(game.id, user.username))
-        except AttributeError:
-            continue
-    if not game.started:
-        task.deferLater(reactor, game.constraints.prompt_seconds/10, game_watcher, game)
+def remove_user_from_cache(game, user):
+    cache_key = '{}_timer'.format(game.id)
+    user_timers = cache.get(cache_key)
+    try:
+        user_timers.pop(user.username)
+        cache.set(cache_key, user_timers)
+        game.users.remove(user)
+        game.save()
+    except AttributeError:
+        return
+
+
+def kickout(game_pk):
+    game = InteractiveShocks.objects.get(pk=game_pk)
+    if game.started:
+        return
+    print("Kickout pk={} started {}".format(game_pk, game.started))
+    cache_key = '{}_timer'.format(game.id)
+    user_timers = cache.get(cache_key)
+    for username, timer in user_timers.items():
+        if game.constraints.kickout_seconds < (timezone.now() - timer).seconds:
+            print('Going to kick user {}'.format(username))
+            user = game.users.get(username=username)
+            user.kicked = True
+            user.save()
+            remove_user_from_cache(game, user.username)
+            game.user_send(user, action='logout', url=reverse('account_logout'))
+            send_game_status(game)
 
 
 @channel_session_user
 def reset_timer(message):
     user, game = user_and_game(message)
-    print('User reseted')
-    cache.set('{}_{}_timer'.format(game.id, user.username), timezone.now())
-    cache.delete('{}_{}_kickout'.format(game.id, user.username))
-    if not game.started:
-        task.deferLater(reactor, game.constraints.prompt_seconds/10, game_watcher, game)
+    print('Reset timer for {}'.format(user.username))
+    user.prompted += 1
+    user.save()
+    watch_user(game, user, watch=False)
+
+
+@channel_session_user
+def cancel_game(message):
+    user, game = user_and_game(message)
+    remove_user_from_cache(game, user)
+    game.user_send(user, action='logout', url=reverse('dynamic_mode:exit'))

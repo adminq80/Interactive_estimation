@@ -29,6 +29,9 @@ class Settings(models.Model):
     prompt_seconds = models.PositiveSmallIntegerField(default=60)
     # how many seconds we will wait before you kick you out for in activity
     kickout_seconds = models.PositiveSmallIntegerField(default=60)
+    minutes_mode = models.BooleanField(default=False)
+    # How many times we will ask the user before we kick her out
+    max_prompts = models.PositiveSmallIntegerField(default=5)
 
     def __str__(self):
         return "Settings: users({},{}), following({},{})".format(self.min_users, self.max_users,

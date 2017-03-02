@@ -38,9 +38,11 @@ def exit_survey(request):
     :return:
     """
     form = ExitSurvey(request.POST or None)
+    u = User.objects.get(username=request.user.username)
+    u.exited = True
+    u.save()
     if request.method == 'POST':
         if form.is_valid():
-            u = User.objects.get(username=request.user.username)
             try:
                 game = InteractiveShocks.objects.get(users=u)
                 game_id = game.id

@@ -36,6 +36,7 @@ DJANGO_APPS = (
 
     # Channels
     'channels',
+    'channels.delay',
 )
 THIRD_PARTY_APPS = (
     'crispy_forms',  # Form layouts

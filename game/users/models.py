@@ -23,6 +23,9 @@ class User(AbstractUser):
     game_type = models.CharField(_('User Type'), max_length=10)
     avatar = models.URLField(null=True)
     user_level = models.CharField(max_length=10, null=True, blank=True)  # level should be either 'e', 'm', or 'h'
+    kicked = models.BooleanField(default=False)
+    prompted = models.SmallIntegerField(default=0)
+    exited = models.BooleanField(default=False)
 
     def __str__(self):
         return self.username
