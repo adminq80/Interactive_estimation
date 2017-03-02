@@ -573,11 +573,7 @@ def game_watcher(message):
                                    'username': username,
                                    }, game.constraints.kickout_seconds).send()
     else:
-        user.kicked = True
-        user.save()
-        game.user_send(user, action='logout', url=reverse('account_logout'))
-        game.users.remove(user)
-        game.save()
+        game.user_send(user, action='logout', url=reverse('dynamic_mode:exit'))
 
 
 def kickout(message):
