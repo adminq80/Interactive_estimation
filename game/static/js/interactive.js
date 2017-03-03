@@ -429,7 +429,14 @@ $(function () {
     }
     else if (data.action = 'timeout_prompt'){
       console.log('Timeout');
+      if(data.minutes !== null){
+        $('#waiting_time').html(data.seconds + ' minutes')
+      }
+      else{
+        $('#waiting_time').html(data.seconds + ' seconds')
+      }
       $( "#dialog-confirm" ).dialog( "open" );
+
       // var s = null;
       // if(data.minutes !== null){
       //    s = 'You have been waiting in the lobby for '+ data.minutes + ' minutes. Please, press OK to keep waiting for the rest of the players. Alternatively, press Cancel to receive the base pay and exit the game.';
