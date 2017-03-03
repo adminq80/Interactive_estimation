@@ -1,18 +1,23 @@
 from django.db import transaction
 from channels import Channel
 
+from .models import Task
 
-class DelayedMessage:
 
-    def __init__(self, channel, content: dict, milliseconds):
+class DelayedMessageExecutor:
+
+    def __init__(self, content: dict, milliseconds: int):
+        with transaction.atomic():
+            print(content)
+            t = Task(**content)
+            t.save()
         delayed_message = {
-            'channel': channel,
-            'content': content,
+            'channel': 'delayed_task',
+            'content': {'task': t.id},
             'delay': milliseconds * 1000,
         }
         self.message = delayed_message
 
     def send(self, immediately=True):
-        print(self.message)
         with transaction.atomic():
             Channel('asgi.delay').send(self.message, immediately=immediately)

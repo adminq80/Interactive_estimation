@@ -11,15 +11,12 @@ from django.urls import reverse
 
 from channels import Channel
 from channels.auth import channel_session_user_from_http, channel_session_user
-from channels.delay.models import DelayedMessage as channel_delayed_message
 from django.utils import timezone
-from twisted.internet import task, reactor
-
 from game.round.models import Plot
 
 from .utils import avatar
-from .models import InteractiveShocks, InteractiveShocksRound, Settings
-from .delayed_message import DelayedMessage
+from .models import InteractiveShocks, InteractiveShocksRound, Settings, Task
+from .delayed_message import DelayedMessageExecutor
 
 SECONDS = 30
 
@@ -98,13 +95,32 @@ def send_game_status(game):
     game.broadcast(action='info', connected_players=game.users.count(), total_players=game.constraints.max_users)
 
 
+def task_runner(message):
+    """
+    runs tasks from asgi.delay
+    """
+    # 'content': {'task': t.id},
+    try:
+        t = Task.objects.get(id=message['task'])
+    except Task.DoesNotExist:
+        return None
+    Channel(t.route).send({'task': message['task'], 'path': t.path})
+
+
+def create_task(route, game, user):
+    return {'route': route,
+            'path': '/dynamic_mode/lobby',
+            'game': game,
+            'payload': json.dumps({'username': user.username, }),
+            }
+
+
 def watch_user(game, user):
-    if game.started or user.exited or user.kicked:
+    if game.started:
         return
-    DelayedMessage('delayed_task', {'game': game.pk,
-                                    'username': user.username,
-                                    }, game.constraints.prompt_seconds).send()
-        # task.deferLater(reactor, game.constraints.prompt_seconds + 3, game_watcher, game.pk)
+    if user.exited or user.kicked:
+        return
+    DelayedMessageExecutor(create_task('watcher', game, user), game.constraints.prompt_seconds).send()
 
 
 @channel_session_user_from_http
@@ -193,7 +209,6 @@ def lobby(message):
         game.users.add(user)
         user.avatar = avatar()
         user.save()
-        cache.set(game.id, 1)
         watch_user(game, user)
 
     game.group_channel.add(message.reply_channel)
@@ -211,18 +226,9 @@ def lobby(message):
             game.save()
             print("Game started value {}".format(game.started))
         with transaction.atomic():
-            try:
-                [m.delete() for m in channel_delayed_message.objects.filter(channel_name='kickout')]
-            except channel_delayed_message.DoesNotExist as e:
-                print('LOBBY Game for kickout')
-                print("Don't know how to handle this error")
-                print(e)
-            try:
-                [m.delete() for m in channel_delayed_message.objects.filter(channel_name='delayed_task')]
-            except channel_delayed_message.DoesNotExist as e:
-                print('LOBBY Game for delayed tasks')
-                print("Don't know how to handle this error")
-                print(e)
+            [m.delete() for m in Task.objects.filter(route='kickout', game=game)]
+            [m.delete() for m in Task.objects.filter(route='watcher', game=game)]
+
         cache.set('{}_disconnected_users'.format(game.id), 0)
         cache.delete('{}_timer'.format(game.id))
         # change users levels
@@ -412,16 +418,15 @@ def round_outcome(message):
     return
 
 
-def twisted_error(*args, **kwargs):
-    print('Twisted Error')
-    print(args)
-    for e in args:
-        print(e)
-    print('*' * 20)
-    print(kwargs)
+# def game_state_checker(game, state, round_data, users_plots, counter=0):
+def game_state_checker(message):
+    game, _ = get_game_from_message(message)
+    data = cache.get(game.id)
+    state = data.get('state')
+    round_data = data.get('round_data')
+    users_plots = data.get('users_plots')
+    counter = data.get('counter')
 
-
-def game_state_checker(game, state, round_data, users_plots, counter=0):
     if counter == SECONDS:
         # move to the next state
         if state == 'initial':
@@ -454,8 +459,17 @@ def game_state_checker(game, state, round_data, users_plots, counter=0):
             start_initial(game)
             return
     counter += 1
-    task.deferLater(
-        reactor, 1, game_state_checker, game, state, round_data, users_plots, counter).addErrback(twisted_error)
+    data['counter'] = counter
+    cache.set(game.id, data)
+    DelayedMessageExecutor(create_game_task('game_state', game), 1).send()
+
+
+def create_game_task(route, game, path='/dynamic_mode/lobby', payload=None):
+    return {'route': route,
+            'game': game,
+            'path': path,
+            'payload': json.dumps(payload),
+            }
 
 
 def start_initial(game):
@@ -471,9 +485,11 @@ def start_initial(game):
         cache.set(game.id, {'state': state,
                             'round_data': round_data,
                             'users_plots': users_plots,
+                            'counter': 0,
                             })
     initial(game, round_data, users_plots)
-    task.deferLater(reactor, 1, game_state_checker, game, state, round_data, users_plots).addErrback(twisted_error)
+    DelayedMessageExecutor(create_game_task('game_state', game), 1).send()
+    # task.deferLater(reactor, 1, game_state_checker, game, state, round_data, users_plots).addErrback(twisted_error)
 
 
 def initial(game, round_data, users_plots, message=None):
@@ -499,13 +515,13 @@ def start_interactive(game, round_data, users_plots):
     cache.set(game.id, {'state': state,
                         'round_data': round_data,
                         'users_plots': users_plots,
+                        'counter': 0,
                         })
     for i in users_plots:
         user = i['user']
         round_data['plot'] = i['plot']
         interactive(user, game, round_data)
-    task.deferLater(reactor, 1, game_state_checker, game, state, round_data, users_plots).addErrback(twisted_error)
-    return
+    DelayedMessageExecutor(create_game_task('game_state', game), 1).send()
 
 
 def interactive(user, game, round_data):
@@ -524,12 +540,13 @@ def start_outcome(game, round_data, users_plots):
     cache.set(game.id, {'state': 'outcome',
                         'round_data': round_data,
                         'users_plots': users_plots,
+                        'counter': 0,
                         })
     for i in users_plots:
         user = i['user']
         round_data['plot'] = i['plot']
         outcome(user, game, round_data)
-    task.deferLater(reactor, 1, game_state_checker, game, 'outcome', round_data, users_plots).addErrback(twisted_error)
+    DelayedMessageExecutor(create_game_task('game_state', game), 1).send()
 
 
 def outcome_loop(l):
@@ -552,18 +569,30 @@ def outcome(user, game: InteractiveShocks, round_data):
                    seconds=SECONDS, **round_data)
 
 
+def get_game_from_message(message):
+    try:
+        t = Task.objects.get(id=message['task'])
+    except Task.DoesNotExist:
+        return None
+    game = t.game
+    payload = json.loads(t.payload)
+    t.delete()
+    return game, payload
+
+
 def game_watcher(message):
-    game_class = InteractiveShocks
-    try:
-        game = InteractiveShocks.objects.get(pk=message['game'])
-        if game.started:
-            return
-    except game_class.DoesNotExist:
+    print('Watcher')
+    game, payload = get_game_from_message(message)
+    if game.started:
         return
-    try:
-        username = message['username']
-        user = game.users.get(username=username)
-    except game.users.models.DoesNotExit:
+    username = payload.get('username')
+    if username:
+        try:
+            user = game.users.get(username=username)
+        except game.users.model.DoesNotExist:
+            print('USER was not found in WATCHER')
+            return
+    else:
         return
     print('Timer reached for {}'.format(username))
     if user.prompted < game.constraints.max_prompts:
@@ -575,26 +604,27 @@ def game_watcher(message):
         else:
             game.user_send(user, action='timeout', minutes=None, seconds=game.constraints.prompt_seconds,
                            url=reverse('dynamic_mode:exit'))
-        DelayedMessage('kickout', {'game': game.pk,
-                                   'username': username,
-                                   }, game.constraints.kickout_seconds).send()
+        DelayedMessageExecutor(create_task('kickout', game, user), game.constraints.kickout_seconds).send()
+        print(Task.objects.all())
     else:
         game.user_send(user, action='logout', url=reverse('dynamic_mode:exit'))
 
 
 def kickout(message):
-    game_class = InteractiveShocks
-    try:
-        game = InteractiveShocks.objects.get(pk=message['game'])
-        if game.started:
+    print('Kickout')
+    game, payload = get_game_from_message(message)
+    if game.started:
+        return
+    username = payload.get('username')
+    if username:
+        try:
+            user = game.users.get(username=username)
+        except game.users.model.DoesNotExist:
+            print('USER was not found in WATCHER')
             return
-    except game_class.DoesNotExist:
+    else:
         return
-    try:
-        username = message['username']
-        user = game.users.get(username=username)
-    except game.users.models.DoesNotExit:
-        return
+    print("Kickout id={} started {}".format(game.id, game.started))
     print("Kickout pk={} started {}".format(game.pk, game.started))
     print('Going to kick user {}'.format(username))
     user.kicked = True
@@ -610,21 +640,30 @@ def reset_timer(message):
     user, game = user_and_game(message)
     if game:
         print('Reset timer for {}'.format(user.username))
-        msg = {
-            'game': game.pk,
-            'username': user.username,
-        }
         with transaction.atomic():
             try:
-                m = channel_delayed_message.objects.get(channel_name='kickout', content=json.dumps(msg))
+                print(Task.objects.all())
+                m = Task.objects.get(route='kickout', game=game)
                 m.delete()
-            except channel_delayed_message.DoesNotExist as e:
+            except Task.DoesNotExist as e:
                 print('Reset timer')
                 print("Don't know how to handle this error")
                 print(e)
+                print(Task.objects.all())
+                if game.started:
+                    one = [m.delete() for m in Task.objects.filter(route='kickout', game=game)]
+                    two = [m.delete() for m in Task.objects.filter(route='watcher', game=game)]
+                    print('Reset one {}, two {}'.format(len(one), len(two)))
+                return
         user.prompted += 1
         user.save()
-        if not game.started:
+        if game.started:
+            one = [m.delete() for m in Task.objects.filter(route='kickout', game=game)]
+            two = [m.delete() for m in Task.objects.filter(route='watcher', game=game)]
+            print('Reset one {}, two {}'.format(len(one), len(two)))
+            game.user_send(user, action='ping', text='Hello')
+            return
+        else:
             watch_user(game, user)
 
 
@@ -632,23 +671,20 @@ def reset_timer(message):
 def cancel_game(message):
     user, game = user_and_game(message)
     if game:
-        msg = {
-            'game': game.pk,
-            'username': user.username,
-        }
-        msg = json.dumps(msg)
         with transaction.atomic():
             try:
-                [m.delete() for m in channel_delayed_message.objects.filter(channel_name='kickout')]
-            except channel_delayed_message.DoesNotExist as e:
+                [m.delete() for m in Task.objects.filter(route='kickout', game=game)]
+            except Task.DoesNotExist as e:
                 print('CANCEL Game for kickout')
                 print("Don't know how to handle this error")
                 print(e)
+                return
             try:
-                [m.delete() for m in channel_delayed_message.objects.filter(channel_name='delayed_task')]
-            except channel_delayed_message.DoesNotExist as e:
+                [m.delete() for m in Task.objects.filter(route='watcher', game=game)]
+            except Task.DoesNotExist as e:
                 print('CANCEL Game for delayed tasks')
                 print("Don't know how to handle this error")
                 print(e)
+                return
         game.user_send(user, action='logout', url=reverse('dynamic_mode:exit'))
 
