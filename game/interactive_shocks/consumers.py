@@ -252,7 +252,10 @@ def exit_game(message):
         if game.started:
             if game.end_time is None:
                 game.broadcast(action='disconnected', username=user.username)
-                cache.set('{}_disconnected_users'.format(game.id), cache.get('{}_disconnected_users'.format(game.id)) + 1)
+                disconnected_count = cache.get('{}_disconnected_users'.format(game.id))
+                if disconnected_count is None:
+                    disconnected_count = 0
+                cache.set('{}_disconnected_users'.format(game.id), disconnected_count + 1)
         game.group_channel.discard(message.reply_channel)
         game.user_channel(user).discard(message.reply_channel)
     else:
@@ -421,6 +424,8 @@ def round_outcome(message):
 # def game_state_checker(game, state, round_data, users_plots, counter=0):
 def game_state_checker(message):
     game, _ = get_game_from_message(message)
+    if not game:
+        return
     data = cache.get(game.id)
     state = data.get('state')
     round_data = data.get('round_data')
@@ -573,7 +578,7 @@ def get_game_from_message(message):
     try:
         t = Task.objects.get(id=message['task'])
     except Task.DoesNotExist:
-        return None
+        return None, None
     game = t.game
     payload = json.loads(t.payload)
     t.delete()
@@ -583,6 +588,8 @@ def get_game_from_message(message):
 def game_watcher(message):
     print('Watcher')
     game, payload = get_game_from_message(message)
+    if not game and not payload:
+        return
     if game.started:
         return
     username = payload.get('username')
@@ -613,6 +620,8 @@ def game_watcher(message):
 def kickout(message):
     print('Kickout')
     game, payload = get_game_from_message(message)
+    if not game and not payload:
+        return
     if game.started:
         return
     username = payload.get('username')
