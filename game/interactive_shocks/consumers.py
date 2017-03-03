@@ -606,11 +606,11 @@ def game_watcher(message):
 
         if game.constraints.minutes_mode:
             game.user_send(user, action='timeout_prompt', minutes=game.constraints.prompt_seconds//60,
-                           url=reverse('dynamic_mode:exit'))
+                           sound_interval=game.constraints.prompt_sound_interval, url=reverse('dynamic_mode:exit'))
         else:
             game.user_send(user, action='timeout_prompt', minutes=None, seconds=game.constraints.prompt_seconds,
-                           url=reverse('dynamic_mode:exit'))
-        # DelayedMessageExecutor(create_task('kickout', game, user), game.constraints.kickout_seconds).send()
+                           sound_interval=game.constraints.prompt_sound_interval, url=reverse('dynamic_mode:exit'))
+        DelayedMessageExecutor(create_task('kickout', game, user), game.constraints.kickout_seconds).send()
         print(Task.objects.all())
     else:
         game.user_send(user, action='logout', url=reverse('dynamic_mode:exit'))

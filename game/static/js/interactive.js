@@ -171,6 +171,7 @@ function start_initial(data){
 }
 
 
+
 function percentile_generator(data){
       var all_users = [];
       $.each(data.following, function(i, user){
@@ -300,12 +301,14 @@ $(function () {
         width: 400,
         modal: true,
         buttons: {
-        OK: function(){
+        "Remain in lobby": function(){
           $( this ).dialog( "close" );
+          clearInterval(sound_player);
           socket.send(JSON.stringify({action:'resetTimer'}));
         },
-        Cancel: function(){
+        Exit: function(){
           $( this ).dialog( "close" );
+          clearInterval(sound_player);
           socket.send(JSON.stringify({action:'exit_game'}));
         }
       }
@@ -337,6 +340,7 @@ $(function () {
       $('.user-avatar-large').attr('src', data.url);
     }
     else if(data.action == 'initial') {
+      clearInterval(sound_player);
       start_initial(data);
     }
     else if(data.action == 'ping'){
@@ -412,6 +416,7 @@ $(function () {
       window.location.href = data.url;
     }
     else if(data.action == 'AFK'){
+      clearInterval(sound_player);
       window.location.href = 'http://acronym.wikia.com/wiki/AFK';
     }
     else if(data.action == 'disconnected'){
@@ -429,7 +434,16 @@ $(function () {
     }
     else if (data.action = 'timeout_prompt'){
       console.log('Timeout');
+      if(data.minutes !== null){
+        $('#waiting_time').html(data.minutes + ' minutes')
+      }
+      else{
+        $('#waiting_time').html(data.seconds + ' seconds')
+      }
+      sound_player = setInterval(round_sound, data.sound_interval*1000);
+      round_sound();
       $( "#dialog-confirm" ).dialog( "open" );
+
       // var s = null;
       // if(data.minutes !== null){
       //    s = 'You have been waiting in the lobby for '+ data.minutes + ' minutes. Please, press OK to keep waiting for the rest of the players. Alternatively, press Cancel to receive the base pay and exit the game.';

@@ -32,6 +32,7 @@ class Settings(models.Model):
     minutes_mode = models.BooleanField(default=False)
     # How many times we will ask the user before we kick her out
     max_prompts = models.PositiveSmallIntegerField(default=5)
+    prompt_sound_interval = models.PositiveSmallIntegerField(default=10)
 
     def __str__(self):
         return "Settings: users({},{}), following({},{})".format(self.min_users, self.max_users,
