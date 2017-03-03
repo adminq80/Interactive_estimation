@@ -252,9 +252,7 @@ def exit_game(message):
         if game.started:
             if game.end_time is None:
                 game.broadcast(action='disconnected', username=user.username)
-                disconnected_count = cache.get('{}_disconnected_users'.format(game.id))
-                if disconnected_count is None:
-                    disconnected_count = 0
+                disconnected_count = cache.get('{}_disconnected_users'.format(game.id)) or 0
                 cache.set('{}_disconnected_users'.format(game.id), disconnected_count + 1)
         game.group_channel.discard(message.reply_channel)
         game.user_channel(user).discard(message.reply_channel)
