@@ -321,6 +321,7 @@ $(function () {
       console.log(data.msg);
       return;
     }
+    console.log(data.action);
 
     if(data.action == "info"){
       document.querySelector('#connected_players').innerHTML = data.connected_players || 0;
@@ -330,13 +331,8 @@ $(function () {
     else if(data.action == "redirect"){
       var proto = (ws_scheme == "wss") ? "https://" : "http://";
       window.location.href = proto + window.location.host + data.url;
-    }else if(data.action == 'logout'){
-      console.log("logout");
-      window.location.href = data.url;
     }
-    else if(data.action == 'AFK'){
-      window.location.href = 'http://acronym.wikia.com/wiki/AFK';
-    }else if(data.action == 'avatar'){
+    else if(data.action == 'avatar'){
       $('.user-avatar').attr('src', data.url);
       $('.user-avatar-large').attr('src', data.url);
     }
@@ -345,32 +341,8 @@ $(function () {
     }
     else if(data.action == 'ping'){
       console.log(data.text)
-    }else if(data.action == 'disconnected'){
-      console.log(data.username);
-      //noinspection JSDuplicatedDeclaration
-        var arr = JSON.parse(sessionStorage.getItem('disconnected')) || [];
-      arr.push(data.username);
-      sessionStorage.setItem('disconnected', JSON.stringify(arr));
-    }else if (data.action == 'reconnected'){
-      console.log('User '+ data.username + 'recoonected !');
-      //noinspection JSDuplicatedDeclaration
-        var arr = JSON.parse(sessionStorage.getItem('disconnected')) || [];
-      sessionStorage.setItem('disconnected', JSON.stringify(arr.filter(function(i){ return i !== data.username;})));
-    }else if (data.action = 'timeout'){
-      console.log('Timeout');
-      $( "#dialog-confirm" ).dialog( "open" );
-      // var s = null;
-      // if(data.minutes !== null){
-      //    s = 'You have been waiting in the lobby for '+ data.minutes + ' minutes. Please, press OK to keep waiting for the rest of the players. Alternatively, press Cancel to receive the base pay and exit the game.';
-      // }else{
-      //    s = 'You have been waiting in the lobby for '+ data.seconds + ' seconds. Please, press OK to keep waiting for the rest of the players. Alternatively, press Cancel to receive the base pay and exit the game.';
-      // }
-      //   if (confirm(s) == true){
-      //     socket.send(JSON.stringify({action:'resetTimer'}));
-      //   }else{
-      //     socket.send(JSON.stringify({action:'exit_game'}));
-      //   }
-    }else if(data.action == 'interactive') {
+    }
+    else if(data.action == 'interactive') {
       start_game(data, data.seconds);
       $(".guess").show();
 
@@ -434,6 +406,41 @@ $(function () {
         return user.username;
       });
       start_interactive(data);
+    }
+    else if(data.action == 'logout'){
+      console.log("logout");
+      window.location.href = data.url;
+    }
+    else if(data.action == 'AFK'){
+      window.location.href = 'http://acronym.wikia.com/wiki/AFK';
+    }
+    else if(data.action == 'disconnected'){
+      console.log(data.username);
+      //noinspection JSDuplicatedDeclaration
+        var arr = JSON.parse(sessionStorage.getItem('disconnected')) || [];
+      arr.push(data.username);
+      sessionStorage.setItem('disconnected', JSON.stringify(arr));
+    }
+    else if (data.action == 'reconnected'){
+      console.log('User '+ data.username + 'recoonected !');
+      //noinspection JSDuplicatedDeclaration
+        var arr = JSON.parse(sessionStorage.getItem('disconnected')) || [];
+      sessionStorage.setItem('disconnected', JSON.stringify(arr.filter(function(i){ return i !== data.username;})));
+    }
+    else if (data.action = 'timeout_prompt'){
+      console.log('Timeout');
+      $( "#dialog-confirm" ).dialog( "open" );
+      // var s = null;
+      // if(data.minutes !== null){
+      //    s = 'You have been waiting in the lobby for '+ data.minutes + ' minutes. Please, press OK to keep waiting for the rest of the players. Alternatively, press Cancel to receive the base pay and exit the game.';
+      // }else{
+      //    s = 'You have been waiting in the lobby for '+ data.seconds + ' seconds. Please, press OK to keep waiting for the rest of the players. Alternatively, press Cancel to receive the base pay and exit the game.';
+      // }
+      //   if (confirm(s) == true){
+      //     socket.send(JSON.stringify({action:'resetTimer'}));
+      //   }else{
+      //     socket.send(JSON.stringify({action:'exit_game'}));
+      //   }
     }
     else {
       console.log(data.action);

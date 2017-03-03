@@ -8,7 +8,6 @@ class DelayedMessageExecutor:
 
     def __init__(self, content: dict, milliseconds: int):
         with transaction.atomic():
-            print(content)
             t = Task(**content)
             t.save()
         delayed_message = {
