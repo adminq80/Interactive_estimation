@@ -210,13 +210,19 @@ def lobby(message):
             game.started = True
             game.save()
             print("Game started value {}".format(game.started))
-        try:
-            [m.delete() for m in channel_delayed_message.objects.filter(channel_name='kickout')]
-            [m.delete() for m in channel_delayed_message.objects.filter(channel_name='delayed_task')]
-        except channel_delayed_message.DoesNotExist as e:
-            print('Cancel Game')
-            print("Don't know how to handle this error")
-            print(e)
+        with transaction.atomic():
+            try:
+                [m.delete() for m in channel_delayed_message.objects.filter(channel_name='kickout')]
+            except channel_delayed_message.DoesNotExist as e:
+                print('LOBBY Game for kickout')
+                print("Don't know how to handle this error")
+                print(e)
+            try:
+                [m.delete() for m in channel_delayed_message.objects.filter(channel_name='delayed_task')]
+            except channel_delayed_message.DoesNotExist as e:
+                print('LOBBY Game for delayed tasks')
+                print("Don't know how to handle this error")
+                print(e)
         cache.set('{}_disconnected_users'.format(game.id), 0)
         cache.delete('{}_timer'.format(game.id))
         # change users levels
@@ -608,13 +614,14 @@ def reset_timer(message):
             'game': game.pk,
             'username': user.username,
         }
-        try:
-            m = channel_delayed_message.objects.get(channel_name='kickout', content=json.dumps(msg))
-            m.delete()
-        except channel_delayed_message.DoesNotExist as e:
-            print('Reset timer')
-            print("Don't know how to handle this error")
-            print(e)
+        with transaction.atomic():
+            try:
+                m = channel_delayed_message.objects.get(channel_name='kickout', content=json.dumps(msg))
+                m.delete()
+            except channel_delayed_message.DoesNotExist as e:
+                print('Reset timer')
+                print("Don't know how to handle this error")
+                print(e)
         user.prompted += 1
         user.save()
         if not game.started:
@@ -630,12 +637,18 @@ def cancel_game(message):
             'username': user.username,
         }
         msg = json.dumps(msg)
-        try:
-            [m.delete() for m in channel_delayed_message.objects.filter(channel_name='kickout', content=msg)]
-            [m.delete() for m in channel_delayed_message.objects.filter(channel_name='delayed_task', content=msg)]
-        except channel_delayed_message.DoesNotExist as e:
-            print('Cancel Game')
-            print("Don't know how to handle this error")
-            print(e)
+        with transaction.atomic():
+            try:
+                [m.delete() for m in channel_delayed_message.objects.filter(channel_name='kickout')]
+            except channel_delayed_message.DoesNotExist as e:
+                print('CANCEL Game for kickout')
+                print("Don't know how to handle this error")
+                print(e)
+            try:
+                [m.delete() for m in channel_delayed_message.objects.filter(channel_name='delayed_task')]
+            except channel_delayed_message.DoesNotExist as e:
+                print('CANCEL Game for delayed tasks')
+                print("Don't know how to handle this error")
+                print(e)
         game.user_send(user, action='logout', url=reverse('dynamic_mode:exit'))
 
