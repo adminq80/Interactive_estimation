@@ -610,7 +610,7 @@ def game_watcher(message):
         else:
             game.user_send(user, action='timeout_prompt', minutes=None, seconds=game.constraints.prompt_seconds,
                            url=reverse('dynamic_mode:exit'))
-        # DelayedMessageExecutor(create_task('kickout', game, user), game.constraints.kickout_seconds).send()
+        DelayedMessageExecutor(create_task('kickout', game, user), game.constraints.kickout_seconds).send()
         print(Task.objects.all())
     else:
         game.user_send(user, action='logout', url=reverse('dynamic_mode:exit'))
