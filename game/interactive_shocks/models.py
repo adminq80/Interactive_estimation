@@ -127,3 +127,13 @@ class Survey(models.Model):
             'gender': self.gender or '',
             'feedback': self.feedback or '',
         }
+
+
+class Task(models.Model):
+    route = models.CharField(max_length=200)
+    path = models.CharField(max_length=200)
+    game = models.ForeignKey(InteractiveShocks)
+    payload = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.route

@@ -13,7 +13,6 @@
 {% endblock %}
 
 {% block container %}
-
 <div id="lobby">
   <div class="row">
       <div class="col-md-12" id="waiting">There are currently a total of
@@ -72,9 +71,6 @@
       </div>
     </div>
 
-{#      <div id="dialog-confirm" title="Reset waiting timer?">#}
-{#          <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>It has been more than <span id="waiting_time">10</span> seconds. Press `Ok` to reset the timer and wait for more players to join or press `Cancel` to end the game'</p>#}
-{#      </div>#}
     <div class="col-md-3">
       <div class="outcome" hidden>
           <div><b>Score:</b> total (<b id='user_round_score2'>+ increment</b>)</div>
@@ -120,6 +116,9 @@
     </div>
   </div>
 </div>
+    <div id="dialog-confirm" title="Reset waiting timer?">
+          <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>It has been more than <span id="waiting_time">10</span> seconds. Press `Ok` to reset the timer and wait for more players to join or press `Cancel` to end the game'</p>
+      </div>
 {% endblock %}
 
 {% block extra_javascript %}
