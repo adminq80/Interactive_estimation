@@ -221,18 +221,16 @@ def lobby(message):
 
     if waiting_for == 0:
         print("Going to start the game")
-        with transaction.atomic():
-            game.started = True
-            game.save()
-            print("Game started value {}".format(game.started))
-        with transaction.atomic():
-            [m.delete() for m in Task.objects.filter(route='kickout', game=game)]
-            [m.delete() for m in Task.objects.filter(route='watcher', game=game)]
-
+        game.started = True
+        game.save()
+        print("Game started value {}".format(game.started))
+        [m.delete() for m in Task.objects.filter(route='kickout', game=game)]
+        [m.delete() for m in Task.objects.filter(route='watcher', game=game)]
         cache.set('{}_disconnected_users'.format(game.id), 0)
-        cache.delete('{}_timer'.format(game.id))
         # change users levels
+        print("Going to chane the levels")
         changing_levels(game)
+        print("Going to start the first round")
         start_initial(game)
     else:
         send_game_status(game)
@@ -465,7 +463,6 @@ def game_state_checker(message):
     data['counter'] = counter
     cache.set(game.id, data)
     DelayedMessageExecutor(create_game_task('game_state', game), 1).send()
-
 
 
 def create_game_task(route, game, path='/dynamic_mode/lobby', payload=None):
