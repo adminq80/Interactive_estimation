@@ -645,21 +645,16 @@ def reset_timer(message):
     user, game = user_and_game(message)
     if game:
         print('Reset timer for {}'.format(user.username))
-        with transaction.atomic():
-            try:
-                print(Task.objects.all())
-                m = Task.objects.get(route='kickout', game=game)
-                m.delete()
-            except Task.DoesNotExist as e:
-                print('Reset timer')
-                print("Don't know how to handle this error")
-                print(e)
-                print(Task.objects.all())
-                if game.started:
-                    one = [m.delete() for m in Task.objects.filter(route='kickout', game=game)]
-                    two = [m.delete() for m in Task.objects.filter(route='watcher', game=game)]
-                    print('Reset one {}, two {}'.format(len(one), len(two)))
-                return
+        try:
+            print(Task.objects.all())
+            m = Task.objects.get(route='kickout', game=game)
+            m.delete()
+        except Task.DoesNotExist as e:
+            print('Reset timer')
+            print("Don't know how to handle this error")
+            print(e)
+            print(Task.objects.all())
+            return
         user.prompted += 1
         user.save()
         if game.started:
@@ -667,7 +662,6 @@ def reset_timer(message):
             two = [m.delete() for m in Task.objects.filter(route='watcher', game=game)]
             print('Reset one {}, two {}'.format(len(one), len(two)))
             game.user_send(user, action='ping', text='Hello')
-            return
         else:
             watch_user(game, user)
 
@@ -676,20 +670,4 @@ def reset_timer(message):
 def cancel_game(message):
     user, game = user_and_game(message)
     if game:
-        with transaction.atomic():
-            try:
-                [m.delete() for m in Task.objects.filter(route='kickout', game=game)]
-            except Task.DoesNotExist as e:
-                print('CANCEL Game for kickout')
-                print("Don't know how to handle this error")
-                print(e)
-                return
-            try:
-                [m.delete() for m in Task.objects.filter(route='watcher', game=game)]
-            except Task.DoesNotExist as e:
-                print('CANCEL Game for delayed tasks')
-                print("Don't know how to handle this error")
-                print(e)
-                return
         game.user_send(user, action='logout', url=reverse('dynamic_mode:exit'))
-
