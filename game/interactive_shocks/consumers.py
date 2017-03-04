@@ -441,24 +441,36 @@ def game_state_checker(message):
     if state == 'initial':
         r = InteractiveShocksRound.objects.filter(
             game=game, round_order=round_data.get('current_round'), guess=None).count()
-        r -= cache.get('{}_disconnected_users'.format(game.id))
+        try:
+            r -= cache.get('{}_disconnected_users'.format(game.id))
+        except TypeError:
+            pass
         if r == 0:
             start_interactive(game, round_data, users_plots)
             return
     elif state == 'interactive':
         r = InteractiveShocksRound.objects.filter(game=game, round_order=round_data.get('current_round'),
                                                   influenced_guess=None).count()
-        r -= cache.get('{}_disconnected_users'.format(game.id))
+        try:
+            r -= cache.get('{}_disconnected_users'.format(game.id))
+        except TypeError:
+            pass
+
         if r == 0:
             start_outcome(game, round_data, users_plots)
             return
     elif state == 'outcome':
         r = InteractiveShocksRound.objects.filter(game=game, round_order=round_data.get('current_round'),
                                                   outcome=False).count()
-        r -= cache.get('{}_disconnected_users'.format(game.id))
+        try:
+            r -= cache.get('{}_disconnected_users'.format(game.id))
+        except TypeError:
+            pass
+
         if r == 0:
             start_initial(game)
             return
+
     counter += 1
     data['counter'] = counter
     cache.set(game.id, data)
@@ -504,6 +516,7 @@ def initial(game, round_data, users_plots, message=None):
     if message:
         # send to only one user and return
         game.user_send(message.user, **data)
+        return
     else:
         for i in users_plots:
             user = i['user']
