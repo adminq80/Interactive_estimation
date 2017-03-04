@@ -518,10 +518,13 @@ def initial(game, round_data, users_plots, message=None):
         game.user_send(message.user, **data)
         return
     else:
+        messages = {}
         for i in users_plots:
             user = i['user']
             data['plot'] = i['plot']
-            game.user_send(user, **data)
+            messages[user] = user_packet(**data)
+        game.fast_users_send(messages)
+        # game.user_send(user, **data)
 
 
 def start_interactive(game, round_data, users_plots):
@@ -531,10 +534,12 @@ def start_interactive(game, round_data, users_plots):
                         'users_plots': users_plots,
                         'counter': 0,
                         })
+    messages = {}
     for i in users_plots:
         user = i['user']
         round_data['plot'] = i['plot']
-        interactive(user, game, round_data)
+        messages[user] = interactive(user, game, round_data)
+    game.fast_users_send(messages)
     DelayedMessageExecutor(create_game_task('game_state', game), 1).send()
 
 
@@ -546,8 +551,10 @@ def interactive(user, game, round_data):
         user=u,
         round_order=round_data.get('current_round')).get_guess()} for u in current_round.following.all()]
     score, gain = user.get_score_and_gain
-    game.user_send(user, action='interactive', score=score, gain=gain,
-                   following=following, seconds=SECONDS, **round_data)
+
+    return user_packet(action='interactive', score=score, gain=gain, following=following, seconds=SECONDS, **round_data)
+    # game.user_send(user, action='interactive', score=score, gain=gain,
+    #                following=following, seconds=SECONDS, **round_data)
 
 
 def start_outcome(game, round_data, users_plots):
@@ -556,16 +563,22 @@ def start_outcome(game, round_data, users_plots):
                         'users_plots': users_plots,
                         'counter': 0,
                         })
+    messages = {}
     for i in users_plots:
         user = i['user']
         round_data['plot'] = i['plot']
-        outcome(user, game, round_data)
+        messages[user] = outcome(user, game, round_data)
+    game.fast_users_send(messages)
     DelayedMessageExecutor(create_game_task('game_state', game), 1).send()
 
 
 def outcome_loop(l):
     return [{'username': u.username, 'avatar': u.get_avatar, 'score': u.get_score_and_gain[0],
              'gain': u.get_score_and_gain[1]} for u in l]
+
+
+def user_packet(**kwargs):
+    return json.dumps(kwargs)
 
 
 def outcome(user, game: InteractiveShocks, round_data):
@@ -577,10 +590,15 @@ def outcome(user, game: InteractiveShocks, round_data):
     currently_following = outcome_loop(current_round.following.all())
     score, gain = user.get_score_and_gain
 
-    game.user_send(user, action='outcome', guess=float(current_round.get_influenced_guess()),
-                   score=score, gain=gain, following=currently_following, all_players=rest_of_users,
-                   max_following=game.constraints.max_following, correct_answer=float(current_round.plot.answer),
-                   seconds=SECONDS, **round_data)
+    return user_packet(action='outcome', guess=float(current_round.get_influenced_guess()),score=score, gain=gain,
+                       following=currently_following, all_players=rest_of_users,
+                       max_following=game.constraints.max_following, correct_answer=float(current_round.plot.answer),
+                       seconds=SECONDS, **round_data)
+
+    # game.user_send(user, action='outcome', guess=float(current_round.get_influenced_guess()),
+    #                score=score, gain=gain, following=currently_following, all_players=rest_of_users,
+    #                max_following=game.constraints.max_following, correct_answer=float(current_round.plot.answer),
+    #                seconds=SECONDS, **round_data)
 
 
 def get_game_from_message(message):

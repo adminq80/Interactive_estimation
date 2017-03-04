@@ -106,6 +106,10 @@ class InteractiveShocks(models.Model):
         packet = json.dumps(kwargs)
         return self.user_channel(user).send({'text': packet})
 
+    def fast_users_send(self, users: dict):
+        for user, msg in users.items():
+            self.user_channel(user).send({'text': msg})
+
     class Meta:
         verbose_name_plural = 'Interactive Shocks'
 
