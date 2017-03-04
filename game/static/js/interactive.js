@@ -340,7 +340,6 @@ $(function () {
       $('.user-avatar-large').attr('src', data.url);
     }
     else if(data.action == 'initial') {
-      clearInterval(sound_player);
       start_initial(data);
     }
     else if(data.action == 'ping'){

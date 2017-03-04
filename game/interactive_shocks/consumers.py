@@ -574,6 +574,7 @@ def get_game_from_message(message):
     try:
         t = Task.objects.get(id=message['task'])
     except Task.DoesNotExist:
+        print('Encountered an error')
         return None, None
     game = t.game
     payload = json.loads(t.payload)
@@ -601,16 +602,16 @@ def game_watcher(message):
     if user.prompted < game.constraints.max_prompts:
         print("Going to prompt {}".format(user.username))
 
+        DelayedMessageExecutor(create_task('kickout', game, user), game.constraints.kickout_seconds).send()
+        print(Task.objects.all())
         if game.constraints.minutes_mode:
             game.user_send(user, action='timeout_prompt', minutes=game.constraints.prompt_seconds//60,
                            sound_interval=game.constraints.prompt_sound_interval, url=reverse('dynamic_mode:exit'))
         else:
             game.user_send(user, action='timeout_prompt', minutes=None, seconds=game.constraints.prompt_seconds,
                            sound_interval=game.constraints.prompt_sound_interval, url=reverse('dynamic_mode:exit'))
-        DelayedMessageExecutor(create_task('kickout', game, user), game.constraints.kickout_seconds).send()
-        print(Task.objects.all())
     else:
-        game.user_send(user, action='logout', url=reverse('dynamic_mode:exit'))
+        DelayedMessageExecutor(create_task('kickout', game, user), 0.1).send()
 
 
 def kickout(message):
@@ -634,8 +635,6 @@ def kickout(message):
     print('Going to kick user {}'.format(username))
     user.kicked = True
     user.save()
-    game.users.remove(user)
-    game.save()
     game.user_send(user, action='AFK')
     send_game_status(game)
 
@@ -647,7 +646,7 @@ def reset_timer(message):
         print('Reset timer for {}'.format(user.username))
         try:
             print(Task.objects.all())
-            m = Task.objects.get(route='kickout', game=game)
+            m = Task.objects.get(route='kickout', game=game, payload__contains=user.username)
             m.delete()
         except Task.DoesNotExist as e:
             print('Reset timer')
