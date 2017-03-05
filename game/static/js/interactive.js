@@ -25,9 +25,9 @@ function countdown(counterState, s) {
 }
 
 function class_name_for_score(group){
-    if (group == 1)
+    if (group === '1')
     return 'high-gain';
-  if (group == 2)
+  if (group === '2')
       return 'medium-gain';
   return'low-gain';
 }
@@ -147,14 +147,14 @@ function start_interactive(data) {
   var arr = JSON.parse(sessionStorage.getItem('disconnected')) || [];
   $.each(data.all_players.sort(comp_score), function(i, user) {
     var avatar = '/static/' + user.avatar;
-    new_follow_list(user.username, avatar, user.score, user.gain, +sessionStorage.getItem(user.username), arr.find(function(i){return i == user.username}));
+    new_follow_list(user.username, avatar, user.score, user.gain, sessionStorage.getItem(user.username), arr.find(function(i){return i == user.username}));
   });
   $("#unfollow_list tbody td").html("");
   // populate list of people you can unfollow
   $.each(data.following.sort(comp_score), function(i, user) {
     var avatar = "/static/"+user.avatar;
     var row = $($("#unfollow_list tbody td")[i]);
-    row.html(new_unfollow_list(user.username, avatar, user.score, user.gain, +sessionStorage.getItem(user.username), arr.find(function(i){return i == user.username})));
+    row.html(new_unfollow_list(user.username, avatar, user.score, user.gain, sessionStorage.getItem(user.username), arr.find(function(i){return i == user.username})));
   });
 }
 
@@ -184,11 +184,11 @@ function percentile_generator(data){
     var batch = Math.floor(all_users.length / 3);
     $.each(all_users.sort(function(a, b){return +a.gain > +b.gain ? -1:1;}), function (i, user) {
        if(i < batch) {
-           sessionStorage.setItem(user.username, 1);
+           sessionStorage.setItem(user.username, '1');
        }else if (i < (batch<<1)){
-         sessionStorage.setItem(user.username, 2);
+         sessionStorage.setItem(user.username, '2');
        }else{
-         sessionStorage.setItem(user.username, 3);
+         sessionStorage.setItem(user.username, '3');
        }
     });
 }
