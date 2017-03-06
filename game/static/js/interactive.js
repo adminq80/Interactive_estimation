@@ -147,14 +147,20 @@ function start_interactive(data) {
   var arr = JSON.parse(sessionStorage.getItem('disconnected')) || [];
   $.each(data.all_players.sort(comp_score), function(i, user) {
     var avatar = '/static/' + user.avatar;
-    new_follow_list(user.username, avatar, user.score, user.gain, sessionStorage.getItem(user.username), arr.find(function(i){return i == user.username}));
+    var user_data = JSON.parse(sessionStorage.getItem(user.username));
+    console.log('follow');
+    console.log(user_data);
+    new_follow_list(user.username, avatar, user_data.score, user_data.gain, user_data.batch, arr.find(function(i){return i == user.username}));
   });
   $("#unfollow_list tbody td").html("");
   // populate list of people you can unfollow
   $.each(data.following.sort(comp_score), function(i, user) {
     var avatar = "/static/"+user.avatar;
+    var user_data = JSON.parse(sessionStorage.getItem(user.username));
+    console.log('unfollow');
+    console.log(user_data);
     var row = $($("#unfollow_list tbody td")[i]);
-    row.html(new_unfollow_list(user.username, avatar, user.score, user.gain, sessionStorage.getItem(user.username), arr.find(function(i){return i == user.username})));
+    row.html(new_unfollow_list(user.username, avatar, user_data.score, user_data.gain, user_data.batch, arr.find(function(i){return i == user.username})));
   });
 }
 
@@ -180,16 +186,18 @@ function percentile_generator(data){
       $.each(data.all_players, function(i, user){
         all_users.push(user);
       });
-      all_users.push({username:"self", gain:data.gain});
+      all_users.push({username:"self", gain:data.gain, score:data.score});
     var batch = Math.floor(all_users.length / 3);
     $.each(all_users.sort(function(a, b){return +a.gain > +b.gain ? -1:1;}), function (i, user) {
-       if(i < batch) {
-           sessionStorage.setItem(user.username, '1');
+      var d = {gain: user.gain, score: user.score};
+      if(i < batch) {
+        d.batch = '1';
        }else if (i < (batch<<1)){
-         sessionStorage.setItem(user.username, '2');
+        d.batch = '2';
        }else{
-         sessionStorage.setItem(user.username, '3');
+         d.batch = '3';
        }
+       sessionStorage.setItem(user.username, JSON.stringify(d));
     });
 }
 
@@ -239,13 +247,13 @@ function start_outcome(data){
       }
 
       percentile_generator(data);
-
+      var user_data = JSON.parse(sessionStorage.getItem('self'));
       $("#roundAnswer").html(data.correct_answer);
-      $('#user_round_score').html(data.gain);
-      $('#user_round_score2').addClass(class_name_for_score(sessionStorage.getItem('self')));
-      $('#user_round_score').addClass(class_name_for_score(sessionStorage.getItem('self')));
-      $("#roundBonus").html('+'+ data.gain);
-      $('#roundBonus').addClass(class_name_for_score(sessionStorage.getItem('self')));
+      $('#user_round_score').html(user_data.gain);
+      $('#user_round_score2').addClass(class_name_for_score(user_data.batch));
+      $('#user_round_score').addClass(class_name_for_score(user_data.batch));
+      $("#roundBonus").html('+'+ user_data.gain);
+      $('#roundBonus').addClass(class_name_for_score(user_data.batch));
 
       $(".img-responsive").addClass("faded");
 

@@ -322,8 +322,8 @@ def follow_list(message):
             d = {
                 'username': u.username,
                 'avatar': u.get_avatar,
-                'score': u.get_score_and_gain[0],
-                'gain': u.get_score_and_gain[1],
+                # 'score': u.get_score_and_gain[0],
+                # 'gain': u.get_score_and_gain[1],
             }
             if u.username == user.username:
                 continue
@@ -550,9 +550,9 @@ def interactive(user, game, round_data):
     following = [{'username': u.username, 'avatar': u.get_avatar, 'guess': InteractiveShocksRound.objects.get(
         user=u,
         round_order=round_data.get('current_round')).get_guess()} for u in current_round.following.all()]
-    score, gain = user.get_score_and_gain
+    score = user.get_score
 
-    return user_packet(action='interactive', score=score, gain=gain, following=following, seconds=SECONDS, **round_data)
+    return user_packet(action='interactive', score=score, following=following, seconds=SECONDS, **round_data)
     # game.user_send(user, action='interactive', score=score, gain=gain,
     #                following=following, seconds=SECONDS, **round_data)
 
