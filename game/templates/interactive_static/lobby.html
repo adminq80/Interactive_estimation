@@ -47,6 +47,7 @@
       </div>
       <div class='row'>
         <div id="answerSlider">
+            <div class="ui-slider-handle"></div>
         </div>
         <span id="min">0</span>
         <span class="quarter">0.25</span>
@@ -101,6 +102,10 @@
     </div>
   </div>
 </div>
+
+     <div id="dialog-confirm" title="Remain in lobby?">
+        <p>You have been waiting in the lobby for <span id="waiting_time">10</span>.  Please, press 'Remain in lobby' to keep waiting for the rest of the players. Alternatively, press 'Exit' to receive the base pay and exit the game.</p>
+      </div>
 {% endblock %}
 
 {% block extra_javascript %}
