@@ -49,7 +49,7 @@ def exit_survey(request):
             return redirect('static_mode:done')
         else:
             print('NOT Valid')
-    return render(request, 'control/survey.html', {'form': form, 'score': round(request.user.get_score * .2, 2)})
+    return render(request, 'control/survey.html', {'form': form, 'score': round(request.user.get_score * .25, 2)})
 
 
 def done(request):

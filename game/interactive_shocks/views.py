@@ -55,7 +55,7 @@ def exit_survey(request):
             return redirect('dynamic_mode:done')
         else:
             print('NOT Valid')
-    return render(request, 'control/survey.html', {'form': form, 'score': round(request.user.get_score * .3, 2)})
+    return render(request, 'control/survey.html', {'form': form, 'score': round(request.user.get_score * .375, 2)})
 
 
 def done(request):

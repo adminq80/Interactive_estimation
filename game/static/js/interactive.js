@@ -138,7 +138,9 @@ function start_game(data, seconds) {
 }
 
 function comp_score(a, b) {
-  return (+a.score) >= (+b.score) ? -1: 1;
+  var a_score = parseFloat(a.score) || parseFloat(sessionStorage.getItem(a.username).score);
+  var b_score = parseFloat(b.score) || parseFloat(sessionStorage.getItem(b.username).score);
+  return a_score >= b_score ? -1: 1;
 }
 
 function start_interactive(data) {
@@ -150,7 +152,8 @@ function start_interactive(data) {
     var user_data = JSON.parse(sessionStorage.getItem(user.username));
     console.log('follow');
     console.log(user_data);
-    new_follow_list(user.username, avatar, user_data.score, user_data.gain, user_data.batch, arr.find(function(i){return i == user.username}));
+    new_follow_list(user.username, avatar, parseFloat(user_data.score), parseFloat(user_data.gain), user_data.batch,
+        arr.find(function(i){return i == user.username}));
   });
   $("#unfollow_list tbody td").html("");
   // populate list of people you can unfollow
@@ -160,7 +163,8 @@ function start_interactive(data) {
     console.log('unfollow');
     console.log(user_data);
     var row = $($("#unfollow_list tbody td")[i]);
-    row.html(new_unfollow_list(user.username, avatar, user_data.score, user_data.gain, user_data.batch, arr.find(function(i){return i == user.username})));
+    row.html(new_unfollow_list(user.username, avatar, parseFloat(user_data.score), parseFloat(user_data.gain), user_data.batch,
+        arr.find(function(i){return i == user.username})));
   });
 }
 
@@ -186,10 +190,10 @@ function percentile_generator(data){
       $.each(data.all_players, function(i, user){
         all_users.push(user);
       });
-      all_users.push({username:"self", gain:data.gain, score:data.score});
+      all_users.push({username:"self", gain:data.gain || 0, score: data.score || 0});
     var batch = Math.floor(all_users.length / 3);
-    $.each(all_users.sort(function(a, b){return +a.gain > +b.gain ? -1:1;}), function (i, user) {
-      var d = {gain: user.gain, score: user.score};
+    $.each(all_users.sort(function(a, b){return parseFloat(a.gain) > parseFloat(b.gain) ? -1:1;}), function (i, user) {
+      var d = {gain: user.gain || 0, score: user.score || 0};
       if(i < batch) {
         d.batch = '1';
        }else if (i < (batch<<1)){
@@ -250,10 +254,10 @@ function start_outcome(data){
       var user_data = JSON.parse(sessionStorage.getItem('self'));
       $("#roundAnswer").html(data.correct_answer);
       $('#user_round_score').html(user_data.gain);
-      $('#user_round_score2').addClass(class_name_for_score(user_data.batch));
-      $('#user_round_score').addClass(class_name_for_score(user_data.batch));
-      $("#roundBonus").html('+'+ user_data.gain);
-      $('#roundBonus').addClass(class_name_for_score(user_data.batch));
+      $('#user_round_score2').removeClass('high-gain medium-gain low-gain').addClass(class_name_for_score(user_data.batch));
+      $('#user_round_score').removeClass('high-gain medium-gain low-gain').addClass(class_name_for_score(user_data.batch));
+      $("#roundBonus").html('+' + user_data.gain);
+      $('#roundBonus').removeClass('high-gain medium-gain low-gain').addClass(class_name_for_score(user_data.batch));
 
       $(".img-responsive").addClass("faded");
 
