@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .forms import SettingsForm
-from .models import Settings, Survey, InteractiveStatic, InteractiveStaticRound
+from .models import Settings, Survey, InteractiveStatic, InteractiveStaticRound, Task
 
 
 class SettingsAdmin(admin.ModelAdmin):
@@ -13,3 +13,4 @@ admin.site.register(Settings, SettingsAdmin)
 admin.site.register(InteractiveStatic)
 admin.site.register(InteractiveStaticRound)
 admin.site.register(Survey)
+admin.site.register(Task)

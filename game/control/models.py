@@ -1,4 +1,4 @@
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, validate_comma_separated_integer_list
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
@@ -9,6 +9,9 @@ from django.utils import timezone
 class Setting(models.Model):
     max_rounds = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
     batch_size = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
+    types = models.CharField(default='', max_length=1000,
+                             validators=[validate_comma_separated_integer_list],
+                             help_text='a comma separated lists of integers from 0-2. 0 for easy, 1 for medium and 2 for hard')
 
     def __str__(self):
         return "Setting: max_rounds: {} ".format(self.max_rounds)

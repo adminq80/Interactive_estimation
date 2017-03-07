@@ -1,5 +1,5 @@
 from math import fabs
-from random import choice
+from random import choice, shuffle
 from datetime import timedelta
 
 from django.contrib.auth import authenticate, login
@@ -199,6 +199,21 @@ def instruction(request):
             setting = settings.order_by('?')[0]
         else:
             setting = Setting.objects.create(max_rounds=10, batch_size=5)
+        types = setting.types.split(',')
+        shuffle(types)
+        try:
+            d = {
+                '0': 'e',
+                '1': 'm',
+                '2': 'h',
+            }
+            t = types.pop(0)
+            u.level = d[t]
+            u.save()
+            setting.types = ','.join(types)
+            setting.save()
+        except AttributeError:
+            print('Control types array is empty')
         Control.objects.create(user=u, max_rounds=setting.max_rounds, batch_size=setting.batch_size)
         u = authenticate(username=u.username, password=password)
         login(request, u)

@@ -25,6 +25,15 @@ class Settings(models.Model):
 
     max_rounds = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
 
+    # Number of seconds until we will prompt you to leave the game or stay
+    prompt_seconds = models.PositiveSmallIntegerField(default=60)
+    # how many seconds we will wait before you kick you out for in activity
+    kickout_seconds = models.PositiveSmallIntegerField(default=60)
+    minutes_mode = models.BooleanField(default=False)
+    # How many times we will ask the user before we kick her out
+    max_prompts = models.PositiveSmallIntegerField(default=5)
+    prompt_sound_interval = models.PositiveSmallIntegerField(default=10)
+
     def __str__(self):
         return "Settings: users({},{}), following({},{})".format(self.min_users, self.max_users,
                                                                  self.min_following, self.max_following
@@ -97,6 +106,10 @@ class InteractiveStatic(models.Model):
         packet = json.dumps(kwargs)
         return self.user_channel(user).send({'text': packet})
 
+    def fast_users_send(self, users: dict):
+        for user, msg in users.items():
+            self.user_channel(user).send({'text': msg})
+
 
 class Survey(models.Model):
     username = models.CharField(max_length=255, blank=True, null=True)
@@ -116,3 +129,13 @@ class Survey(models.Model):
             'gender': self.gender or '',
             'feedback': self.feedback or '',
         }
+
+
+class Task(models.Model):
+    route = models.CharField(max_length=200)
+    path = models.CharField(max_length=200)
+    game = models.ForeignKey(InteractiveStatic)
+    payload = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.route

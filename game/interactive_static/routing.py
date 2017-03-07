@@ -1,7 +1,7 @@
 from channels import route
 from .consumers import exit_game, lobby, ws_receive
 from .consumers import data_broadcast, initial_submit, interactive_submit, round_outcome
-
+from .consumers import cancel_game, game_state_checker, game_watcher, kickout, reset_timer
 
 game_routes = [
     # route('initial.guess', initial_submit),  # initial guess submission
@@ -15,6 +15,11 @@ game_routes = [
     route('game.route', interactive_submit, action='^interactive$'),
     # route('game.route', follow_list, action='^follow$'),
     route('game.route', round_outcome, action='^outcome$'),
+    route('game.route', reset_timer, action='^resetTimer$'),
+    route('game.route', cancel_game, action='^exit_game$'),
+    route('watcher', game_watcher),
+    route('kickout', kickout),
+    route('game_state', game_state_checker),
 
 ]
 
