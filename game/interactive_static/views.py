@@ -38,13 +38,19 @@ def exit_survey(request):
     :return:
     """
     form = ExitSurvey(request.POST or None)
+    u = User.objects.get(username=request.user.username)
+    u.exited = True
+    u.save()
     if request.method == 'POST':
         if form.is_valid():
-            u = User.objects.get(username=request.user.username)
-            game = InteractiveStatic.objects.get(users=u)
+            try:
+                game = InteractiveStatic.objects.get(users=u)
+                game_id = game.id
+            except InteractiveStatic.DoesNotExist:
+                game_id = -1
             instance = form.save(commit=False)
             instance.username = u.username
-            instance.game = game.id
+            instance.game = game_id
             instance.save()
             return redirect('static_mode:done')
         else:
