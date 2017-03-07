@@ -129,7 +129,7 @@ class Survey(models.Model):
 
     def dump(self):
         return {
-            'user': self.user or '',
+            'user': self.username or '',
             'game': self.game or '',
             'age': self.age or '',
             'gender': self.gender or '',

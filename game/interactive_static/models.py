@@ -131,6 +131,9 @@ class Survey(models.Model):
             'age': self.age or '',
             'gender': self.gender or '',
             'feedback': self.feedback or '',
+            'bugs': self.bugs or '',
+            'pay': self.pay or '',
+            'education': self.education or '',
         }
 
 
