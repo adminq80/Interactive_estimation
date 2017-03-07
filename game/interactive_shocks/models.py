@@ -120,19 +120,24 @@ class Survey(models.Model):
     age = models.PositiveSmallIntegerField(null=True)
     gender = models.CharField(max_length=30, blank=True, null=True)
     feedback = models.TextField(null=True)
+    bugs = models.TextField(null=True)
+    pay = models.TextField(null=True)
+    education = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return self.username
 
     def dump(self):
         return {
-            'user': self.username or '',
+            'user': self.user or '',
             'game': self.game or '',
             'age': self.age or '',
             'gender': self.gender or '',
             'feedback': self.feedback or '',
+            'bugs': self.bugs or '',
+            'pay': self.pay or '',
+            'education': self.education or '',
         }
-
 
 class Task(models.Model):
     route = models.CharField(max_length=200)

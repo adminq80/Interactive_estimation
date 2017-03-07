@@ -228,7 +228,6 @@ def lobby(message):
         [m.delete() for m in Task.objects.filter(route='kickout', game=game)]
         [m.delete() for m in Task.objects.filter(route='watcher', game=game)]
         cache.set('{}_disconnected_users'.format(game.id), 0)
-        # change users levels
         print("Going to chane the levels")
         changing_levels(game)
         print("Going to start the first round")
@@ -367,7 +366,6 @@ def round_outcome(message):
     return
 
 
-# def game_state_checker(game, state, round_data, users_plots, counter=0):
 def game_state_checker(message):
     game, _ = get_game_from_message(message)
     if not game:
@@ -452,7 +450,6 @@ def start_initial(game):
                             })
     initial(game, round_data, users_plots)
     DelayedMessageExecutor(create_game_task('game_state', game), 1).send()
-    # task.deferLater(reactor, 1, game_state_checker, game, state, round_data, users_plots).addErrback(twisted_error)
 
 
 def initial(game, round_data, users_plots, message=None):
@@ -474,7 +471,6 @@ def initial(game, round_data, users_plots, message=None):
             data['plot'] = i['plot']
             messages[user] = user_packet(**data)
         game.fast_users_send(messages)
-        # game.user_send(user, **data)
 
 
 def start_interactive(game, round_data, users_plots):
@@ -503,8 +499,6 @@ def interactive(user, game, round_data):
     score = user.get_score
 
     return user_packet(action='interactive', score=score, following=following, seconds=SECONDS, **round_data)
-    # game.user_send(user, action='interactive', score=score, gain=gain,
-    #                following=following, seconds=SECONDS, **round_data)
 
 
 def start_outcome(game, round_data, users_plots):
@@ -522,10 +516,6 @@ def start_outcome(game, round_data, users_plots):
     DelayedMessageExecutor(create_game_task('game_state', game), 1).send()
 
 
-def outcome_loop(l):
-    return [{'username': u.username, 'avatar': u.get_avatar} for u in l]
-
-
 def user_packet(**kwargs):
     return json.dumps(kwargs)
 
@@ -533,21 +523,16 @@ def user_packet(**kwargs):
 def outcome(user, game: InteractiveStatic, round_data):
     current_round = InteractiveStaticRound.objects.get(user=user, round_order=round_data.get('current_round'))
 
-    rest_of_users = outcome_loop(current_round.game.users.filter(~Q(username__in=current_round.following.values(
-        'username'))).exclude(username=user.username))
+    rest_of_users = current_round.game.users.filter(~Q(username__in=current_round.following.values(
+        'username'))).exclude(username=user.username)
 
-    currently_following = outcome_loop(current_round.following.all())
+    currently_following = current_round.following.all()
     score, gain = user.get_score_and_gain
 
     return user_packet(action='outcome', guess=float(current_round.get_influenced_guess()),score=score, gain=gain,
                        following=currently_following, all_players=rest_of_users,
                        max_following=game.constraints.max_following, correct_answer=float(current_round.plot.answer),
                        seconds=OUTCOME_SECONDS, **round_data)
-
-    # game.user_send(user, action='outcome', guess=float(current_round.get_influenced_guess()),
-    #                score=score, gain=gain, following=currently_following, all_players=rest_of_users,
-    #                max_following=game.constraints.max_following, correct_answer=float(current_round.plot.answer),
-    #                seconds=SECONDS, **round_data)
 
 
 def get_game_from_message(message):

@@ -117,6 +117,9 @@ class Survey(models.Model):
     age = models.PositiveSmallIntegerField(null=True)
     gender = models.CharField(max_length=30, blank=True, null=True)
     feedback = models.TextField(null=True)
+    bugs = models.TextField(null=True)
+    pay = models.TextField(null=True)
+    education = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return self.username
