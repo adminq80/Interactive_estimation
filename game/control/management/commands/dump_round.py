@@ -45,7 +45,10 @@ class Command(BaseCommand):
                 survey = None
             d['survey'] = survey
             d['rounds'] = [r.round_data() for r in rounds]
-            d['completed_hit'] = c.max_rounds == len(d['rounds'])
+            if c.max_rounds == len(d['rounds']):
+                d['hit_status'] = 'completed'
+            else:
+                d['hit_status'] = 'disconnected'
             users.append(d)
         print('Users = {}'.format(len(users)))
         print(json.dumps(users, cls=DecimalEncoder))
