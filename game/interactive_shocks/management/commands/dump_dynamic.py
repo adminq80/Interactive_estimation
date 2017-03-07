@@ -30,7 +30,7 @@ class Command(BaseCommand):
                     continue
                 d = {'user': u.username,
                      'final_score': u.get_score,
-                     'condition': 'control',
+                     'condition': 'dynamic',
                      'time_created': u.date_joined,
                      'game_id': game.id,
                      'unanswered': rounds.filter(guess__lt=0).count(),
