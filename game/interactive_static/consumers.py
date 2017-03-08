@@ -532,14 +532,9 @@ def user_packet(**kwargs):
 def outcome(user, game: InteractiveStatic, round_data):
     current_round = InteractiveStaticRound.objects.get(user=user, round_order=round_data.get('current_round'))
 
-    rest_of_users = current_round.game.users.filter(~Q(username__in=current_round.following.values(
-        'username'))).exclude(username=user.username)
-
-    currently_following = current_round.following.all()
     score, gain = user.get_score_and_gain
 
-    return user_packet(action='outcome', guess=float(current_round.get_influenced_guess()),score=score, gain=gain,
-                       following=currently_following, all_players=rest_of_users,
+    return user_packet(action='outcome', guess=float(current_round.get_influenced_guess()), score=score, gain=gain,
                        max_following=game.constraints.max_following, correct_answer=float(current_round.plot.answer),
                        seconds=OUTCOME_SECONDS, **round_data)
 
