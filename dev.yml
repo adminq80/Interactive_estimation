@@ -31,21 +31,5 @@ services:
       - postgres
       - redis
 
-
-
-  pycharm:
-    build:
-      context: .
-      dockerfile: ./compose/django/Dockerfile-dev
-    depends_on:
-      - postgres
-    environment:
-      - POSTGRES_USER=game
-    volumes:
-      - .:/app
-    links:
-      - postgres
-
-
   redis:
     image: redis:latest

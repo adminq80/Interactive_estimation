@@ -374,7 +374,7 @@ def game_state_checker(message):
     state = data.get('state')
     round_data = data.get('round_data')
     users_plots = data.get('users_plots')
-    counter = data.get('counter')
+    counter = (timezone.now() - data.get('counter')).seconds
 
     if counter == SECONDS or (counter == OUTCOME_SECONDS and state == 'outcome'):
         # move to the next state
@@ -419,9 +419,6 @@ def game_state_checker(message):
             start_initial(game)
             return
 
-    counter += 1
-    data['counter'] = counter
-    cache.set(game.id, data)
     DelayedMessageExecutor(create_game_task('game_state', game), 1).send()
 
 
@@ -446,7 +443,7 @@ def start_initial(game):
         cache.set(game.id, {'state': state,
                             'round_data': round_data,
                             'users_plots': users_plots,
-                            'counter': 0,
+                            'counter': timezone.now(),
                             })
     initial(game, round_data, users_plots)
     DelayedMessageExecutor(create_game_task('game_state', game), 1).send()
@@ -478,7 +475,7 @@ def start_interactive(game, round_data, users_plots):
     cache.set(game.id, {'state': state,
                         'round_data': round_data,
                         'users_plots': users_plots,
-                        'counter': 0,
+                        'counter': timezone.now(),
                         })
     messages = {}
     for i in users_plots:
@@ -505,7 +502,7 @@ def start_outcome(game, round_data, users_plots):
     cache.set(game.id, {'state': 'outcome',
                         'round_data': round_data,
                         'users_plots': users_plots,
-                        'counter': 0,
+                        'counter': timezone.now(),
                         })
     messages = {}
     for i in users_plots:
