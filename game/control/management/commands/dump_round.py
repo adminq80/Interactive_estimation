@@ -1,22 +1,11 @@
 import json
-import datetime
-from decimal import Decimal
 
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from game.round.models import Round
 from game.control.models import Control, Survey
 from game.users.models import User
 
-
-class DecimalEncoder(json.JSONEncoder):
-    def default(self, o):
-        if isinstance(o, Decimal):
-            return float(o)
-        if isinstance(o, datetime.datetime):
-            return str(o)
-        if isinstance(o, datetime.timedelta):
-            return o.seconds
-        return super(DecimalEncoder, self).default(o)
+from game.contrib.decimal_encoder import DecimalEncoder
 
 
 class Command(BaseCommand):
