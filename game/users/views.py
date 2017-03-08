@@ -1,28 +1,17 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 
-from random import choice
-
 from django.core.urlresolvers import reverse
-from django.db import IntegrityError
-from django.db import transaction
+
 from django.http import Http404
 from django.views.generic import DetailView, ListView, RedirectView, UpdateView
 
-from django.shortcuts import redirect, render
-from django.contrib.auth import login, authenticate
-
-from django.contrib.auth.decorators import login_required
-
+from django.shortcuts import redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from django.core.mail import send_mass_mail
+from django.contrib.auth import logout
 
-from game.interactive.models import Interactive
-from game.control.models import Control
-
-from .models import User
-from .forms import UserForm
+from .models import User, UserTypes
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):
@@ -66,15 +55,32 @@ class UserListView(LoginRequiredMixin, ListView):
 
 def start(request):
 
-    c = choice(['i', 'c'])
-
     if request.user.is_authenticated:
         print("User is authenticated")
         c = request.user.game_type
+    else:
+        choices = UserTypes.objects.all()[0]
+        types = choices.types.split(',')
+        t = types.pop(0)
+        d = {
+            '0': 'control',
+            '1': 'static',
+            '2': 'dynamic',
+        }
+        c = d[t]
+        choices.types = ','.join(types)
+        choices.save()
 
-    if c == 'i':
-        return redirect('interactive:lobby')
-    elif c == 'c':
+    if c == 'dynamic':
+        return redirect('dynamic_mode:lobby')
+    elif c == 'control':
         return redirect('control:play')
+    elif c == 'static':
+        return redirect('static_mode:lobby')
     else:
         raise Http404('{} not implemented'.format(c))
+
+
+def user_logout(request):
+    logout(request)
+    return redirect('/')

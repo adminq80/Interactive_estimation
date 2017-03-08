@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+{% load staticfiles i18n %}
+
+{% block container %}
+<div class="container">
+  <div class="overview">
+
+  {#Edit text#}
+    <div class="overview-1" id="overview-1" hidden>
+      <h2>Game Instructions</h2>
+      <p>
+        <br>After completing the instructions and comprehension check, you will enter the game's lobby. The game will start automatically after 12 players enter the lobby, and you will hear a bell ring. <br> The game consists of <b>20 rounds</b>. At each round you will see a scatter plot and be asked to <b>estimate the correlation of the X and Y variables</b>. <a href="https://en.wikipedia.org/wiki/Pearson_product-moment_correlation_coefficient">Correlation</a> measures how strongly two variables are related to each other. For example, the graph below depicts the correlation between age and height. As age increases, height tends to increase as well.
+      </p>
+      <p>
+          <div><img src="/static/images/height-age.png" width="501px" /></div>
+      </p>
+      <div class="row">
+          <a class="btn btn-primary nextButton" href="#overview-2">Next</a>
+{#        <input class='btn btn-primary nextButton' type="submit" id="submit" value="Next">#}
+      </div>
+    </div>
+
+
+      <div class="overview-2" id="overview-2" hidden>
+      <h2>Game Instructions</h2>
+      <p>
+      In this game, <b>your correlation guess can range from 0 to 1</b>, and the closer the points fit to a straight line, the closer the correlation will be to 1. No calculations are necessary, just make your best estimate.
+      </p>
+      <div><img src="/static/images/correlation-examples.png" width="650px" /></div>
+      <div class="row">
+          <a class='btn btn-primary prevButton' href="#overview-1">Previous</a>
+          <a class="btn btn-primary nextButton" href="#overview-3">Next</a>
+      </div>
+      </div>
+
+
+    <div class="overview-3" id="overview-3" hidden>
+      <h2>Game Instructions</h2>
+      <p>
+      Note that many different scatter plots may have the same correlation value. All 4 of the scatter plots below have a correlation of 0.82.
+      </p>
+      <div><img src="/static/images/same-correlation.png" /></div>
+      <div class="row">
+        <a class='btn btn-primary prevButton' href="#overview-2">Previous</a>
+          <a class="btn btn-primary nextButton" href="#overview-4">Next</a>
+      </div>
+    </div>
+
+
+    <div class="overview-4" id="overview-4" hidden>
+      <h2>Game Instructions</h2>
+     <p>
+    Each round will consist of 3 stages: "Your Guess", "Interactive Guess", and "Round Outcome".
+    </p>
+
+    <p>
+    1. <strong>Your Guess</strong>: Guess the correlation of the plot shown. Use the slider below the plot to pick a value, and click "Submit" when you are ready. You can take maximum 30 seconds to submit.
+    </p>
+      <div><img src="/static/images/static_stage1.png" class="screenshot"/></div>
+      <p>   </p>
+      <div class="row">
+        <a class='btn btn-primary prevButton' href="#overview-3">Previous</a>
+          <a class="btn btn-primary nextButton" href="#overview-5">Next</a>
+      </div>
+    </div>
+
+
+    <div class="overview-5" id="overview-5" hidden>
+      <h2>Game Instructions</h2>
+      <p>
+      2. <b>Interactive Guess:</b>  Here you will see the guesses of other players. You can change your guess by using the slider bar, and see how other players change their guesses in real-time. Click "Submit" when you are ready to submit your final guess. You can take maximum 30 seconds to submit.<br>
+      </p>
+      <div><img src="/static/images/static_stage2.png" class="screenshot"/></div>
+      <p>   </p>
+      <div class="row">
+        <a class='btn btn-primary prevButton' href="#overview-4">Previous</a>
+          <a class="btn btn-primary nextButton" href="#overview-6">Next</a>
+      </div>
+    </div>
+
+
+    <div class="overview-6" id="overview-6" hidden>
+      <h2>Game Instructions</h2>
+      <p>
+      3. <b>Round Overview</b>: See your final guess vs. the actual correlation value, and the score you earned. <br>
+      See the scores of all players, and choose who you want to follow in the next round. Use the unfollow and follow buttons to choose a maximum of 3 players.<br>
+      Click “Next” to go to the next round.
+      </p>
+      <div><img src="/static/images/dynamic_stage3.png" width="130%"/></div>
+      <p>   </p>
+      <div class="row">
+        <a class='btn btn-primary prevButton' href="#overview-5">Previous</a>
+          <a class="btn btn-primary nextButton" href="#overview-7">Next</a>
+      </div>
+    </div>
+
+
+    <div class="overview-7" id="overview-7" hidden>
+      <h2>Comprehension Check</h2>
+      <p>   </p>
+      <form class="form" method="post">
+      {% csrf_token %}
+          {% for error in form.non_field_errors %}
+              <ul>
+                  <li><b>{{ error }}</b></li>
+              </ul>
+          {% endfor %}
+          <div class="form-group">
+              {{ form.q1.label }}
+              {% for option in form.q1 %}
+                  <div>
+                      {{ option }}
+                  </div>
+              {% endfor %}
+          </div>
+          <div class="form-group">
+              {{ form.q2.label }} {{ form.q2 }} {{ form.q3.label }} {{ form.q3 }}
+          </div>
+          <div class="form-group">
+              {{ form.q4.label }}
+              {% for option in form.q4 %}
+                  <div>
+                      {{ option }}
+                  </div>
+              {% endfor %}
+          </div>
+          <div class="form-group">
+              {{ form.q5.label }}
+              {% for option in form.q5 %}
+                  <div>
+                      {{ option }}
+                  </div>
+              {% endfor %}
+          </div>
+          <div class="form-group">
+              {{ form.q6.label }}
+              {% for option in form.q6 %}
+                  <div>
+                      {{ option }}
+                  </div>
+              {% endfor %}
+          </div>
+      <div class="row">
+          <a class='btn btn-primary prevButton' href="#overview-6">Previous</a>
+          <input type="submit" class="btn btn-primary" name="submit" />
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_javascript %}
+  <script src="{% static 'js/instructions.js' %}"></script>
+{% endblock %}

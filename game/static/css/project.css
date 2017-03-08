@@ -90,11 +90,11 @@ html, body {
 }
 
 .example {
-  width: 30%;
+  width: 40%;
 }
 
 .sample {
-  width: 200px;
+  width: 500px;
 }
 #myModal {
   position: absolute;
@@ -104,15 +104,94 @@ html, body {
   -webkit-transform: translate(-50%, -50%);
 }
 
-<<<<<<< HEAD
+.toolTip {
+  z-index: 2;
+}
+
+.loading {
+  width: 50px;
+  margin: auto;
+  display: block;
+}
+
+.overview {
+  width: 60%;
+  margin: auto;
+}
+.tooltip {
+  color: red #important;
+}
+
+#sampleSlider {
+  width: 280px;
+}
+
+.submitButton {
+  margin-left: 200px;
+}
+
+.screenshot {
+  width: 100%;
+}
+
+.followingSlider {
+  margin-top: 10px;
+  width: 100%;
+  opacity: 1;
+}
+
+.img-responsive {
+  width: 100%;
+}
+
+.faded {
+  opacity: 0.2;
+}
+
+.user-avatar {
+  width: 40px;
+}
+.user-avatar-large{
+}
+.border {
+  border: 1px solid black;
+}
+
+.highlight {
+  border: 2px solid #5ce85c;
+}
+
+.hide {
+  display: none;
+}
+
+#roundAnswer {
+  color: #3366ff;
+}
 blockquote.instr {
-    font-size: 16px;
-=======
+  font-size: 16px;
+}
 #age {
   width: 100px;
 }
 
 .gender {
   margin-left: 20px;
->>>>>>> bfb49ebec0260de6b46a3131e33ce1f6243e94ed
+}
+
+.low-gain{
+  color: #e60000;
+}
+.medium-gain{
+  color: #ffa31a;
+}
+.high-gain{
+  color: #00cc44;
+}
+.true-answer{
+  border: 12px solid #3366ff !important;
+}
+
+#answerSlider{
+  opacity: 1 !important;
 }

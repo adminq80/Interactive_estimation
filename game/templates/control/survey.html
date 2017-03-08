@@ -3,34 +3,62 @@
 {% block container %}
 <div class="survey">
 <h2>Exit Survey</h2>
- <p>Thank you for participating. Your final score is {{score}}.</p>
-  <p>You do not have to provide any information you feel uncomfortable with.</p>
+    <p>Please submit the following code to receive your bonus</p>
+    <p><strong>{{user.username}}</strong></p>
+    <p>Your final <b>bonus</b> is ${{score}} in addition of the <b>base reward</b> for completing the HIT.</p>
+    <p>Please answer the following short survey. You do not have to provide any information you feel uncomfortable with.</p>
+<hr>
   <form class="form-inline" action="." method="post">
     {% csrf_token %}
+        <div>
+            {% if form.errors %}
+                {{ form.errors }}
+            {% endif %}
+        </div>
+            <div class="form-group">
+                <label for="age">
+                    Age
+                </label>
+                <input class="form-control" id="age" name="age">
+            </div>
+            <div class="form-group">
+                <label for="gender">
+                    Gender
+                </label>
+                <input class="form-control" type="text" id="gender" name="gender"/>
+            </div><div><br></div>
+        <div class="form-group">
+            <label for="education">Highest educational qualification</label> <br>
+            <input type="radio" id='education' name="education" value="highschool">High School<br>
+            <input type="radio" id='education' name="education" value="bachelor">US Bachelor's degree<br>
+            <input type="radio" id='education' name="education" value="master">Master's or higher<br>
+            <input type="radio" id='education' name="education" value="other">Other<br>
+        </div><hr>
+  <div class="form-group">
+      <label for="bugs">Have you noticed any bugs or problems in the game?</label><br>
+      <textarea id='bugs' rows="1" cols="60" class="form-control" name="bugs"></textarea>
+  </div>
+  <div class="form-group">
+      <label for="pay">Do you feel the pay was fair?</label><br>
+      <textarea id='pay' rows='1' cols="60" class="form-control" name="pay"></textarea>
+  </div>
       <div class="form-group">
-          {% if form.errors %}
-            {{ form.errors }}
-          {% endif %}
-      <p>Please provide your age, gender below and feedback.</p>
-      <span class="age">Age <input class="form-control" id="age" name="age"></span>
-      <span class="gender">
-      Gender
-        &nbsp;
-        <input class="form-check-input" type="radio" name="gender" id="male" value="m"> Male
-        &nbsp;
-        <input class="form-check-input" type="radio" name="gender" id="female" value="f"> Female
-      </span>
-    </div>
-    <div class="form-group">
-      <br>
-      <p>
-      2. Please enter any feedback, including problems you encountered.
-      </p>
-      <div class="col-xs-12">
-        <textarea class="form-control" name="feedback"></textarea>
+          <label for="feedback">
+              Please enter any feedback, including problems you encountered.
+          </label>
+        <textarea id='feedback' rows="1" cols="60" class="form-control" name="feedback"></textarea><br>
       </div>
-    </div>
-        <button class="btn btn-primary nextButton" type="submit">Submit HIT</button>
+  <div class="form-group">
+      <button class="btn btn-primary nextButton" type="submit">Submit HIT</button>
+  </div>
   </form>
 </div>
+{% endblock %}
+
+{% block extra_javascript %}
+    <script>
+    (function(){
+        document.querySelector('.logout').style.display = 'none';
+    })();
+    </script>
 {% endblock %}

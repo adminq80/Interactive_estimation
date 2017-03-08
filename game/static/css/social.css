@@ -9,8 +9,12 @@
 
 .avatar {
   margin-left: 5px;
-  margin-right: 10px;
-  width: 40px;
+  margin-right: 5px;
+  width: 30px;
+}
+.avatar-large{
+  margin: 0 10px 20px 10px;
+  width: 55px;
 }
 
 .plusIcon {
@@ -34,3 +38,4 @@
 #unfollow_list td {
   height: 120px;
 }
+

@@ -47,10 +47,5 @@ services:
       - postgres
 
 
-
   redis:
     image: redis:latest
-
-
-
-

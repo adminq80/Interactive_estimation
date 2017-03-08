@@ -5,17 +5,15 @@
 {% endblock %}
 
 <div>
-  <div id="timer" class="info">
-    Timer
-    <div class="box">
-      <div id="counter"></div>
+    <div>
+        <h6 style="white-space: nowrap;"><b>You are:</b></h6>
+    <img src='/static/{{ user.get_avatar }}' class="avatar-large user-avatar-large" />
     </div>
+  <div id="timer" class="info">
+    <span id="counter"></span>
   </div>
   <div class="info">
-    Score 
-    <div class="box">
-      {{ user.get_score }}
-    </div>
+    Total score: <br><span class="user_score">{{ score }}</span> <img id="coin" src="/static/images/coin.png" />
   </div>
-  <div class="info">Plots remaining: {{ remaining }} <span id="remaining"></span></div>
+  <div class="info">Rounds left: <br>{{ remaining }} <span id="remaining"></span></div>
 </div>

@@ -1,27 +1,28 @@
 import math
 
 
-def calculate_score(rounds):
-    """
-    :param rounds:
-    :return score:
+def get_guess(rnd):
+    if hasattr(rnd, 'influenced_guess'):
+        return rnd.influenced_guess
+    return rnd.guess
 
-     cumScore = 0
-     if corr-guess =! 0 :
-        cumScore+=1/sqrt((corr-guess)**2)
-     else:
-        cumScore += 100
-    """
-    score = 0.0
-    for r in rounds:
-        guess = r.guess
-        answer = r.plot.answer
-        error = math.fabs(answer - guess)
-        #if calc == 0.0:
-        #    score += 100
-        #else:
-        #    if guess > 0:
-        #        score += 1/math.sqrt(calc**2)
-        score += (1.0-error)**2
-            
-    return round(score, 2)
+
+def get_error(rnd):
+    guess = get_guess(rnd)
+    if guess is None or guess < 0:
+        return 0.0
+    answer = rnd.plot.answer
+    error = math.fabs(answer - guess)
+    return (1.0 - error) ** 2
+
+
+def score_gain(rounds):
+    l = [get_error(r) for r in rounds]
+    score = sum(l[:-1])  # Sum all errors except the last one
+    gain = l[-1]
+    return round(float(score), 2), round(float(gain), 2)
+
+
+def calculate_score(rounds):
+    score = sum([get_error(r) for r in rounds])
+    return round(float(score), 2)

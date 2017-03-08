@@ -6,14 +6,18 @@ function countdown() {
   function tick() {
     seconds--;
     counter.innerHTML = "0:" + (seconds < 10 ? "0" : "") + String(seconds);
-    if( seconds > 0 ) {
-        setTimeout(tick, 1000);
+    if(seconds > 0) {
+      setTimeout(tick, 1000);
+      if(seconds == 10) {
+        $("#counter").css("color", "red");
+        $("#counter").css("font-size", "32px");
+      }
     } else {
       var submit = $("#submit")[0];
+      $("#submit").removeAttr("disabled");
       submit.click();
     }
   }
-  console.log(counter);
   if(counter) {
     tick();
   }
@@ -28,9 +32,11 @@ $("#slider").slider({
     $('#correlation')[0].innerHTML = ui.value;
   },
   change: function(event, ui) {
-    $('.ui-slider-handle').show();
+    $('#slider > .ui-slider-handle').show();
+    $("#submit").removeAttr("disabled");
     $('#guess').val(ui.value);
   }
 });
 
-$('.ui-slider-handle').hide();
+$('#slider > .ui-slider-handle').hide();
+

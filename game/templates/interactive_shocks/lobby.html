@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block breadcrumbs %}
+<div id="breadcrumbs" hidden="true">
+  <ul class="nav nav-wizard">
+    <li>Current Round: <span id="currentRound"></span></li>
+    <li id="initial"><a>Initial Guess</a></li>
+    <li id="interactive"><a>Interactive Guess</a></li>
+    <li id="outcome"><a>Round Outcome</a></li>
+  </ul>
+</div>
+{% endblock %}
+
+{% block container %}
+<div id="lobby">
+  <div class="row">
+      <div class="col-md-12" id="waiting">There are currently a total of
+          <b><span id="connected_players">0</span> out of <span id="total_players">0</span>
+          required participants</b> waiting for the game to start.</div>
+  </div>
+  <p>Please wait a few moments while we try to find the needed participants.</p>
+  <p>If we can't find enough participants within {{lobbyTimeout}} minutes, we will end the HIT and pay you for your time.</p>
+  <h>Please make sure your sound is on as a bell will ring to indicate the start of a new game.</h>
+</div>
+
+<div id="game" hidden>
+  <div class="form">
+    <div class="col-md-1">
+      {% include 'components/timer.html' %}
+    </div>
+
+    <div class="col-md-5 guess" hidden>
+      <div>
+        <img src='#' class="img-responsive"/>
+      </div>
+      <div id="picker">
+        {% include 'components/slider.html' %}
+        <span id="submitText" class="hide">If this is your final guess, please click</span><input type="submit" value="Submit" id="submit" class="btn btn-success nextButton" disabled>
+      </div>
+    </div>
+
+    <div class="col-md-5 outcome" hidden>
+      <div>
+        <img src='#' class="img-responsive"/>
+      </div>
+      <div class='row'>
+        <div id="answerSlider">
+            <div class="ui-slider-handle"></div>
+        </div>
+        <span id="min">0</span>
+        <span class="quarter">0.25</span>
+        <span class="quarter">0.5</span>
+        <span class="quarter">0.75</span>
+        <span id="max">1</span>
+      </div>
+      <div class="row">
+        <div class="col-md-5"><b style="white-space: nowrap">Your guess:</b></div>
+        <div class="col-md-2"><span id="yourGuess"></span></div>
+      </div>
+      <div class="row">
+        <div class="col-md-5"><b style="white-space: nowrap">Actual correlation:</b></div>
+        <div class="col-md-2"><span id="roundAnswer"></span></div>
+      </div>
+      <div class="row">
+        <div class="col-md-5"><b style="white-space: nowrap">Score increment:</b></div>
+        <div class="col-md-2"><b id="roundBonus"></b></div>
+      </div>
+      <div>
+        <input type="submit" value="Submit" id="submit" class="btn btn-success nextButton">
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="outcome" hidden>
+          <div><b>Score:</b> total (<b id='user_round_score2'>+ increment</b>)</div>
+        <div>
+          <img src='' class="avatar user-avatar" />
+            <span class="user_score">0.0</span> (+<b><span id="user_round_score"></span></b>) <img id="coin" src="/static/images/coin.png" />
+        </div>
+        <br>
+        <b>You are following:</b>
+        <table class="table table-bordered" id="unfollow_list">
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+
+      <div id="interactiveGuess" hidden>
+
+        <div><b>You are following:</b></div>
+        <table class="table table-bordered" id="following_list">
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="outcome" hidden>
+        <b>You can follow:</b>
+        <div id="follow_list">
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            Waiting for other players...
+            <img src='/static/images/loading.gif' class="loading"/>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div id="dialog-confirm" title="Remain in lobby?">
+        <p>You have been waiting in the lobby for <span id="waiting_time">10</span>.  Please, press 'Remain in lobby' to keep waiting for the rest of the players. Alternatively, press 'Exit' to receive the base pay and exit the game.</p>
+      </div>
+{% endblock %}
+
+{% block extra_javascript %}
+<script src="{% static "js/reconnecting-websocket.min.js" %}" type="text/javascript"></script>
+<script src="{% static "js/interactive.js" %}"></script>
+{% endblock %}

@@ -36,6 +36,7 @@ DJANGO_APPS = (
 
     # Channels
     'channels',
+    'channels.delay',
 )
 THIRD_PARTY_APPS = (
     'crispy_forms',  # Form layouts
@@ -50,8 +51,10 @@ LOCAL_APPS = (
     'game.users.apps.UsersConfig',
     # Your stuff: custom apps go here
     'game.round',
-    'game.interactive',
+    # 'game.interactive',
     'game.control',
+    'game.interactive_shocks',
+    'game.interactive_static',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -250,6 +253,7 @@ CHANNEL_LAYERS = {
             "hosts": [env('REDIS_URL')],
         },
         "ROUTING": "config.routing.channel_routing",
+        # "BACKEND": "asgiref.inmemory.ChannelLayer",
     },
 }
 
