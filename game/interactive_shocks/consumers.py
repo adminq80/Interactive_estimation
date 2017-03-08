@@ -9,6 +9,8 @@ from django.db.models import Count
 from django.db.models import Q
 from django.urls import reverse
 
+from twisted.internet import task, reactor
+
 from channels import Channel
 from channels.auth import channel_session_user_from_http, channel_session_user
 from django.utils import timezone
@@ -417,11 +419,16 @@ def round_outcome(message):
     return
 
 
-# def game_state_checker(game, state, round_data, users_plots, counter=0):
-def game_state_checker(message):
-    game, _ = get_game_from_message(message)
-    if not game:
-        return
+def twisted_error(*args, **kwargs):
+    print('Twisted Error')
+    print(args)
+    for e in args:
+        print(e)
+    print('*' * 20)
+    print(kwargs)
+
+
+def game_state_checker(game):
     data = cache.get(game.id)
     state = data.get('state')
     round_data = data.get('round_data')
@@ -470,7 +477,8 @@ def game_state_checker(message):
         if r == 0:
             start_initial(game)
             return
-    DelayedMessageExecutor(create_game_task('game_state', game), 1).send()
+    # DelayedMessageExecutor(create_game_task('game_state', game), 1).send()
+    task.deferLater(reactor, 1, game_state_checker, game).addErrback(twisted_error)
 
 
 def create_game_task(route, game, path='/dynamic_mode/lobby', payload=None):
@@ -497,8 +505,8 @@ def start_initial(game):
                             'counter': timezone.now(),
                             })
     initial(game, round_data, users_plots)
-    DelayedMessageExecutor(create_game_task('game_state', game), 1).send()
-    # task.deferLater(reactor, 1, game_state_checker, game, state, round_data, users_plots).addErrback(twisted_error)
+    # DelayedMessageExecutor(create_game_task('game_state', game), 1).send()
+    task.deferLater(reactor, 1, game_state_checker, game).addErrback(twisted_error)
 
 
 def initial(game, round_data, users_plots, message=None):
@@ -536,7 +544,8 @@ def start_interactive(game, round_data, users_plots):
         round_data['plot'] = i['plot']
         messages[user] = interactive(user, game, round_data)
     game.fast_users_send(messages)
-    DelayedMessageExecutor(create_game_task('game_state', game), 1).send()
+    # DelayedMessageExecutor(create_game_task('game_state', game), 1).send()
+    task.deferLater(reactor, 1, game_state_checker, game).addErrback(twisted_error)
 
 
 def interactive(user, game, round_data):
@@ -565,7 +574,8 @@ def start_outcome(game, round_data, users_plots):
         round_data['plot'] = i['plot']
         messages[user] = outcome(user, game, round_data)
     game.fast_users_send(messages)
-    DelayedMessageExecutor(create_game_task('game_state', game), 1).send()
+    # DelayedMessageExecutor(create_game_task('game_state', game), 1).send()
+    task.deferLater(reactor, 1, game_state_checker, game).addErrback(twisted_error)
 
 
 def outcome_loop(l):
