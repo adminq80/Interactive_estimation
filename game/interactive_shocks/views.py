@@ -61,7 +61,6 @@ def exit_survey(request):
 def done(request):
     return render(request, 'interactive_shocks/done.html')
 
-import socket
 
 def instruction(request):
     form = CheckForm(request.POST or None)
@@ -85,5 +84,4 @@ def instruction(request):
                                                                     'rounds_num': game_settings.max_rounds,
                                                                     'following_num': game_settings.max_following,
                                                                     'form': form,
-                                                                    'host': socket.gethostname(),
                                                                     })
