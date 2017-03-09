@@ -36,4 +36,4 @@ services:
     ports:
       - "0.0.0.0:80:80"
     volumes:
-      - django_static:/etc/nginx/html/static
+      - django_static:/static
