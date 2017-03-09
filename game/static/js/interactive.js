@@ -250,14 +250,17 @@ function start_outcome(data){
         $($("#answerSlider > .ui-slider-handle")[0]).addClass("true-answer");
       }
 
-      percentile_generator(data);
-      var user_data = JSON.parse(sessionStorage.getItem('self'));
       $("#roundAnswer").html(data.correct_answer);
-      $('#user_round_score').html(user_data.gain);
-      $('#user_round_score2').removeClass('high-gain medium-gain low-gain').addClass(class_name_for_score(user_data.batch));
-      $('#user_round_score').removeClass('high-gain medium-gain low-gain').addClass(class_name_for_score(user_data.batch));
-      $("#roundBonus").html('+' + user_data.gain);
-      $('#roundBonus').removeClass('high-gain medium-gain low-gain').addClass(class_name_for_score(user_data.batch));
+      $("#roundBonus").html('+' + data.gain);
+
+      if (window.location.pathname.match(/dynamic_mode/)) {
+          percentile_generator(data);
+          var user_data = JSON.parse(sessionStorage.getItem('self'));
+          $('#user_round_score').html(data.gain);
+          $('#user_round_score2').removeClass('high-gain medium-gain low-gain').addClass(class_name_for_score(user_data.batch));
+          $('#user_round_score').removeClass('high-gain medium-gain low-gain').addClass(class_name_for_score(user_data.batch));
+          $('#roundBonus').removeClass('high-gain medium-gain low-gain').addClass(class_name_for_score(user_data.batch));
+      }
 
       $(".img-responsive").addClass("faded");
 
