@@ -22,7 +22,7 @@ services:
       - postgres
       - redis
     volumes:
-      - django_static:/app/static
+      - django_static:/app/game/static
     command: /daphne.sh
     env_file: .env
 
@@ -36,4 +36,4 @@ services:
     ports:
       - "0.0.0.0:80:80"
     volumes:
-      - django_static:/static
+      - django_static:/etc/nginx/html/static
