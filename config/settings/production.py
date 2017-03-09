@@ -101,7 +101,7 @@ INSTALLED_APPS += (
 
 # URL that handles the media served from MEDIA_ROOT, used for managing
 # stored files.
-MEDIA_URL = '/static/'
+MEDIA_URL = '/media/'
 
 
 # Static Assets
