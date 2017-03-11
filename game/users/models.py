@@ -56,6 +56,9 @@ class User(AbstractUser):
     @property
     def get_score_and_gain(self):
         played_rounds = self.__get_user_cls().objects.filter(user=self).order_by('round_order')
+        if self.game_type == 'dynamic' or self.game_type == 'static':
+            count = played_rounds.count() - 1
+            played_rounds = played_rounds[:count]
         return score_gain(played_rounds)
 
     @property

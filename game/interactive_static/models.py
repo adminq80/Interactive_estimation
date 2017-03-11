@@ -62,7 +62,7 @@ class InteractiveStaticRound(Round):
     def round_data(self):
         data = super(InteractiveStaticRound, self).round_data()
         data['game_id'] = self.game.id
-        data['condition'] = 'interactive'
+        data['condition'] = 'static'
         data['revised_guess'] = self.influenced_guess
         data['game_size'] = self.game.constraints.max_users
         data['following_capacity'] = self.game.constraints.max_following

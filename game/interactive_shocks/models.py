@@ -62,7 +62,7 @@ class InteractiveShocksRound(Round):
     def round_data(self):
         data = super(InteractiveShocksRound, self).round_data()
         data['game_id'] = self.game.id
-        data['condition'] = 'interactive'
+        data['condition'] = 'dynamic'
         data['revised_guess'] = self.influenced_guess
         data['game_size'] = self.game.constraints.max_users
         data['following_capacity'] = self.game.constraints.max_following
@@ -138,6 +138,7 @@ class Survey(models.Model):
             'pay': self.pay or '',
             'education': self.education or '',
         }
+
 
 class Task(models.Model):
     route = models.CharField(max_length=200)

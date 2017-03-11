@@ -6,10 +6,10 @@ from decimal import Decimal
 from django.core.cache import cache
 from django.db import transaction
 from django.db.models import Count
-from django.db.models import Q
 from django.urls import reverse
 
-from twisted.internet import task, reactor
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from channels import Channel
 from channels.auth import channel_session_user_from_http, channel_session_user
@@ -230,6 +230,11 @@ def lobby(message):
         [m.delete() for m in Task.objects.filter(route='kickout', game=game)]
         [m.delete() for m in Task.objects.filter(route='watcher', game=game)]
         cache.set('{}_disconnected_users'.format(game.id), 0)
+        round_data, users_plots = get_round(game)
+        cache.set(game.id, {
+            'round_data': round_data,
+            'users_plots': users_plots,
+        })
         print("Going to chane the levels")
         changing_levels(game)
         print("Going to start the first round")
@@ -362,7 +367,7 @@ def round_outcome(message):
     except AttributeError:
         game.user_send(user, action='logout', url=reverse('account_logout'))
         return
-    round_ = InteractiveStaticRound.objects.get(user=user, game=game, round_order=round_data.get('current_round'))
+    round_ = InteractiveStaticRound.objects.get(user=user, game=game, round_order=round_data.get('current_round')-1)
     round_.outcome = True
     round_.save()
     return
@@ -377,58 +382,66 @@ def twisted_error(*args, **kwargs):
     print(kwargs)
 
 
-def game_state_checker(game):
+@receiver(post_save, sender=InteractiveStaticRound)
+def handler(sender, instance, created, **kwargs):
+    if not created and (instance.guess or instance.influenced_guess):
+        game = instance.game
+        data = cache.get(game.id)
+        state = data.get('state')
+        round_data = data.get('round_data')
+        users_plots = data.get('users_plots')
+
+        if state == 'initial':
+            r = InteractiveStatic.objects.filter(
+                game=game, round_order=round_data.get('current_round'), guess=None).count()
+            try:
+                r -= cache.get('{}_disconnected_users'.format(game.id))
+            except TypeError:
+                pass
+            if r == 0:
+                [m.delete() for m in Task.objects.filter(route='game_state', game=game)]
+                start_interactive(game, round_data, users_plots)
+                return
+        elif state == 'interactive':
+            r = InteractiveStaticRound.objects.filter(game=game, round_order=round_data.get('current_round'),
+                                                      influenced_guess=None).count()
+            try:
+                r -= cache.get('{}_disconnected_users'.format(game.id))
+            except TypeError:
+                pass
+
+            if r == 0:
+                [m.delete() for m in Task.objects.filter(route='game_state', game=game)]
+                start_outcome(game, round_data, users_plots)
+                return
+        elif state == 'outcome':
+            r = InteractiveStaticRound.objects.filter(game=game, round_order=round_data.get('current_round')-1,
+                                                      outcome=False).count()
+            try:
+                r -= cache.get('{}_disconnected_users'.format(game.id))
+            except TypeError:
+                pass
+
+            if r == 0:
+                [m.delete() for m in Task.objects.filter(route='game_state', game=game)]
+                start_initial(game)
+                return
+
+
+def game_state_checker(message):
+    game, _ = get_game_from_message(message)
     data = cache.get(game.id)
     state = data.get('state')
     round_data = data.get('round_data')
     users_plots = data.get('users_plots')
-    counter = (timezone.now() - data.get('counter')).seconds
-
-    if counter == SECONDS or (counter == OUTCOME_SECONDS and state == 'outcome'):
-        # move to the next state
-        if state == 'initial':
-            start_interactive(game, round_data, users_plots)
-        elif state == 'interactive':
-            start_outcome(game, round_data, users_plots)
-        else:
-            start_initial(game)
-        return
 
     if state == 'initial':
-        r = InteractiveStaticRound.objects.filter(
-            game=game, round_order=round_data.get('current_round'), guess=None).count()
-        try:
-            r -= cache.get('{}_disconnected_users'.format(game.id))
-        except TypeError:
-            pass
-        if r == 0:
-            start_interactive(game, round_data, users_plots)
-            return
+        start_interactive(game, round_data, users_plots)
     elif state == 'interactive':
-        r = InteractiveStaticRound.objects.filter(game=game, round_order=round_data.get('current_round'),
-                                                  influenced_guess=None).count()
-        try:
-            r -= cache.get('{}_disconnected_users'.format(game.id))
-        except TypeError:
-            pass
-
-        if r == 0:
-            start_outcome(game, round_data, users_plots)
-            return
-    elif state == 'outcome':
-        r = InteractiveStaticRound.objects.filter(game=game, round_order=round_data.get('current_round'),
-                                                  outcome=False).count()
-        try:
-            r -= cache.get('{}_disconnected_users'.format(game.id))
-        except TypeError:
-            pass
-
-        if r == 0:
-            start_initial(game)
-            return
-
-    # DelayedMessageExecutor(create_game_task('game_state', game), 1).send()
-    task.deferLater(reactor, 1, game_state_checker, game).addErrback(twisted_error)
+        start_outcome(game, round_data, users_plots)
+    else:
+        start_initial(game)
+    return
 
 
 def create_game_task(route, game, path='/static_mode/lobby', payload=None):
@@ -440,23 +453,17 @@ def create_game_task(route, game, path='/static_mode/lobby', payload=None):
 
 
 def start_initial(game):
-    round_data, users_plots = get_round(game)
     state = 'initial'
-
-    if round_data is None:
-        game.end_time = timezone.now()
-        game.save()
-        game.broadcast(action='redirect', url=reverse('static_mode:exit'))
-        return
-    else:
-        cache.set(game.id, {'state': state,
-                            'round_data': round_data,
-                            'users_plots': users_plots,
-                            'counter': timezone.now(),
-                            })
+    d = cache.get(game.id)
+    round_data = d.get('round_data')
+    users_plots = d.get('users_plots')
+    cache.set(game.id, {'state': state,
+                        'round_data': round_data,
+                        'users_plots': users_plots,
+                        'counter': timezone.now(),
+                        })
     initial(game, round_data, users_plots)
-    # DelayedMessageExecutor(create_game_task('game_state', game), 1).send()
-    task.deferLater(reactor, 1, game_state_checker, game).addErrback(twisted_error)
+    DelayedMessageExecutor(create_game_task('game_state', game), SECONDS).send()
 
 
 def initial(game, round_data, users_plots, message=None):
@@ -493,8 +500,7 @@ def start_interactive(game, round_data, users_plots):
         round_data['plot'] = i['plot']
         messages[user] = interactive(user, game, round_data)
     game.fast_users_send(messages)
-    # DelayedMessageExecutor(create_game_task('game_state', game), 1).send()
-    task.deferLater(reactor, 1, game_state_checker, game).addErrback(twisted_error)
+    DelayedMessageExecutor(create_game_task('game_state', game), SECONDS).send()
 
 
 def interactive(user, game, round_data):
@@ -510,6 +516,13 @@ def interactive(user, game, round_data):
 
 
 def start_outcome(game, round_data, users_plots):
+    next_round, next_plots = get_round(game)
+    if next_round is None:
+        game.end_time = timezone.now()
+        game.save()
+        game.broadcast(action='redirect', url=reverse('dynamic_mode:exit'))
+        return
+
     cache.set(game.id, {'state': 'outcome',
                         'round_data': round_data,
                         'users_plots': users_plots,
@@ -521,8 +534,7 @@ def start_outcome(game, round_data, users_plots):
         round_data['plot'] = i['plot']
         messages[user] = outcome(user, game, round_data)
     game.fast_users_send(messages)
-    # DelayedMessageExecutor(create_game_task('game_state', game), 1).send()
-    task.deferLater(reactor, 1, game_state_checker, game).addErrback(twisted_error)
+    DelayedMessageExecutor(create_game_task('game_state', game), OUTCOME_SECONDS).send()
 
 
 def user_packet(**kwargs):
