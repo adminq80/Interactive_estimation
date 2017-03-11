@@ -21,7 +21,7 @@ from .utils import avatar
 from .models import InteractiveShocks, InteractiveShocksRound, Settings, Task
 from .delayed_message import DelayedMessageExecutor
 
-SECONDS = 300
+SECONDS = 30
 
 
 def changing_levels(game):

@@ -147,7 +147,9 @@ function start_interactive(data) {
   // populate list of people you can follow
   $("#follow_list").html("");
   var arr = JSON.parse(sessionStorage.getItem('disconnected')) || [];
-  $.each(data.all_players.sort(comp_score), function(i, user) {
+  var all_players = data.all_players;
+  var following = data.following;
+  $.each(all_players.sort(comp_score), function(i, user) {
     var avatar = '/static/' + user.avatar;
     var user_data = JSON.parse(sessionStorage.getItem(user.username));
     console.log('follow');
@@ -157,7 +159,7 @@ function start_interactive(data) {
   });
   $("#unfollow_list tbody td").html("");
   // populate list of people you can unfollow
-  $.each(data.following.sort(comp_score), function(i, user) {
+  $.each(following.sort(comp_score), function(i, user) {
     var avatar = "/static/"+user.avatar;
     var user_data = JSON.parse(sessionStorage.getItem(user.username));
     console.log('unfollow');
