@@ -21,7 +21,7 @@ from .utils import avatar
 from .models import InteractiveShocks, InteractiveShocksRound, Settings, Task
 from .delayed_message import DelayedMessageExecutor
 
-SECONDS = 30
+SECONDS = 300
 
 
 def changing_levels(game):
@@ -231,14 +231,15 @@ def lobby(message):
         [m.delete() for m in Task.objects.filter(route='watcher', game=game)]
         cache.set('{}_disconnected_users'.format(game.id), 0)
         # change users levels
+        print("Going to chane the levels")
+        changing_levels(game)
+
         round_data, users_plots = get_round(game)
         cache.set(game.id, {
             'round_data': round_data,
             'users_plots': users_plots,
             'state': 'initial',
         })
-        print("Going to chane the levels")
-        changing_levels(game)
         print("Going to start the first round")
         start_initial(game)
     else:
@@ -286,7 +287,7 @@ def ws_receive(message):
 @channel_session_user
 def data_broadcast(message):
     slider = float(message.get('sliderValue'))
-    if slider:
+    if slider >= 0:
         user, game = user_and_game(message)
         try:
             d = cache.get(game.id)
