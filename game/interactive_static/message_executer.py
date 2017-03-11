@@ -18,5 +18,4 @@ class DelayedMessageExecutor:
         self.message = delayed_message
 
     def send(self, immediately=True):
-        with transaction.atomic():
-            Channel('asgi.delay').send(self.message, immediately=immediately)
+        Channel('asgi.delay').send(self.message, immediately=immediately)

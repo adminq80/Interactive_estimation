@@ -74,7 +74,7 @@ def get_round(game, user=None):
         with transaction.atomic():
             i_round.save()
 
-    return {'plot': None, 'remaining': remaining, 'current_round': current_round}, users_plots
+    return {'plot': None, 'remaining': remaining - 1, 'current_round': current_round}, users_plots
 
 
 def user_and_game(message):
@@ -235,6 +235,7 @@ def lobby(message):
         cache.set(game.id, {
             'round_data': round_data,
             'users_plots': users_plots,
+            'state': 'initial',
         })
         print("Going to chane the levels")
         changing_levels(game)
@@ -444,7 +445,7 @@ def create_game_task(route, game, path='/dynamic_mode/lobby', payload=None):
 
 @receiver(post_save, sender=InteractiveShocksRound)
 def handler(sender, instance, created, **kwargs):
-    if not created and (instance.guess or instance.influenced_guess):
+    if not created and (instance.guess or instance.influenced_guess or instance.outcome):
         game = instance.game
         data = cache.get(game.id)
         state = data.get('state')
@@ -489,7 +490,6 @@ def handler(sender, instance, created, **kwargs):
 
 
 def game_state_checker(message):
-    print(type(message))
     game, _ = get_game_from_message(message)
     data = cache.get(game.id)
     state = data.get('state')

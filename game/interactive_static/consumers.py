@@ -74,7 +74,7 @@ def get_round(game, user=None):
         with transaction.atomic():
             i_round.save()
 
-    return {'plot': None, 'remaining': remaining, 'current_round': current_round}, users_plots
+    return {'plot': None, 'remaining': remaining - 1, 'current_round': current_round}, users_plots
 
 
 def user_and_game(message):
@@ -234,6 +234,7 @@ def lobby(message):
         cache.set(game.id, {
             'round_data': round_data,
             'users_plots': users_plots,
+            'state': 'initial',
         })
         print("Going to chane the levels")
         changing_levels(game)
@@ -382,17 +383,24 @@ def twisted_error(*args, **kwargs):
     print(kwargs)
 
 
+def create_game_task(route, game, path='/static_mode/lobby', payload=None):
+    return {'route': route,
+            'game': game,
+            'path': path,
+            'payload': json.dumps(payload),
+            }
+
+
 @receiver(post_save, sender=InteractiveStaticRound)
 def handler(sender, instance, created, **kwargs):
-    if not created and (instance.guess or instance.influenced_guess):
+    if not created and (instance.guess or instance.influenced_guess or instance.outcome):
         game = instance.game
         data = cache.get(game.id)
         state = data.get('state')
         round_data = data.get('round_data')
         users_plots = data.get('users_plots')
-
         if state == 'initial':
-            r = InteractiveStatic.objects.filter(
+            r = InteractiveStaticRound.objects.filter(
                 game=game, round_order=round_data.get('current_round'), guess=None).count()
             try:
                 r -= cache.get('{}_disconnected_users'.format(game.id))
@@ -442,14 +450,6 @@ def game_state_checker(message):
     else:
         start_initial(game)
     return
-
-
-def create_game_task(route, game, path='/static_mode/lobby', payload=None):
-    return {'route': route,
-            'game': game,
-            'path': path,
-            'payload': json.dumps(payload),
-            }
 
 
 def start_initial(game):
@@ -520,12 +520,12 @@ def start_outcome(game, round_data, users_plots):
     if next_round is None:
         game.end_time = timezone.now()
         game.save()
-        game.broadcast(action='redirect', url=reverse('dynamic_mode:exit'))
+        game.broadcast(action='redirect', url=reverse('static_mode:exit'))
         return
 
     cache.set(game.id, {'state': 'outcome',
-                        'round_data': round_data,
-                        'users_plots': users_plots,
+                        'round_data': next_round,
+                        'users_plots': next_plots,
                         'counter': timezone.now(),
                         })
     messages = {}
