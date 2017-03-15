@@ -4,6 +4,7 @@ from functools import wraps
 
 from django.conf import settings
 
+
 def channel_debugger(func):
     name = func.__name__
 

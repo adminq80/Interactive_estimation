@@ -140,6 +140,8 @@ function start_game(data, seconds) {
 function comp_score(a, b) {
   var a_score = parseFloat(a.score) || parseFloat(sessionStorage.getItem(a.username).score);
   var b_score = parseFloat(b.score) || parseFloat(sessionStorage.getItem(b.username).score);
+  console.log('A_score ' + a_score + ' ' + typeof(a_score));
+  console.log('B_score ' + b_score + ' ' + typeof(b_score));
   return a_score >= b_score ? -1: 1;
 }
 

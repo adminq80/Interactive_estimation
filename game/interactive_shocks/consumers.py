@@ -15,6 +15,8 @@ from django.dispatch import receiver
 from channels import Channel
 from channels.auth import channel_session_user_from_http, channel_session_user
 from django.utils import timezone
+
+from game.contrib.calculate import calculate_score
 from game.round.models import Plot
 
 from .utils import avatar
@@ -590,9 +592,29 @@ def start_outcome(game, round_data, users_plots):
     DelayedMessageExecutor(create_game_task('game_state', game), SECONDS).send()
 
 
-def outcome_loop(l):
-    return [{'username': u.username, 'avatar': u.get_avatar, 'score': u.get_score_and_gain[0],
-             'gain': u.get_score_and_gain[1]} for u in l]
+def outcome_loop(l, round_order=0):
+    print('Outcome loop')
+    users = []
+    for u in l:
+        data = cache.get(u.username)
+        if data is None:
+            logging.info('data is None')
+            score, gain = u.get_score_and_gain
+            cache.set(u.username, {'score': score, 'gain': gain, 'round_order': round_order})
+        else:
+            if data.get('round_order') < round_order:
+                logging.info('Going to calculate the next score for the user ')
+                score = data.get('score', 0.0)
+                gain = data.get('gain', 0.0)
+                score += gain
+                gain = calculate_score(InteractiveShocksRound.objects.filter(user=u, round_order=round_order))
+                cache.set(u.username, {'score': score, 'gain': gain, 'round_order': round_order})
+            else:
+                logging.info('Round order has not been changed')
+                score = data.get('score', 0.0)
+                gain = data.get('gain', 0.0)
+        users.append({'username': u.username, 'avatar': u.get_avatar, 'score': score, 'gain': gain})
+    return users
 
 
 def user_packet(**kwargs):
@@ -603,20 +625,15 @@ def outcome(user, game: InteractiveShocks, round_data):
     current_round = InteractiveShocksRound.objects.get(user=user, round_order=round_data.get('current_round'))
 
     rest_of_users = outcome_loop(current_round.game.users.filter(~Q(username__in=current_round.following.values(
-        'username'))).exclude(username=user.username))
+        'username'))).exclude(username=user.username), round_data.get('current_round'))
 
-    currently_following = outcome_loop(current_round.following.all())
+    currently_following = outcome_loop(current_round.following.all(), round_data.get('current_round'))
     score, gain = user.get_score_and_gain
 
     return user_packet(action='outcome', guess=float(current_round.get_influenced_guess()), score=score, gain=gain,
                        following=currently_following, all_players=rest_of_users,
                        max_following=game.constraints.max_following, correct_answer=float(current_round.plot.answer),
                        seconds=SECONDS, **round_data)
-
-    # game.user_send(user, action='outcome', guess=float(current_round.get_influenced_guess()),
-    #                score=score, gain=gain, following=currently_following, all_players=rest_of_users,
-    #                max_following=game.constraints.max_following, correct_answer=float(current_round.plot.answer),
-    #                seconds=SECONDS, **round_data)
 
 
 def get_game_from_message(message):

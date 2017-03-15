@@ -3,6 +3,8 @@ import math
 
 def get_guess(rnd):
     if hasattr(rnd, 'influenced_guess'):
+        if rnd.influenced_guess is None:
+            return rnd.guess
         return rnd.influenced_guess
     return rnd.guess
 
