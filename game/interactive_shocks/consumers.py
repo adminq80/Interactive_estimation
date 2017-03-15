@@ -538,6 +538,10 @@ def initial(game, round_data, users_plots, message=None):
         for i in users_plots:
             user = i['user']
             data['plot'] = i['plot']
+            try:
+                data['score'] = cache.get(user.username).get('score')
+            except AttributeError:
+                data['score'] = 0.0
             messages[user] = user_packet(**data)
         game.fast_users_send(messages)
 
@@ -565,7 +569,10 @@ def interactive(user, game, round_data):
     following = [{'username': u.username, 'avatar': u.get_avatar, 'guess': InteractiveShocksRound.objects.get(
         user=u,
         round_order=round_data.get('current_round')).get_guess()} for u in current_round.following.all()]
-    score = user.get_score
+    try:
+        score = cache.get(user.username).get('score')
+    except AttributeError:
+        score = 0.0
 
     return user_packet(action='interactive', score=score, following=following, seconds=SECONDS, **round_data)
 
@@ -599,16 +606,15 @@ def outcome_loop(l, round_order=0):
         data = cache.get(u.username)
         if data is None:
             logging.info('data is None')
-            score, gain = u.get_score_and_gain
+            score = 0.0
+            gain = calculate_score(InteractiveShocksRound.objects.filter(user=u, round_order=round_order))
             cache.set(u.username, {'score': score, 'gain': gain, 'round_order': round_order})
         else:
             if data.get('round_order') < round_order:
                 logging.info('Going to calculate the next score for the user ')
                 score = data.get('score', 0.0)
-                gain = data.get('gain', 0.0)
-                score += gain
                 gain = calculate_score(InteractiveShocksRound.objects.filter(user=u, round_order=round_order))
-                cache.set(u.username, {'score': score, 'gain': gain, 'round_order': round_order})
+                cache.set(u.username, {'score': round(score + gain, 2), 'gain': gain, 'round_order': round_order})
             else:
                 logging.info('Round order has not been changed')
                 score = data.get('score', 0.0)
@@ -628,7 +634,15 @@ def outcome(user, game: InteractiveShocks, round_data):
         'username'))).exclude(username=user.username), round_data.get('current_round'))
 
     currently_following = outcome_loop(current_round.following.all(), round_data.get('current_round'))
-    score, gain = user.get_score_and_gain
+    try:
+        data = cache.get(user.username)
+        score = data.get('score')
+        gain = data.get('gain')
+    except AttributeError:
+        logging.error('Could not find user score and gain in Cache')
+        score, gain = user.get_score_and_gain
+        cache.set(user.username, {'score': round(score + gain, 2), 'gain': gain, 'round_order':
+            round_data.get('current_round')})
 
     return user_packet(action='outcome', guess=float(current_round.get_influenced_guess()), score=score, gain=gain,
                        following=currently_following, all_players=rest_of_users,
