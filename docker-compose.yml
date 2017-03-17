@@ -47,7 +47,9 @@ services:
     command: python manage.py rundelay
 
   redis:
-    image: redis:latest
+    build:
+     context: .
+     dockerfile: ./compose/redis/Dockerfile
 
   nginx:
     build: ./compose/nginx
