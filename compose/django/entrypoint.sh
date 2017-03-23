@@ -33,5 +33,4 @@ export DATABASE_URL=postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@postgres:5432/$
 #  sleep 1
 #done
 
-#>&2 echo "Postgres is up - continuing..."
 exec $cmd
