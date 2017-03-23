@@ -76,7 +76,7 @@ class InteractiveShocksRound(Round):
         return data
 
     def get_influenced_guess(self):
-        return float(self.influenced_guess) if self.influenced_guess else -1
+        return -1 if self.influenced_guess is None else float(self.influenced_guess)
 
 
 class InteractiveShocks(models.Model):

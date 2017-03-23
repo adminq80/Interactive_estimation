@@ -258,7 +258,7 @@ function start_outcome(data){
       if (window.location.pathname.match(/dynamic_mode/)) {
           percentile_generator(data);
           var user_data = JSON.parse(sessionStorage.getItem('self'));
-          $('#user_round_score').html(data.gain);
+          $('#user_round_score').html('+' + data.gain);
           $('#user_round_score2').removeClass('high-gain medium-gain low-gain').addClass(class_name_for_score(user_data.batch));
           $('#user_round_score').removeClass('high-gain medium-gain low-gain').addClass(class_name_for_score(user_data.batch));
           $('#roundBonus').removeClass('high-gain medium-gain low-gain').addClass(class_name_for_score(user_data.batch));
@@ -372,8 +372,8 @@ $(function () {
       $("#following_list tbody").html("");
 
       $.each(data.following, function(i, user) {
-        if (user.guess < 0) {
-          user.guess = '';
+        if (user.guess == null || user.guess == -1) {
+          user.guess = null;
         }
         var avatar = "/static/"+user.avatar;
         var arr = JSON.parse(sessionStorage.getItem('disconnected')) || [];
@@ -405,7 +405,8 @@ $(function () {
           disabled: true
         });
 
-        if (user.guess == '') {
+        if (user.guess == null) {
+          $(`td#${user.username} > span`).html('');
           $(`td#${user.username} > .followingSlider > .ui-slider-handle`).hide();
         }
         else {

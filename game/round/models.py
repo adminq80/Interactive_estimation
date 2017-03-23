@@ -56,7 +56,7 @@ class Round(models.Model):
 
         data = {'username': self.user.username, 'cumulative_score': score,
                 'avatar': self.user.avatar, 'task_path': self.plot.plot, 'correct_answer': self.plot.answer,
-                'independent_guess': self.guess, 'round_id': self.round_order, 'score': round_score,
+                'independent_guess': self.get_guess(), 'round_id': self.round_order, 'score': round_score,
                 'game_id': None, 'condition': None, 'following': None, 'revised_guess': None,
                 'duration': duration, 'start_time': self.start_time, 'end_time': self.end_time,
                 'batch': self.plot.batch or 0,
@@ -70,7 +70,7 @@ class Round(models.Model):
         return data
 
     def get_guess(self):
-        return float(self.guess) if self.guess else -1
+        return -1 if self.guess is None else float(self.guess)
 
     class Meta:
         unique_together = (('user', 'round_order',),)
