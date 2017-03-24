@@ -105,7 +105,7 @@ function set_breadcrumbs(state, round) {
   var breadcrumbs = $("#breadcrumbs > ul").children();
   $.each(breadcrumbs, function(i, item) {
     $(item).removeClass("active");
-  })
+  });
   $("#"+state).addClass("active");
   $("#currentRound").html(round);
 }
@@ -126,12 +126,12 @@ function start_game(data, seconds) {
   $("#submit").removeClass("highlight");
   $("#submitText").addClass("hide");
   $("#lobby").hide();
-  set_breadcrumbs(state, data.current_round);
+  set_breadcrumbs(state, parseInt(data.current_round) + 1);
   $("#game").show();
 
   $("img.img-responsive").attr("src", '/static/plots/' + data.plot);
   countdown(state, seconds);
-  $("#remaining").html(data.remaining);
+  $("#remaining").html(parseInt(data.remaining) + parseInt(data.current_round));
   $(".user_score").html(data.score);
   round_sound();
 

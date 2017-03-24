@@ -76,7 +76,7 @@ def get_round(game, user=None):
         with transaction.atomic():
             i_round.save()
 
-    return {'plot': None, 'remaining': remaining - 1, 'current_round': current_round}, users_plots
+    return {'plot': None, 'remaining': remaining, 'current_round': current_round}, users_plots
 
 
 def user_and_game(message):
