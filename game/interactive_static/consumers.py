@@ -3,6 +3,7 @@ import logging
 from random import shuffle
 from decimal import Decimal
 
+from channels.sessions import enforce_ordering
 from django.core.cache import cache
 from django.db import transaction
 from django.db.models import Count
@@ -98,11 +99,11 @@ def send_game_status(game):
     game.broadcast(action='info', connected_players=game.users.count(), total_players=game.constraints.max_users)
 
 
+@enforce_ordering
 def static_task_runner(message):
     """
     runs tasks from asgi.delay
     """
-    # 'content': {'task': t.id},
     try:
         t = Task.objects.get(id=message['task'])
     except Task.DoesNotExist:
@@ -437,6 +438,7 @@ def handler(sender, instance, created, **kwargs):
                 return
 
 
+@enforce_ordering
 def game_state_checker(message):
     game, _ = get_game_from_message(message)
     data = cache.get(game.id)

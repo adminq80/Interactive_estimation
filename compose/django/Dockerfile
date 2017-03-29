@@ -10,7 +10,9 @@ RUN pip install -r /requirements/production.txt \
     && useradd -r -g django django
 
 COPY . /app
-RUN chown -R django /app
+RUN chown -R django:django /app
+RUN mkdir /app/staticfiles
+RUN chown -R django:django /app/staticfiles
 
 # COPY ./compose/django/gunicorn.sh /gunicorn.sh
 COPY ./compose/django/daphne.sh /daphne.sh
