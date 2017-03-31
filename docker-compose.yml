@@ -34,7 +34,18 @@ services:
     depends_on:
       - django
     env_file: .env
-    command: python manage.py runworker
+    command: python manage.py runworker --exclude-channels=game.route
+
+
+  game_worker:
+    build:
+      context: .
+      dockerfile: ./compose/django/Dockerfile
+    user: django
+    depends_on:
+      - django
+    env_file: .env
+    command: python manage.py runworker --only-channels=game.route
 
   delay_worker:
     build:
