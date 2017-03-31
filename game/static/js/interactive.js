@@ -371,7 +371,7 @@ $(function () {
 
       $("#following_list tbody").html("");
 
-      $.each(data.following, function(i, user) {
+      $.each(data.following.sort(comp_score), function(i, user) {
         if (user.guess == null || user.guess == -1) {
           user.guess = null;
         }
