@@ -104,7 +104,6 @@ def task_runner(message):
     """
     runs tasks from asgi.delay
     """
-    # 'content': {'task': t.id},
     try:
         t = Task.objects.get(id=message['task'])
         print(t)
@@ -281,6 +280,9 @@ def ws_receive(message):
     if action:
         payload['reply_channel'] = message.content['reply_channel']
         payload['path'] = message.content.get('path')
+        if action == 'follow':
+            Channel(action).send(payload)
+            return
         Channel('game.route').send(payload)
     else:
         # TODO: unrecognized action

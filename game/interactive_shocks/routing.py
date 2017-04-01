@@ -12,13 +12,13 @@ game_routes = [
     route('game.route', initial_submit, action='^initial$'),  # initial guess submission
     route('game.route', data_broadcast, action='^slider$'),  # broadcast guess to player
     route('game.route', interactive_submit, action='^interactive$'),
-    route('game.route', follow_list, action='^follow$'),
     route('game.route', round_outcome, action='^outcome$'),
     route('game.route', reset_timer, action='^resetTimer$'),
     route('game.route', cancel_game, action='^exit_game$'),
     route('watcher', game_watcher),
     route('kickout', kickout),
     route('game_state', game_state_checker),
+    route('follow', follow_list, action='^follow$'),
 
     # route('initial', ws_initial),
     # route('interactive', ws_interactive),

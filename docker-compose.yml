@@ -34,7 +34,7 @@ services:
     depends_on:
       - django
     env_file: .env
-    command: python manage.py runworker --exclude-channels=game.route
+    command: python manage.py runworker --exclude-channels=follow
 
 
   game_worker:
@@ -45,7 +45,7 @@ services:
     depends_on:
       - django
     env_file: .env
-    command: python manage.py runworker --only-channels=game.route
+    command: python manage.py runworker --only-channels=follow
 
   delay_worker:
     build:
