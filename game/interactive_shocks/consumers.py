@@ -330,24 +330,24 @@ def follow_list(message):
     if state != 'outcome':
         return
     if len(follow_users) <= game.constraints.max_following:
-        next_round = InteractiveShocksRound.objects.get(user=user, round_order=round_data.get('current_round'))
-        next_round.following.clear()
-        next_round.save()
-        u_can_follow = []
-        just_followed = []
-        for u in game.users.all():
-            d = {
-                'username': u.username,
-                'avatar': u.get_avatar,
-            }
-            if u.username == user.username:
-                continue
-            elif u.username in follow_users:
-                next_round.following.add(u)
-                just_followed.append(d)
-            else:
-                u_can_follow.append(d)
         with transaction.atomic():
+            next_round = InteractiveShocksRound.objects.get(user=user, round_order=round_data.get('current_round'))
+            next_round.following.clear()
+            next_round.save()
+            u_can_follow = []
+            just_followed = []
+            for u in game.users.all():
+                d = {
+                    'username': u.username,
+                    'avatar': u.get_avatar,
+                }
+                if u.username == user.username:
+                    continue
+                elif u.username in follow_users:
+                    next_round.following.add(u)
+                    just_followed.append(d)
+                else:
+                    u_can_follow.append(d)
             next_round.save()
         message.reply_channel.send({'text': json.dumps({
             'action': 'followNotify',
