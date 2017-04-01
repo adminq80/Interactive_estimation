@@ -138,8 +138,13 @@ function start_game(data, seconds) {
 }
 
 function comp_score(a, b) {
-  var a_score = parseFloat(a.score) || parseFloat(JSON.parse(sessionStorage.getItem(a.username)).score);
-  var b_score = parseFloat(b.score) || parseFloat(JSON.parse(sessionStorage.getItem(b.username)).score);
+  try {
+    var a_score = parseFloat(a.score) || parseFloat(JSON.parse(sessionStorage.getItem(a.username)).score);
+    var b_score = parseFloat(b.score) || parseFloat(JSON.parse(sessionStorage.getItem(b.username)).score);
+  }
+  catch (e){
+    return 1;
+  }
   return a_score >= b_score ? -1: 1;
 }
 
