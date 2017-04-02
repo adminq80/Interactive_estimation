@@ -82,18 +82,6 @@ def play(request):
             data = {'track': track, 'remaining': game.batch_size-1}
         else:
             data = cache.get('control_user_{}'.format(u.id))
-            # if data.get('remaining') == 0:
-            #     plots = Plot.objects.exclude(batch__in=data.get('played_batches', []))
-            #     plot = choice(plots)
-            #     batch = plot.batch
-            #     data['played_batches'].append(batch)
-            #     data['current_batch'] = batch
-            #     data['remaining'] = game.batch_size - 1
-            # else:
-            #     plots = Plot.objects.filter(non_stationary_seq=data.get('track'))
-            #     plot_seq = game.batch_size - data['remaining']
-            #     plot = plots[plot_seq]
-            #     data['remaining'] -= 1
             plots = Plot.objects.filter(non_stationary_seq=data.get('track')).order_by('seq')
             plot_seq = game.batch_size - data['remaining']
             plot = plots[plot_seq]
@@ -125,24 +113,25 @@ def play(request):
             'score': request.user.get_score,
         }
         payload.update(extra)
-        cache.set('control-{}'.format(game.id), payload)
 
     if d:
         # there was new data  before
-        if payload:
+        if payload.get('currentRound', False):
             if payload.get('currentRound') > d.get('currentRound'):
                 d = payload
             else:
-                print('Cache has more recent data than payload')
+                print('Cache has recent data than payload')
                 return redirect('control:play')
         else:
             print('Found data in the cache and Payload is None')
-            # r = Round.objects.get(id=d.get('round_id'))
-            # if (r.start_time + timedelta(seconds=SECONDS + DELAY)) < timezone.now():
-            #     return redirect('control:play')
+            r = Round.objects.get(id=d.get('round_id'))
+            if (r.start_time + timedelta(seconds=SECONDS + DELAY)) < timezone.now():
+                cache.set('control-{}'.format(game.id), None)
+                return redirect('control:play')
     else:
         d = payload
 
+    cache.set('control-{}'.format(game.id), d)
     form = RoundForm()
     d['form'] = form
     d['round'] = plot
