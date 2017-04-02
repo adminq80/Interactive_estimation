@@ -32,6 +32,7 @@ def assign(request):
 
 
 SECONDS = 30
+DELAY = 7
 
 
 # Create your views here.
@@ -110,6 +111,9 @@ def play(request):
         plot = Plot.objects.get(id=round_data.get('plot_id'))
 
     d = cache.get('control-{}'.format(game.id))
+    payload = {
+        'score': 0.0,
+    }
 
     if extra:
         # new round was found
@@ -122,10 +126,6 @@ def play(request):
         }
         payload.update(extra)
         cache.set('control-{}'.format(game.id), payload)
-    else:
-        payload = {
-            'score': 0.0,
-        }
 
     if d:
         # there was new data  before
@@ -137,9 +137,9 @@ def play(request):
                 return redirect('control:play')
         else:
             print('Found data in the cache and Payload is None')
-            r = Round.objects.get(id=d.get('round_id'))
-            if (r.start_time + timedelta(seconds=SECONDS)) < timezone.now():
-                return redirect('control:play')
+            # r = Round.objects.get(id=d.get('round_id'))
+            # if (r.start_time + timedelta(seconds=SECONDS + DELAY)) < timezone.now():
+            #     return redirect('control:play')
     else:
         d = payload
 
@@ -166,7 +166,7 @@ def submit_answer(request):
             plot = Plot.objects.get(id=round_data.get('plot_id'))
             r = Round.objects.get(user=request.user, plot=plot, round_order=round_data.get('currentRound')-1)
 
-            if (r.start_time + timedelta(seconds=SECONDS)) < timezone.now():
+            if (r.start_time + timedelta(seconds=SECONDS + DELAY)) < timezone.now():
                 guess = -1
 
             if r.guess is None:
