@@ -4,7 +4,7 @@
 {% block breadcrumbs %}
 <div>
    <ul class="nav nav-wizard">
-       <li>Current Round: {{currentRound}}/{{ remaining }}</li>
+       <li>Current Round: {{currentRound}}/{{ remaining|add:currentRound}}</li>
        <li class='active'><a>Your Guess</a></li>
        <li><a>Round Outcome</a></li>
    </ul>
