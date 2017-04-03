@@ -15,7 +15,7 @@ function countdown() {
     } else {
       var submit = $("#submit")[0];
       $("#submit").removeAttr("disabled");
-      submit.click();
+      setTimeout(submit_answer, 500);
     }
   }
   if(counter) {
@@ -40,3 +40,7 @@ $("#slider").slider({
 
 $('#slider > .ui-slider-handle').hide();
 
+function submit_answer(){
+  var btn = $("#submit")[0];
+  btn.click()
+}
