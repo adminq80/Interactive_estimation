@@ -54,6 +54,8 @@ def get_round(game, user=None):
         'm': 2,
         'h': 3,
     }
+    initial_condition = {0: [2, 4, 9], 1: [4, 8, 2], 2: [4, 10, 3], 3: [6, 10, 0], 4: [0, 6, 8], 5: [6, 9, 11],
+                         6: [5, 11, 10], 7: [1, 5, 0], 8: [3, 1, 7], 9: [7, 2, 5], 10: [1, 3, 11], 11: [9, 7, 8]}
     for user in users.all():
         seq = seqs[user.level]
         plot = Plot.objects.filter(non_stationary_seq=seq).order_by('seq')[current_round]
@@ -64,9 +66,6 @@ def get_round(game, user=None):
 
         if current_round == 0:
             # random initial game configuration
-            initial_condition = {0: [2, 4, 9], 1: [4, 8, 2], 2: [4, 10, 3], 3: [6, 10, 0], 4: [0, 6, 8], 5: [6, 9, 11],
-                                 6: [5, 11, 10], 7: [1, 5, 0], 8: [3, 1, 7], 9: [7, 2, 5], 10: [1, 3, 11],
-                                 11: [9, 7, 8]}
             if len(game.users.count()) == len(initial_condition):
                 logging.info('Initial Condition')
                 for i, user in enumerate(game.users.order_by('pk')):
