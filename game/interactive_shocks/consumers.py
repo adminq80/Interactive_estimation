@@ -30,9 +30,9 @@ def changing_levels(game):
     total_users = game.users.count()
     chunk = total_users // 3
     last_chuck = total_users - chunk * 2
-    level_list = ['e', 'm'] * chunk + ['h'] * last_chuck
-    shuffle(level_list)
-    for i, user in enumerate(game.users.all()):
+    level_list = ['e'] * chunk + ['m'] * chunk + ['h'] * last_chuck
+    # shuffle(level_list)
+    for i, user in enumerate(game.users.order_by('pk')):
         user.level = level_list[i]
         user.save()
 
@@ -66,9 +66,20 @@ def get_round(game, user=None):
 
         if current_round == 0:
             # random initial game configuration
-            following = users.exclude(username=user.username).order_by('?')[:game.constraints.max_following]  # random
-            for f in following.all():
-                i_round.following.add(f)
+            initial_condition = {0: [2, 4, 9], 1: [4, 8, 2], 2: [4, 10, 3], 3: [6, 10, 0], 4: [0, 6, 8], 5: [6, 9, 11],
+                                 6: [5, 11, 10], 7: [1, 5, 0], 8: [3, 1, 7], 9: [7, 2, 5], 10: [1, 3, 11],
+                                 11: [9, 7, 8]}
+            if len(game.users.count()) == len(initial_condition):
+                logging.info('Initial Condition')
+                for i, user in enumerate(game.users.order_by('pk')):
+                    for users_to_follow in initial_condition[i]:
+                        i_round.following.add(game.users.order_by('pk')[users_to_follow])
+            else:
+                logging.info('users({}) are not equal to the size of {}'.format(len(game.users.all()),
+                                                                                len(initial_condition)))
+                following = users.exclude(username=user.username).order_by('?')[:game.constraints.max_following]
+                for f in following.all():
+                    i_round.following.add(f)
         else:
             previous_round = InteractiveShocksRound.objects.get(user=user, game=game, round_order=current_round - 1)
             for f in previous_round.following.all():

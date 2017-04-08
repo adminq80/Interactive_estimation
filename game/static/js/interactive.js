@@ -465,18 +465,6 @@ $(function () {
       sound_player = setInterval(round_sound, data.sound_interval*1000);
       round_sound();
       $( "#dialog-confirm" ).dialog( "open" );
-
-      // var s = null;
-      // if(data.minutes !== null){
-      //    s = 'You have been waiting in the lobby for '+ data.minutes + ' minutes. Please, press OK to keep waiting for the rest of the players. Alternatively, press Cancel to receive the base pay and exit the game.';
-      // }else{
-      //    s = 'You have been waiting in the lobby for '+ data.seconds + ' seconds. Please, press OK to keep waiting for the rest of the players. Alternatively, press Cancel to receive the base pay and exit the game.';
-      // }
-      //   if (confirm(s) == true){
-      //     socket.send(JSON.stringify({action:'resetTimer'}));
-      //   }else{
-      //     socket.send(JSON.stringify({action:'exit_game'}));
-      //   }
     }
     else {
       console.log(data.action);
