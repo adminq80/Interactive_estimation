@@ -1,6 +1,5 @@
 import json
 import logging
-from random import shuffle
 from decimal import Decimal
 
 from django.core.cache import cache
@@ -31,7 +30,6 @@ def changing_levels(game):
     chunk = total_users // 3
     last_chuck = total_users - chunk * 2
     level_list = ['e'] * chunk + ['m'] * chunk + ['h'] * last_chuck
-    # shuffle(level_list)
     for i, user in enumerate(game.users.order_by('?')):
         user.level = level_list[i]
         user.save()
@@ -236,10 +234,8 @@ def lobby(message):
     waiting_for = game.constraints.max_users - users_count
 
     if waiting_for == 0:
-        print("Going to start the game")
         game.started = True
         game.save()
-        print("Game started value {}".format(game.started))
         [m.delete() for m in Task.objects.filter(route='kickout', game=game)]
         [m.delete() for m in Task.objects.filter(route='watcher', game=game)]
         cache.set('{}_disconnected_users'.format(game.id), 0)
