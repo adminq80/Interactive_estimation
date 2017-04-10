@@ -30,7 +30,7 @@ def changing_levels(game):
     last_chuck = total_users - chunk * 2
     level_list = ['e'] * chunk + ['m'] * chunk + ['h'] * last_chuck
     # shuffle(level_list)
-    for i, user in enumerate(game.users.order_by('pk')):
+    for i, user in enumerate(game.users.order_by('?')):
         user.level = level_list[i]
         user.save()
 
@@ -56,7 +56,7 @@ def get_round(game, user=None):
     }
     initial_condition = {0: [2, 4, 9], 1: [4, 8, 2], 2: [4, 10, 3], 3: [6, 10, 0], 4: [0, 6, 8], 5: [6, 9, 11],
                          6: [5, 11, 10], 7: [1, 5, 0], 8: [3, 1, 7], 9: [7, 2, 5], 10: [1, 3, 11], 11: [9, 7, 8]}
-    for i, user in enumerate(game.users.order_by('pk')):
+    for i, user in enumerate(users):
         seq = seqs[user.level]
         plot = Plot.objects.filter(non_stationary_seq=seq).order_by('seq')[current_round]
         users_plots.append({'user': user, 'plot': plot.plot})
