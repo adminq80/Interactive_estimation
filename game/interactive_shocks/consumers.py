@@ -36,7 +36,7 @@ def changing_levels(game):
 
 
 def get_round(game, user=None):
-    users = game.users.order_by('user_level,')
+    users = game.users.order_by('user_level')
     if not user:
         user = users[0]
     played_rounds = InteractiveShocksRound.objects.filter(user=user, game=game)
