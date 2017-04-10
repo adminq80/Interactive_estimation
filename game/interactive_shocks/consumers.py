@@ -68,7 +68,7 @@ def get_round(game, user=None):
 
         if current_round == 0:
             # random initial game configuration
-            if len(game.users.count()) == len(initial_condition):
+            if game.users.count() == len(initial_condition):
                 logging.info('Initial Condition')
                 for i, user in enumerate(game.users.order_by('pk')):
                     for users_to_follow in initial_condition[i]:
