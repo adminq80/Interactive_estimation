@@ -38,7 +38,7 @@ def changing_levels(game):
 
 
 def get_round(game, user=None):
-    users = game.users.order_by('?')
+    users = game.users.order_by('level')
     if not user:
         user = users[0]
     played_rounds = InteractiveShocksRound.objects.filter(user=user, game=game)
@@ -68,10 +68,10 @@ def get_round(game, user=None):
 
         if current_round == 0:
             # random initial game configuration
-            if game.users.count() == len(initial_condition):
+            if users.count() == len(initial_condition):
                 logging.info('Initial Condition')
-                for users_to_follow in initial_condition[i]:
-                    i_round.following.add(game.users.order_by('pk')[users_to_follow])
+                for user_to_follow in initial_condition[i]:
+                    i_round.following.add(users[user_to_follow])
             else:
                 logging.info('users({}) are not equal to the size of {}'.format(len(game.users.all()),
                                                                                 len(initial_condition)))
