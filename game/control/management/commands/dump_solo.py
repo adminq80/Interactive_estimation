@@ -16,9 +16,9 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         if options['greater']:
-            qs = Control.objects.filter(pk__gte=options['greater'][0])
+            qs = Control.objects.filter(pk__gte=options['greater'][0]).order_by('pk')
         else:
-            qs = Control.objects.filter(pk__in=set(options['ids']))
+            qs = Control.objects.filter(pk__in=set(options['ids'])).order_by('pk')
 
         games = []
         for game in qs:

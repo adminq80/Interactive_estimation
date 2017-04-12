@@ -19,11 +19,11 @@ class Command(BaseCommand):
         game_class = InteractiveStatic
         rounds_class = InteractiveStaticRound
         if options['greater']:
-            qs = game_class.objects.filter(pk__gte=options['greater'][0])
+            qs = game_class.objects.filter(pk__gte=options['greater'][0]).order_by('pk')
             if options['limit']:
                 qs = qs[:options['limit'][0]]
         else:
-            qs = game_class.objects.filter(pk__in=set(options['ids']))
+            qs = game_class.objects.filter(pk__in=set(options['ids'])).order_by('pk')
 
         users = []
         for game in qs:
