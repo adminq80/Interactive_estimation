@@ -17,8 +17,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         if options['greater']:
             qs = Control.objects.filter(pk__gte=options['greater'][0])
-            if options['limit']:
-                qs = qs[:options['limit'][0]]
         else:
             qs = Control.objects.filter(pk__in=set(options['ids']))
 
@@ -41,9 +39,13 @@ class Command(BaseCommand):
                 survey = None
             d['survey'] = survey
             d['rounds'] = [r.round_data() for r in rounds]
+            games.append(d)
             if game.max_rounds == len(d['rounds']):
                 d['hit_status'] = 'completed'
+                if options.get('limit'):
+                    if len(games) >= options['limit'][0]:
+                        break
             else:
                 d['hit_status'] = 'disconnected'
-            games.append(d)
+
         print(json.dumps(games, cls=DecimalEncoder))
