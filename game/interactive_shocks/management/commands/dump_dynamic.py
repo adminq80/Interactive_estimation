@@ -13,12 +13,15 @@ class Command(BaseCommand):
         group = parser.add_mutually_exclusive_group(required=True)
         group.add_argument('--ids', nargs='+', type=int)
         group.add_argument('--greater', nargs=1, type=int)
+        parser.add_argument('--limit', nargs=1, type=int)
 
     def handle(self, *args, **options):
         game_class = InteractiveShocks
         rounds_class = InteractiveShocksRound
         if options['greater']:
             qs = game_class.objects.filter(pk__gte=options['greater'][0])
+            if options['limit']:
+                qs = qs[:options['limit'][0]]
         else:
             qs = game_class.objects.filter(pk__in=set(options['ids']))
 

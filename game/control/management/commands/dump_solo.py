@@ -12,10 +12,13 @@ class Command(BaseCommand):
         group = parser.add_mutually_exclusive_group(required=True)
         group.add_argument('--ids', nargs='+', type=int)
         group.add_argument('--greater', nargs=1, type=int)
+        parser.add_argument('--limit', nargs=1, type=int)
 
     def handle(self, *args, **options):
         if options['greater']:
             qs = Control.objects.filter(pk__gte=options['greater'][0])
+            if options['limit']:
+                qs = qs[:options['limit'][0]]
         else:
             qs = Control.objects.filter(pk__in=set(options['ids']))
 
