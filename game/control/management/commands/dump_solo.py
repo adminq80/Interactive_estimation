@@ -39,7 +39,6 @@ class Command(BaseCommand):
                 survey = None
             d['survey'] = survey
             d['rounds'] = [r.round_data() for r in rounds]
-            games.append(d)
             if game.max_rounds == len(d['rounds']):
                 d['hit_status'] = 'completed'
                 games.append(d)
