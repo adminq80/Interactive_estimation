@@ -15,13 +15,19 @@
 {% block container %}
 <div id="lobby">
   <div class="row">
-      <div class="col-md-12" id="waiting">There are currently a total of
+      <div id="waiting">There are currently a total of
           <b><span id="connected_players">0</span> out of <span id="total_players">0</span>
           required participants</b> waiting for the game to start.</div>
   </div>
-  <p>Please wait a few moments while we try to find the needed participants.</p>
-  <p>If we can't find enough participants within {{lobbyTimeout}} minutes, we will end the HIT and pay you for your time.</p>
-  <h>Please make sure your sound is on as a bell will ring to indicate the start of a new game.</h>
+    <div class="row">
+        <p>Please wait a few moments while the rest of the participants come in. </p>
+    </div>
+    <div class="row">
+        <p>In the case that the game doesn't get enough participants, we will end the HIT and pay you for your time.</p>
+    </div>
+    <div class="row">
+          <p>Please make sure your sound is on as a bell will ring to indicate the start of a new game.</p>
+    </div>
 </div>
 
 <div id="game" hidden>
