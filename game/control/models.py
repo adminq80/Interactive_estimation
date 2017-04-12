@@ -1,9 +1,18 @@
-from django.core.validators import MinValueValidator, validate_comma_separated_integer_list
+import re
+
+from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
 
-# from game.round.models import Round
+
+def validate_comma_separated_integer_list(val, sep=',', code='invalid'):
+    regex = re.compile('^[0-2](?:%(sep)s[0-2])*\Z' % {'sep': re.escape(sep),
+                                                      })
+    if regex.fullmatch(val):
+        return val
+    raise ValidationError('List supplied is not correct', code=code)
 
 
 class Setting(models.Model):

@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.views.generic import DetailView, ListView, RedirectView, UpdateView
 
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.contrib.auth import logout
@@ -59,17 +59,20 @@ def start(request):
         print("User is authenticated")
         c = request.user.game_type
     else:
-        choices = UserTypes.objects.all()[0]
-        types = choices.types.split(',')
-        t = types.pop(0)
-        d = {
-            '0': 'control',
-            '1': 'static',
-            '2': 'dynamic',
-        }
-        c = d[t]
-        choices.types = ','.join(types)
-        choices.save()
+        try:
+            choices = UserTypes.objects.all()[0]
+            types = choices.types.split(',')
+            t = types.pop(0)
+            d = {
+                '0': 'control',
+                '1': 'static',
+                '2': 'dynamic',
+            }
+            c = d[t]
+            choices.types = ','.join(types)
+            choices.save()
+        except AttributeError or KeyError:
+            return render(request, 'out_of_games.html')
 
     if c == 'dynamic':
         return redirect('dynamic_mode:lobby')

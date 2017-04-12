@@ -1,5 +1,5 @@
 from math import fabs
-from random import choice, shuffle
+from random import choice
 from datetime import timedelta
 
 from django.contrib.auth import authenticate, login
@@ -189,7 +189,6 @@ def instruction(request):
         else:
             setting = Setting.objects.create(max_rounds=10, batch_size=5)
         types = setting.types.split(',')
-        shuffle(types)
         try:
             d = {
                 '0': 'e',
@@ -201,8 +200,10 @@ def instruction(request):
             u.save()
             setting.types = ','.join(types)
             setting.save()
-        except AttributeError:
+        except AttributeError or KeyError:
             print('Control types array is empty')
+            return render(request, 'out_of_games.html')
+
         Control.objects.create(user=u, max_rounds=setting.max_rounds, batch_size=setting.batch_size)
         u = authenticate(username=u.username, password=password)
         login(request, u)

@@ -1,17 +1,26 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, absolute_import
+import re
 
+from django.core.exceptions import ValidationError
 from django.contrib.auth.models import AbstractUser
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
-from django.core.validators import validate_comma_separated_integer_list
 
 from game.contrib.calculate import calculate_score, score_gain
 from game.interactive_shocks.models import InteractiveShocksRound
 from game.interactive_static.models import InteractiveStaticRound
 from game.round.models import Round
+
+
+def validate_comma_separated_integer_list(val, sep=',', code='invalid'):
+    regex = re.compile('^[0-2](?:%(sep)s[0-2])*\Z' % {'sep': re.escape(sep),
+                                                      })
+    if regex.fullmatch(val):
+        return val
+    raise ValidationError('List supplied is not correct', code=code)
 
 
 @python_2_unicode_compatible
