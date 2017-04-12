@@ -42,10 +42,9 @@ class Command(BaseCommand):
             games.append(d)
             if game.max_rounds == len(d['rounds']):
                 d['hit_status'] = 'completed'
+                games.append(d)
                 if options.get('limit'):
                     if len(games) >= options['limit'][0]:
                         break
-            else:
-                d['hit_status'] = 'disconnected'
 
         print(json.dumps(games, cls=DecimalEncoder))
