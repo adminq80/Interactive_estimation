@@ -71,7 +71,7 @@ def start(request):
             c = d[t]
             choices.types = ','.join(types)
             choices.save()
-        except AttributeError or KeyError:
+        except (AttributeError, KeyError):
             return render(request, 'out_of_games.html')
 
     if c == 'dynamic':

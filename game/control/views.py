@@ -200,7 +200,7 @@ def instruction(request):
             u.save()
             setting.types = ','.join(types)
             setting.save()
-        except AttributeError or KeyError:
+        except (AttributeError, KeyError):
             print('Control types array is empty')
             return render(request, 'out_of_games.html')
 

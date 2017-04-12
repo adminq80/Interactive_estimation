@@ -87,7 +87,7 @@ class UserTypes(models.Model):
     types = models.CharField(max_length=1000, validators=[validate_comma_separated_integer_list])
 
     def __str__(self):
-        return self.types
+        return 'vector: {}'.format(self.types)
 
     class Meta:
         verbose_name_plural = 'UserTypes'
