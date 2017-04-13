@@ -165,7 +165,7 @@ def lobby(message):
                     round_data = d.get('round_data')
                     users_plots = d.get('users_plots')
                 except AttributeError:
-                    print('Cache invalid')
+                    logging.debug('Cache invalid')
                     game.user_send(user, action='logout', url=reverse('account_logout'))
                     return
                 cache.set('{}_disconnected_users'.format(game.id),
@@ -188,7 +188,7 @@ def lobby(message):
                     d = cache.get(game.id)
                     state = d.get('state')
                 except AttributeError:
-                    print("Game was not found")
+                    logging.debug("Game was not found")
                     game.user_send(user, action='logout', url=reverse('account_logout'))
                 watch_user(game, user)
                 send_game_status(game)
@@ -210,7 +210,7 @@ def lobby(message):
                 watch_user(game, user)
                 break
         else:
-            print("Could not find an empty game")
+            logging.debug("Could not find an empty game")
             logging.error("User couldn't be assigned to a game")
             return
     else:
@@ -229,16 +229,16 @@ def lobby(message):
     waiting_for = game.constraints.max_users - users_count
 
     if waiting_for == 0:
-        print("Going to start the game")
+        logging.debug("Going to start the game")
         game.started = True
         game.save()
         [m.delete() for m in Task.objects.filter(route='kickout', game=game)]
         [m.delete() for m in Task.objects.filter(route='watcher', game=game)]
         cache.set('{}_disconnected_users'.format(game.id), 0)
-        print("Going to chane the levels")
+        logging.debug("Going to change the levels")
         changing_levels(game)
 
-        print("Going to start the first round")
+        logging.debug("Going to start the first round")
         round_data, users_plots = get_round(game)
         cache.set(game.id, {
             'round_data': round_data,
@@ -283,8 +283,8 @@ def ws_receive(message):
         Channel('game.route').send(payload)
     else:
         # TODO: unrecognized action
-        print('unrecognized action')
-        print(message)
+        logging.debug('unrecognized action')
+        logging.debug(message)
         logging.error('Unknown action {}'.format(action))
 
 
@@ -378,15 +378,6 @@ def round_outcome(message):
     round_.outcome = True
     round_.save()
     return
-
-
-def twisted_error(*args, **kwargs):
-    print('Twisted Error')
-    print(args)
-    for e in args:
-        print(e)
-    print('*' * 20)
-    print(kwargs)
 
 
 def create_game_task(route, game, path='/static_mode/lobby', payload=None):
@@ -561,7 +552,7 @@ def get_game_from_message(message):
     try:
         t = Task.objects.get(id=message['task'])
     except Task.DoesNotExist:
-        print('Encountered an error')
+        logging.debug('Encountered an error')
         return None, None
     game = t.game
     payload = json.loads(t.payload)
@@ -570,7 +561,7 @@ def get_game_from_message(message):
 
 
 def game_watcher(message):
-    print('Watcher')
+    logging.debug('Watcher')
     game, payload = get_game_from_message(message)
     if not game and not payload:
         return
@@ -581,16 +572,16 @@ def game_watcher(message):
         try:
             user = game.users.get(username=username)
         except game.users.model.DoesNotExist:
-            print('USER was not found in WATCHER')
+            logging.debug('USER was not found in WATCHER')
             return
     else:
         return
-    print('Timer reached for {}'.format(username))
+    logging.debug('Timer reached for {}'.format(username))
     if user.prompted < game.constraints.max_prompts:
-        print("Going to prompt {}".format(user.username))
+        logging.debug("Going to prompt {}".format(user.username))
 
         DelayedMessageExecutor(create_task('kickout', game, user), game.constraints.kickout_seconds).send()
-        print(Task.objects.all())
+        logging.debug(Task.objects.all())
         if game.constraints.minutes_mode:
             game.user_send(user, action='timeout_prompt', minutes=game.constraints.prompt_seconds//60,
                            sound_interval=game.constraints.prompt_sound_interval, url=reverse('static_mode:exit'))
@@ -602,7 +593,7 @@ def game_watcher(message):
 
 
 def kickout(message):
-    print('Kickout')
+    logging.debug('Kickout')
     game, payload = get_game_from_message(message)
     if not game and not payload:
         return
@@ -613,13 +604,13 @@ def kickout(message):
         try:
             user = game.users.get(username=username)
         except game.users.model.DoesNotExist:
-            print('USER was not found in WATCHER')
+            logging.debug('USER was not found in WATCHER')
             return
     else:
         return
-    print("Kickout id={} started {}".format(game.id, game.started))
-    print("Kickout pk={} started {}".format(game.pk, game.started))
-    print('Going to kick user {}'.format(username))
+    logging.debug("Kickout id={} started {}".format(game.id, game.started))
+    logging.debug("Kickout pk={} started {}".format(game.pk, game.started))
+    logging.debug('Going to kick user {}'.format(username))
     user.kicked = True
     user.save()
     game.user_send(user, action='AFK')
@@ -630,23 +621,23 @@ def kickout(message):
 def reset_timer(message):
     user, game = user_and_game(message)
     if game:
-        print('Reset timer for {}'.format(user.username))
+        logging.debug('Reset timer for {}'.format(user.username))
         try:
-            print(Task.objects.all())
+            logging.debug(Task.objects.all())
             m = Task.objects.get(route='kickout', game=game, payload__contains=user.username)
             m.delete()
         except Task.DoesNotExist as e:
-            print('Reset timer')
-            print("Don't know how to handle this error")
-            print(e)
-            print(Task.objects.all())
+            logging.debug('Reset timer')
+            logging.debug("Don't know how to handle this error")
+            logging.debug(e)
+            logging.debug(Task.objects.all())
             return
         user.prompted += 1
         user.save()
         if game.started:
             one = [m.delete() for m in Task.objects.filter(route='kickout', game=game)]
             two = [m.delete() for m in Task.objects.filter(route='watcher', game=game)]
-            print('Reset one {}, two {}'.format(len(one), len(two)))
+            logging.debug('Reset one {}, two {}'.format(len(one), len(two)))
             game.user_send(user, action='ping', text='Hello')
         else:
             watch_user(game, user)
