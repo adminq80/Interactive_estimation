@@ -43,12 +43,12 @@ class Round(models.Model):
         return self.user.username
 
     def round_data(self):
-        played_rounds = self.__class__.objects.filter(user=self.user, round_order__lte=self.round_order,
-                                                      guess__gte=Decimal(0.0))
+        played_rounds = self.__class__.objects.filter(user=self.user, round_order__lte=self.round_order)
         score = calculate_score(played_rounds)
-        this_round = self.__class__.objects.filter(user=self.user, round_order=self.round_order,
-                                                   guess__gte=Decimal(0.0))
+
+        this_round = self.__class__.objects.filter(user=self.user, round_order=self.round_order)
         round_score = calculate_score(this_round)
+
         if self.end_time and self.start_time:
             duration = (self.end_time - self.start_time).seconds
         else:
